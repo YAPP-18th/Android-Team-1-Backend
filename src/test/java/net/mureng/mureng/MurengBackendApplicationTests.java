@@ -1,10 +1,10 @@
-package net.murreng.murreng;
+package net.mureng.mureng;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class MurrengBackendApplicationTests {
+class MurengBackendApplicationTests {
 
 	@Test
 	void contextLoads() {
