@@ -1,0 +1,26 @@
+package net.mureng.mureng.domain.member;
+
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import java.time.LocalDate;
+
+@Getter
+@NoArgsConstructor
+@Entity
+public class MemberScrap {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    private Long member_id;
+
+    private Long exp_id;
+
+    private LocalDate reg_date;
+}
