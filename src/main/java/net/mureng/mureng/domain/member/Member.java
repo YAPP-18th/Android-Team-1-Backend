@@ -13,19 +13,24 @@ public class Member {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long member_id;
+    @Column(name = "member_id")
+    private Long memberId;
 
     private String identifier;
 
     private String email;
 
-    private Boolean is_active;
+    @Column(name = "is_active")
+    private Boolean isActive;
 
     private String nickname;
 
     private String image;
 
-    private LocalDateTime reg_date;
+    @Column(name = "reg_date")
+    private LocalDateTime regDate;
 
-    private LocalDateTime mod_date;
+    @Column(name = "mod_date")
+    private LocalDateTime modDate;
+
 }

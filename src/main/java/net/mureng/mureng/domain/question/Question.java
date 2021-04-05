@@ -3,10 +3,7 @@ package net.mureng.mureng.domain.question;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.time.LocalDateTime;
 
 @Getter
@@ -16,16 +13,20 @@ public class Question {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long question_id;
+    @Column(name = "question_id")
+    private Long questionId;
 
-    private Long member_id;
+    @Column(name = "member_id")
+    private Long memberId;
 
     private String category;
 
     private String content;
 
-    private String ko_content;
+    @Column(name = "ko_content")
+    private String koContent;
 
-    private LocalDateTime reg_date;
+    @Column(name = "reg_date")
+    private LocalDateTime regDate;
 
 }

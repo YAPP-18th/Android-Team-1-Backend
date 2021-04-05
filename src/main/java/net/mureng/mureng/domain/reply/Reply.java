@@ -3,10 +3,7 @@ package net.mureng.mureng.domain.reply;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.time.LocalDateTime;
 
 @Getter
@@ -16,11 +13,14 @@ public class Reply {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long reply_id;
+    @Column(name = "reply_id")
+    private Long replyId;
 
-    private Long member_id;
+    @Column(name = "member_id")
+    private Long memberId;
 
-    private Long question_id;
+    @Column(name = "question_id")
+    private Long questionId;
 
     private String content;
 
@@ -30,8 +30,10 @@ public class Reply {
 
     private Boolean deleted;
 
-    private LocalDateTime reg_date;
+    @Column(name = "reg_date")
+    private LocalDateTime regDate;
 
-    private LocalDateTime mod_date;
+    @Column(name = "mod_date")
+    private LocalDateTime modDate;
 
 }

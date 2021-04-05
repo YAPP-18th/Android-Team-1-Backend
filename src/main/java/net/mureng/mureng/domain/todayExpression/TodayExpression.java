@@ -3,30 +3,33 @@ package net.mureng.mureng.domain.todayExpression;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.time.LocalDateTime;
 
 @Getter
 @NoArgsConstructor
 @Entity
+@Table(name = "TODAY_EXPRESSION")
 public class TodayExpression {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long exp_id;
+    @Column(name = "exp_id")
+    private Long expId;
 
     private String expression;
 
     private String meaning;
 
-    private String expression_example;
+    @Column(name = "expression_example")
+    private String expressionExample;
 
-    private String expression_meaning;
+    @Column(name = "expression_meaning")
+    private String expressionMeaning;
 
-    private LocalDateTime reg_date;
+    @Column(name = "reg_date")
+    private LocalDateTime regDate;
 
-    private LocalDateTime mod_date;
+    @Column(name = "mod_date")
+    private LocalDateTime modDate;
 }

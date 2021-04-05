@@ -3,24 +3,23 @@ package net.mureng.mureng.domain.reply;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.time.LocalDateTime;
 
 @Getter
 @NoArgsConstructor
 @Entity
+@Table(name = "REPLY_LIKES")
 public class ReplyLikes {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    @Column(name = "reply_id")
+    private Long replyId;
 
-    private Long reply_id;
+    @Column(name = "member_id")
+    private Long memberId;
 
-    private Long member_id;
-
-    private LocalDateTime reg_date;
+    @Column(name = "reg_date")
+    private LocalDateTime regDate;
 }

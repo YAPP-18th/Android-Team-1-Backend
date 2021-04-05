@@ -3,10 +3,7 @@ package net.mureng.mureng.domain.badge;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 @Getter
 @NoArgsConstructor
@@ -15,7 +12,8 @@ public class Badge {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long badge_id;
+    @Column(name="badge_id")
+    private Long badgeId;
 
     private String name;
 

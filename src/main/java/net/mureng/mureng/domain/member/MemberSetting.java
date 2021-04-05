@@ -4,24 +4,22 @@ package net.mureng.mureng.domain.member;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.time.LocalTime;
 
 @Getter
 @NoArgsConstructor
 @Entity
+@Table(name = "MEMBER_SETTING")
 public class MemberSetting {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    @Column(name = "member_id")
+    private Long memberId;
 
-    private Long member_id;
+    @Column(name = "daily_end_time")
+    private LocalTime dailyEndTime;
 
-    private LocalTime daily_end_time;
-
-    private Boolean is_push_active;
+    @Column(name = "isPushActive")
+    private Boolean isPushActive;
 }

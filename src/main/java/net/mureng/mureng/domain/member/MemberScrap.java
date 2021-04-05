@@ -3,24 +3,22 @@ package net.mureng.mureng.domain.member;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.time.LocalDate;
 
 @Getter
 @NoArgsConstructor
 @Entity
+@Table(name = "MEMBER_SCRAP")
 public class MemberScrap {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    @Column(name = "member_id")
+    private Long memberId;
 
-    private Long member_id;
+    @Column(name = "exp_id")
+    private Long expId;
 
-    private Long exp_id;
-
-    private LocalDate reg_date;
+    @Column(name = "reg_date")
+    private LocalDate regDate;
 }
