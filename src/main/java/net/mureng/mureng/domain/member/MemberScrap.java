@@ -1,24 +1,28 @@
 package net.mureng.mureng.domain.member;
 
-import lombok.Getter;
+import lombok.Data;
 import lombok.NoArgsConstructor;
+import net.mureng.mureng.domain.todayExpression.TodayExpression;
 
 import javax.persistence.*;
 import java.time.LocalDate;
 
-@Getter
+@Data
 @NoArgsConstructor
 @Entity
 @Table(name = "MEMBER_SCRAP")
 public class MemberScrap {
-
     @Id
-    @Column(name = "member_id")
-    private Long memberId;
+    @ManyToOne
+    @JoinColumn(name = "member_id")
+    private Member memberId;
 
-    @Column(name = "exp_id")
-    private Long expId;
+    @ManyToOne
+    @JoinColumn(name = "exp_id")
+    private TodayExpression expId;
 
     @Column(name = "reg_date")
     private LocalDate regDate;
+
+
 }

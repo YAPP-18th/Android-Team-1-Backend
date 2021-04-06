@@ -1,24 +1,27 @@
 package net.mureng.mureng.domain.reply;
 
-import lombok.Getter;
+import lombok.Data;
 import lombok.NoArgsConstructor;
+import net.mureng.mureng.domain.member.Member;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
 
-@Getter
+@Data
 @NoArgsConstructor
 @Entity
 @Table(name = "REPLY_LIKES")
 public class ReplyLikes {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "reply_id")
-    private Long replyId;
+    @ManyToOne
+    @JoinColumn(name = "reply_id")
+    private Reply replyId;
 
-    @Column(name = "member_id")
-    private Long memberId;
+    @Id
+    @ManyToOne
+    @JoinColumn(name = "member_id")
+    private Member memberId;
 
     @Column(name = "reg_date")
     private LocalDateTime regDate;

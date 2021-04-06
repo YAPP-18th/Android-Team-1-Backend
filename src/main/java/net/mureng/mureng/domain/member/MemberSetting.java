@@ -1,21 +1,22 @@
 package net.mureng.mureng.domain.member;
 
 
-import lombok.Getter;
+import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.time.LocalTime;
 
-@Getter
+@Data
 @NoArgsConstructor
 @Entity
 @Table(name = "MEMBER_SETTING")
 public class MemberSetting {
 
     @Id
-    @Column(name = "member_id")
-    private Long memberId;
+    @OneToOne
+    @JoinColumn(name = "member_id")
+    private Member memberId;
 
     @Column(name = "daily_end_time")
     private LocalTime dailyEndTime;

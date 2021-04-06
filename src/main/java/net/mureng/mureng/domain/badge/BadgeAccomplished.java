@@ -1,24 +1,27 @@
 package net.mureng.mureng.domain.badge;
 
-import lombok.Getter;
+import lombok.Data;
 import lombok.NoArgsConstructor;
+import net.mureng.mureng.domain.member.Member;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
 
-@Getter
+@Data
 @NoArgsConstructor
 @Entity
 @Table(name = "BADGE_ACCOMPLISHED")
 public class BadgeAccomplished {
 
     @Id
-    @Column(name = "badge_id")
+    @ManyToOne
+    @JoinColumn(name = "badge_id")
     private Badge badgeId;
 
     @Id
-    @Column(name = "member_id")
-    private Long memberId;
+    @ManyToOne
+    @JoinColumn(name = "member_id")
+    private Member memberId;
 
     @Column(name = "reg_date")
     private LocalDateTime regDate;

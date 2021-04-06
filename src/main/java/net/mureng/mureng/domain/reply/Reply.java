@@ -1,12 +1,14 @@
 package net.mureng.mureng.domain.reply;
 
-import lombok.Getter;
+import lombok.Data;
 import lombok.NoArgsConstructor;
+import net.mureng.mureng.domain.member.Member;
+import net.mureng.mureng.domain.question.Question;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
 
-@Getter
+@Data
 @NoArgsConstructor
 @Entity
 public class Reply {
@@ -16,11 +18,13 @@ public class Reply {
     @Column(name = "reply_id")
     private Long replyId;
 
-    @Column(name = "member_id")
-    private Long memberId;
+    @ManyToOne
+    @JoinColumn(name = "member_id")
+    private Member memberId;
 
-    @Column(name = "question_id")
-    private Long questionId;
+    @ManyToOne
+    @JoinColumn(name = "question_id")
+    private Question questionId;
 
     private String content;
 

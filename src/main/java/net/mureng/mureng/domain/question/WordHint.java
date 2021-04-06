@@ -1,12 +1,12 @@
 package net.mureng.mureng.domain.question;
 
-import lombok.Getter;
+import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
 
-@Getter
+@Data
 @NoArgsConstructor
 @Entity
 @Table(name = "WORD_HINT")
@@ -17,8 +17,9 @@ public class WordHint {
     @Column(name = "hint_id")
     private Long hintId;
 
-    @Column(name = "question_id")
-    private Long questionId;
+    @ManyToOne
+    @JoinColumn(name = "question_id")
+    private Question questionId;
 
     private String word;
 

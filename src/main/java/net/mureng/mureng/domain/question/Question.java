@@ -1,12 +1,13 @@
 package net.mureng.mureng.domain.question;
 
-import lombok.Getter;
+import lombok.Data;
 import lombok.NoArgsConstructor;
+import net.mureng.mureng.domain.member.Member;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
 
-@Getter
+@Data
 @NoArgsConstructor
 @Entity
 public class Question {
@@ -16,8 +17,9 @@ public class Question {
     @Column(name = "question_id")
     private Long questionId;
 
-    @Column(name = "member_id")
-    private Long memberId;
+    @ManyToOne
+    @JoinColumn(name = "member_id")
+    private Member memberId;
 
     private String category;
 

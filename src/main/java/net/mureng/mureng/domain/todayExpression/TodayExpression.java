@@ -1,12 +1,12 @@
 package net.mureng.mureng.domain.todayExpression;
 
-import lombok.Getter;
+import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
 
-@Getter
+@Data
 @NoArgsConstructor
 @Entity
 @Table(name = "TODAY_EXPRESSION")
