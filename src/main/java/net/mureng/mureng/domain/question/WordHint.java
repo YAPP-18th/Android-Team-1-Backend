@@ -1,14 +1,13 @@
 package net.mureng.mureng.domain.question;
 
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
 
 @Getter
-@Setter
 @NoArgsConstructor
 @Entity
 @Table(name = "WORD_HINT")
@@ -31,4 +30,13 @@ public class WordHint {
 
     @Column(name = "reg_date", nullable = false)
     private LocalDateTime regDate;
+
+    @Builder
+    public WordHint(Long hintId, Question questionId, String word, String meaning, LocalDateTime regDate) {
+        this.hintId = hintId;
+        this.questionId = questionId;
+        this.word = word;
+        this.meaning = meaning;
+        this.regDate = regDate;
+    }
 }

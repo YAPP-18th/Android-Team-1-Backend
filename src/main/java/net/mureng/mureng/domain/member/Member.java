@@ -1,14 +1,13 @@
 package net.mureng.mureng.domain.member;
 
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
 
 @Getter
-@Setter
 @NoArgsConstructor
 @Entity
 public class Member {
@@ -41,4 +40,16 @@ public class Member {
     @Column(name = "mureng_count", nullable = false, columnDefinition = "int default 0")
     private Long murengCount;
 
+    @Builder
+    public Member(Long memberId, String identifier, String email, Boolean isActive, String nickname, String image, LocalDateTime regDate, LocalDateTime modDate, Long murengCount) {
+        this.memberId = memberId;
+        this.identifier = identifier;
+        this.email = email;
+        this.isActive = isActive;
+        this.nickname = nickname;
+        this.image = image;
+        this.regDate = regDate;
+        this.modDate = modDate;
+        this.murengCount = murengCount;
+    }
 }

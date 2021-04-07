@@ -1,30 +1,30 @@
 package net.mureng.mureng.domain.reply;
 
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import net.mureng.mureng.domain.member.Member;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.EmbeddedId;
+import javax.persistence.Entity;
+import javax.persistence.Table;
 import java.time.LocalDateTime;
 
 @Getter
-@Setter
 @NoArgsConstructor
 @Entity
 @Table(name = "REPLY_LIKES")
 public class ReplyLikes {
-
-    @Id
-    @ManyToOne
-    @JoinColumn(name = "reply_id")
-    private Reply replyId;
-
-    @Id
-    @ManyToOne
-    @JoinColumn(name = "member_id")
-    private Member memberId;
+    @EmbeddedId
+    private ReplyLikesPK id;
 
     @Column(name = "reg_date", nullable = false)
     private LocalDateTime regDate;
+
+    @Builder
+    public ReplyLikes(ReplyLikesPK id, LocalDateTime regDate) {
+        this.id = id;
+        this.regDate = regDate;
+    }
 }

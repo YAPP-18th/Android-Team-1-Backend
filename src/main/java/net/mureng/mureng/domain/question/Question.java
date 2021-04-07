@@ -1,15 +1,14 @@
 package net.mureng.mureng.domain.question;
 
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 import net.mureng.mureng.domain.member.Member;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
 
 @Getter
-@Setter
 @NoArgsConstructor
 @Entity
 public class Question {
@@ -35,4 +34,13 @@ public class Question {
     @Column(name = "reg_date", nullable = false)
     private LocalDateTime regDate;
 
+    @Builder
+    public Question(Long questionId, Member memberId, String category, String content, String koContent, LocalDateTime regDate) {
+        this.questionId = questionId;
+        this.memberId = memberId;
+        this.category = category;
+        this.content = content;
+        this.koContent = koContent;
+        this.regDate = regDate;
+    }
 }

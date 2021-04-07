@@ -1,8 +1,8 @@
 package net.mureng.mureng.domain.reply;
 
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 import net.mureng.mureng.domain.member.Member;
 import net.mureng.mureng.domain.question.Question;
 
@@ -10,7 +10,6 @@ import javax.persistence.*;
 import java.time.LocalDateTime;
 
 @Getter
-@Setter
 @NoArgsConstructor
 @Entity
 public class Reply {
@@ -46,4 +45,16 @@ public class Reply {
     @Column(name = "mod_date", nullable = false)
     private LocalDateTime modDate;
 
+    @Builder
+    public Reply(Long replyId, Member memberId, Question questionId, String content, String image, Boolean visible, Boolean deleted, LocalDateTime regDate, LocalDateTime modDate) {
+        this.replyId = replyId;
+        this.memberId = memberId;
+        this.questionId = questionId;
+        this.content = content;
+        this.image = image;
+        this.visible = visible;
+        this.deleted = deleted;
+        this.regDate = regDate;
+        this.modDate = modDate;
+    }
 }

@@ -1,13 +1,12 @@
 package net.mureng.mureng.domain.badge;
 
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 import javax.persistence.*;
 
 @Getter
-@Setter
 @NoArgsConstructor
 @Entity
 public class Badge {
@@ -23,4 +22,10 @@ public class Badge {
     @Column(nullable = false)
     private String content;
 
+    @Builder
+    public Badge(Long badgeId, String name, String content) {
+        this.badgeId = badgeId;
+        this.name = name;
+        this.content = content;
+    }
 }
