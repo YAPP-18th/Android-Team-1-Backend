@@ -1,36 +1,44 @@
 package net.mureng.mureng.domain.member;
 
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
 
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
 @Entity
 public class Member {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "member_id")
+    @Column(name = "member_id", nullable = false)
     private Long memberId;
 
+    @Column(nullable = false)
     private String identifier;
 
+    @Column(nullable = false)
     private String email;
 
-    @Column(name = "is_active")
+    @Column(name = "is_active", nullable = false, columnDefinition = "boolean default true")
     private Boolean isActive;
 
+    @Column(nullable = false, length = 8)
     private String nickname;
 
     private String image;
 
-    @Column(name = "reg_date")
+    @Column(name = "reg_date", nullable = false)
     private LocalDateTime regDate;
 
-    @Column(name = "mod_date")
+    @Column(name = "mod_date", nullable = false)
     private LocalDateTime modDate;
+
+    @Column(name = "mureng_count", nullable = false, columnDefinition = "int default 0")
+    private Long murengCount;
 
 }

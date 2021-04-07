@@ -1,13 +1,15 @@
 package net.mureng.mureng.domain.reply;
 
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import net.mureng.mureng.domain.member.Member;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
 
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
 @Entity
 @Table(name = "REPLY_LIKES")
@@ -23,6 +25,6 @@ public class ReplyLikes {
     @JoinColumn(name = "member_id")
     private Member memberId;
 
-    @Column(name = "reg_date")
+    @Column(name = "reg_date", nullable = false)
     private LocalDateTime regDate;
 }

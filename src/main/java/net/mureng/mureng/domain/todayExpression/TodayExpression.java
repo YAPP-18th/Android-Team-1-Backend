@@ -1,12 +1,14 @@
 package net.mureng.mureng.domain.todayExpression;
 
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
 
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
 @Entity
 @Table(name = "TODAY_EXPRESSION")
@@ -17,19 +19,19 @@ public class TodayExpression {
     @Column(name = "exp_id")
     private Long expId;
 
+    @Column(nullable = false)
     private String expression;
 
+    @Column(nullable = false)
     private String meaning;
 
-    @Column(name = "expression_example")
     private String expressionExample;
 
-    @Column(name = "expression_meaning")
     private String expressionMeaning;
 
-    @Column(name = "reg_date")
+    @Column(name = "reg_date", nullable = false)
     private LocalDateTime regDate;
 
-    @Column(name = "mod_date")
+    @Column(name = "mod_date", nullable = false)
     private LocalDateTime modDate;
 }
