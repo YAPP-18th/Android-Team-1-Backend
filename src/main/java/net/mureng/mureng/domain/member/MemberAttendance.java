@@ -13,8 +13,13 @@ import java.time.LocalDate;
 @Table(name = "MEMBER_ATTENDANCE")
 public class MemberAttendance {
 
-    @EmbeddedId
-    private MemberAttendancePK id;
+    @Id
+    private Long memberId;
+
+    @MapsId
+    @OneToOne
+    @JoinColumn(name = "member_id")
+    private Member member;
 
     @Column(name = "attendance_count", nullable = false)
     private Long attendanceCount;
@@ -23,8 +28,8 @@ public class MemberAttendance {
     private LocalDate lastAttendanceDate;
 
     @Builder
-    public MemberAttendance(MemberAttendancePK id, Long attendanceCount, LocalDate lastAttendanceDate) {
-        this.id = id;
+    public MemberAttendance(Long memberId, Long attendanceCount, LocalDate lastAttendanceDate) {
+        this.memberId = memberId;
         this.attendanceCount = attendanceCount;
         this.lastAttendanceDate = lastAttendanceDate;
     }

@@ -42,7 +42,7 @@ public class MemberRepositoryTest {
                                     .nickname("Test")
                                     .regDate(LocalDateTime.now())
                                     .modDate(LocalDateTime.now())
-                                    .murengCount(new Long(0))
+                                    .murengCount(0L)
                                     .build());
 
         List<Member> memberList = memberRepository.findAll();
@@ -65,7 +65,7 @@ public class MemberRepositoryTest {
                 .nickname("Test")
                 .regDate(LocalDateTime.now())
                 .modDate(LocalDateTime.now())
-                .murengCount(new Long(0))
+                .murengCount(0L)
                 .build());
 
         List<Member> memberList = memberRepository.findAll();
