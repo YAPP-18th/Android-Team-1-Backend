@@ -1,5 +1,6 @@
 package net.mureng.mureng.domain.member;
 
+import net.mureng.mureng.annotation.MurengDataTest;
 import net.mureng.mureng.domain.todayExpression.TodayExpression;
 import net.mureng.mureng.domain.todayExpression.TodayExpressionRepository;
 import org.junit.jupiter.api.Test;
@@ -18,8 +19,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 
 
-@ExtendWith(SpringExtension.class)
-@SpringBootTest
+@MurengDataTest
 public class MemberRepositoryTest {
     
     @Autowired
