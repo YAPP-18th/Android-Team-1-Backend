@@ -1,5 +1,8 @@
 package net.mureng.mureng.domain.member;
 
+import com.github.springtestdbunit.annotation.DatabaseSetup;
+import com.github.springtestdbunit.annotation.ExpectedDatabase;
+import com.github.springtestdbunit.assertion.DatabaseAssertionMode;
 import net.mureng.mureng.annotation.MurengDataTest;
 import net.mureng.mureng.domain.todayExpression.TodayExpression;
 import net.mureng.mureng.domain.todayExpression.TodayExpressionRepository;
@@ -32,6 +35,8 @@ public class MemberRepositoryTest {
     MemberScrapRepository memberScrapRepository;
 
     @Test
+    @ExpectedDatabase(value = "classpath:dbunit/expected/멤버_회원가입.xml",
+            assertionMode = DatabaseAssertionMode.NON_STRICT)
     public void 멤버_회원가입(){
         String email = "test@gmail.com";
 
@@ -40,52 +45,27 @@ public class MemberRepositoryTest {
                                     .email(email)
                                     .isActive(true)
                                     .nickname("Test")
-                                    .regDate(LocalDateTime.now())
-                                    .modDate(LocalDateTime.now())
+                                    .regDate(LocalDateTime.of(2020, 10, 14, 17, 11, 9))
+                                    .modDate(LocalDateTime.of(2020, 10, 14, 17, 11, 10))
                                     .murengCount(0L)
                                     .build());
-
-        List<Member> memberList = memberRepository.findAll();
-
-        Member member = memberList.get(0);
-        assertThat(member.getEmail(), is(equalTo(email)));
-
     }
 
-
     @Test
-    public void 멤버_스크랩(){
+    @DatabaseSetup({
+            "classpath:dbunit/entity/member.xml",
+            "classpath:dbunit/entity/member_scrap.xml",
+            "classpath:dbunit/entity/today_expression.xml"
+    })
+    public void 멤버_스크랩_조회_테스트(){
         // Member signup
-        String email = "test@gmail.com";
-
-        memberRepository.save(Member.builder()
-                .identifier("123")
-                .email(email)
-                .isActive(true)
-                .nickname("Test")
-                .regDate(LocalDateTime.now())
-                .modDate(LocalDateTime.now())
-                .murengCount(0L)
-                .build());
-
-        List<Member> memberList = memberRepository.findAll();
-        Member member = memberList.get(0);
+        Member member = memberRepository.findById(1L).orElseThrow();
 
         // Make TodayExpression
-        todayExpressionRepository.save(TodayExpression.builder()
-                .expression("test")
-                .meaning("테스트")
-                .regDate(LocalDateTime.now())
-                .modDate(LocalDateTime.now())
-                .build());
-
-        List<TodayExpression> todayExpressionList = todayExpressionRepository.findAll();
-        TodayExpression todayExpression = todayExpressionList.get(0);
-
+        TodayExpression todayExpression = todayExpressionRepository.findById(1L).orElseThrow();
 
         Long memberId = member.getMemberId();
         Long expId = todayExpression.getExpId();
-
 
         // Make MemberScrapPk
         MemberScrapPK pk = MemberScrapPK.builder()
@@ -93,15 +73,10 @@ public class MemberRepositoryTest {
                                         .expId(expId)
                                         .build();
 
-        memberScrapRepository.save(MemberScrap.builder()
-                                            .id(pk)
-                                            .regDate(LocalDate.now())
-                                            .build());
 
-        Optional<MemberScrap> memberScrap = memberScrapRepository.findById(pk);
+        MemberScrap memberScrap = memberScrapRepository.findById(pk).orElseThrow();
 
         assertThat(todayExpression.getExpression(), is(equalTo("test")));
-        assertThat(memberScrap.get().getId().getMemberId(), is(equalTo(member.getMemberId())));
-
+        assertThat(memberScrap.getId().getMemberId(), is(equalTo(member.getMemberId())));
     }
 }

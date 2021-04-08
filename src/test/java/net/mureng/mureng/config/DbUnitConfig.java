@@ -2,6 +2,8 @@ package net.mureng.mureng.config;
 
 import com.github.springtestdbunit.bean.DatabaseConfigBean;
 import com.github.springtestdbunit.bean.DatabaseDataSourceConnectionFactoryBean;
+import org.dbunit.database.DefaultMetadataHandler;
+import org.dbunit.ext.h2.H2DataTypeFactory;
 import org.dbunit.ext.mysql.MySqlDataTypeFactory;
 import org.dbunit.ext.mysql.MySqlMetadataHandler;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -18,8 +20,8 @@ public class DbUnitConfig {
     public DatabaseConfigBean dbUnitDatabaseConfig() {
         DatabaseConfigBean config = new DatabaseConfigBean();
         config.setAllowEmptyFields(true);
-        config.setDatatypeFactory(new MySqlDataTypeFactory());
-        config.setMetadataHandler(new MySqlMetadataHandler());
+        config.setDatatypeFactory(new H2DataTypeFactory());
+        config.setMetadataHandler(new DefaultMetadataHandler());
         return config;
     }
 
