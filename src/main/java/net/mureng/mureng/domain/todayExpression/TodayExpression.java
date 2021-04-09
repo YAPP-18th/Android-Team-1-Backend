@@ -24,8 +24,10 @@ public class TodayExpression {
     @Column(nullable = false)
     private String meaning;
 
+    @Column(name = "expression_example")
     private String expressionExample;
 
+    @Column(name = "expression_meaning") // TODO expression_example_meaning 이 되어야 하는건 아닌지??
     private String expressionMeaning;
 
     @Column(name = "reg_date", nullable = false)
