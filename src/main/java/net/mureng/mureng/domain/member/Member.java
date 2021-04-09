@@ -40,6 +40,12 @@ public class Member {
     @Column(name = "mureng_count", nullable = false, columnDefinition = "int default 0")
     private Long murengCount;
 
+    @OneToOne(mappedBy = "member")
+    private MemberAttendance memberAttendance;
+
+    @OneToOne(mappedBy = "member")
+    private MemberSetting memberSetting;
+
     @Builder
     public Member(Long memberId, String identifier, String email, Boolean isActive, String nickname, String image, LocalDateTime regDate, LocalDateTime modDate, Long murengCount) {
         this.memberId = memberId;

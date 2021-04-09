@@ -1,5 +1,9 @@
 package net.mureng.mureng.domain.member;
 
+import com.github.springtestdbunit.annotation.DatabaseSetup;
+import com.github.springtestdbunit.annotation.ExpectedDatabase;
+import com.github.springtestdbunit.assertion.DatabaseAssertionMode;
+import net.mureng.mureng.annotation.MurengDataTest;
 import net.mureng.mureng.domain.todayExpression.TodayExpression;
 import net.mureng.mureng.domain.todayExpression.TodayExpressionRepository;
 import org.junit.jupiter.api.Test;
@@ -16,92 +20,61 @@ import java.util.Optional;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 
-@ExtendWith(SpringExtension.class)
-@SpringBootTest
+@MurengDataTest
 public class MemberRepositoryTest {
     
     @Autowired
     MemberRepository memberRepository;
 
-    @Autowired
-    TodayExpressionRepository todayExpressionRepository;
-
-    @Autowired
-    MemberScrapRepository memberScrapRepository;
-
     @Test
+    @ExpectedDatabase(value = "classpath:dbunit/expected/멤버_회원가입.xml",
+            assertionMode = DatabaseAssertionMode.NON_STRICT)
     public void 멤버_회원가입(){
-        String email = "test@gmail.com";
-
-        memberRepository.save(Member.builder()
-                                    .identifier("123")
-                                    .email(email)
-                                    .isActive(true)
-                                    .nickname("Test")
-                                    .regDate(LocalDateTime.now())
-                                    .modDate(LocalDateTime.now())
-                                    .murengCount(new Long(0))
-                                    .build());
-
-        List<Member> memberList = memberRepository.findAll();
-
-        Member member = memberList.get(0);
-        assertThat(member.getEmail(), is(equalTo(email)));
-
-    }
-
-
-    @Test
-    public void 멤버_스크랩(){
-        // Member signup
-        String email = "test@gmail.com";
-
-        memberRepository.save(Member.builder()
+        Member member = Member.builder()
+                .memberId(1L)
                 .identifier("123")
-                .email(email)
+                .email("test@gmail.com")
                 .isActive(true)
                 .nickname("Test")
-                .regDate(LocalDateTime.now())
-                .modDate(LocalDateTime.now())
-                .murengCount(new Long(0))
-                .build());
+                .regDate(LocalDateTime.of(2020, 10, 14, 17, 11, 9))
+                .modDate(LocalDateTime.of(2020, 10, 14, 17, 11, 10))
+                .murengCount(0L)
+                .build();
 
-        List<Member> memberList = memberRepository.findAll();
-        Member member = memberList.get(0);
+        memberRepository.save(member);
+    }
 
-        // Make TodayExpression
-        todayExpressionRepository.save(TodayExpression.builder()
-                .expression("test")
-                .meaning("테스트")
-                .regDate(LocalDateTime.now())
-                .modDate(LocalDateTime.now())
-                .build());
+    @Test
+    @DatabaseSetup({
+            "classpath:dbunit/entity/member.xml",
+            "classpath:dbunit/entity/member_setting.xml"
+    })
+    public void 멤버_연관_설정_조회() {
+        Member member = memberRepository.findById(1L).orElseThrow();
+        MemberSetting memberSetting = member.getMemberSetting();
 
-        List<TodayExpression> todayExpressionList = todayExpressionRepository.findAll();
-        TodayExpression todayExpression = todayExpressionList.get(0);
+        assertEquals(1L, memberSetting.getMemberId());
+        assertEquals(17, memberSetting.getDailyEndTime().getHour());
+        assertEquals(11, memberSetting.getDailyEndTime().getMinute());
+        assertEquals(9, memberSetting.getDailyEndTime().getSecond());
+    }
 
+    @Test
+    @DatabaseSetup({
+            "classpath:dbunit/entity/member.xml",
+            "classpath:dbunit/entity/member_attendance.xml"
+    })
+    public void 멤버_연관_출석_조회() {
+        Member member = memberRepository.findById(1L).orElseThrow();
+        MemberAttendance memberAttendance = member.getMemberAttendance();
 
-        Long memberId = member.getMemberId();
-        Long expId = todayExpression.getExpId();
-
-
-        // Make MemberScrapPk
-        MemberScrapPK pk = MemberScrapPK.builder()
-                                        .memberId(memberId)
-                                        .expId(expId)
-                                        .build();
-
-        memberScrapRepository.save(MemberScrap.builder()
-                                            .id(pk)
-                                            .regDate(LocalDate.now())
-                                            .build());
-
-        Optional<MemberScrap> memberScrap = memberScrapRepository.findById(pk);
-
-        assertThat(todayExpression.getExpression(), is(equalTo("test")));
-        assertThat(memberScrap.get().getId().getMemberId(), is(equalTo(member.getMemberId())));
-
+        assertEquals(1L, memberAttendance.getMemberId());
+        assertEquals(10, memberAttendance.getAttendanceCount());
+        assertEquals(2020, memberAttendance.getLastAttendanceDate().getYear());
+        assertEquals(10, memberAttendance.getLastAttendanceDate().getMonthValue());
+        assertEquals(14, memberAttendance.getLastAttendanceDate().getDayOfMonth());
     }
 }

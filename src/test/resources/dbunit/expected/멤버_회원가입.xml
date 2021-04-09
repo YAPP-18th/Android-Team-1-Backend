@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dataset>
+    <member identifier="123" email="test@gmail.com" is_active="true" nickname="Test" mureng_count="0"
+            mod_date="2020-10-14 17:11:10" reg_date="2020-10-14 17:11:09"/>
+
+</dataset>

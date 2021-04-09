@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dataset>
+    <today_expression exp_id="1" expression="test" meaning="테스트" expression_example="this is test."
+                      expression_meaning="이것은 테스트이다." mod_date="2020-10-14 17:11:10" reg_date="2020-10-14 17:11:09"/>
+    <today_expression exp_id="2" expression="test2" meaning="테스트2" expression_example="this is test2."
+                      expression_meaning="이것은 테스트2이다." mod_date="2020-10-15 17:11:10" reg_date="2020-10-15 17:11:09"/>
+</dataset>

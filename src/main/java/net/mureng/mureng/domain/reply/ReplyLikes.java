@@ -4,11 +4,10 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import net.mureng.mureng.domain.badge.Badge;
+import net.mureng.mureng.domain.member.Member;
 
-import javax.persistence.Column;
-import javax.persistence.EmbeddedId;
-import javax.persistence.Entity;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.time.LocalDateTime;
 
 @Getter
@@ -18,6 +17,16 @@ import java.time.LocalDateTime;
 public class ReplyLikes {
     @EmbeddedId
     private ReplyLikesPK id;
+
+    @MapsId("memberId")
+    @ManyToOne
+    @JoinColumn(name = "member_id")
+    private Member member;
+
+    @MapsId("replyId")
+    @ManyToOne
+    @JoinColumn(name = "reply_id")
+    private Reply reply;
 
     @Column(name = "reg_date", nullable = false)
     private LocalDateTime regDate;
