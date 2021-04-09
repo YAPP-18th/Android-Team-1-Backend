@@ -20,6 +20,7 @@ import java.util.Optional;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 
 @MurengDataTest
@@ -32,16 +33,48 @@ public class MemberRepositoryTest {
     @ExpectedDatabase(value = "classpath:dbunit/expected/멤버_회원가입.xml",
             assertionMode = DatabaseAssertionMode.NON_STRICT)
     public void 멤버_회원가입(){
-        String email = "test@gmail.com";
+        Member member = Member.builder()
+                .memberId(1L)
+                .identifier("123")
+                .email("test@gmail.com")
+                .isActive(true)
+                .nickname("Test")
+                .regDate(LocalDateTime.of(2020, 10, 14, 17, 11, 9))
+                .modDate(LocalDateTime.of(2020, 10, 14, 17, 11, 10))
+                .murengCount(0L)
+                .build();
 
-        memberRepository.save(Member.builder()
-                                    .identifier("123")
-                                    .email(email)
-                                    .isActive(true)
-                                    .nickname("Test")
-                                    .regDate(LocalDateTime.of(2020, 10, 14, 17, 11, 9))
-                                    .modDate(LocalDateTime.of(2020, 10, 14, 17, 11, 10))
-                                    .murengCount(0L)
-                                    .build());
+        memberRepository.save(member);
+    }
+
+    @Test
+    @DatabaseSetup({
+            "classpath:dbunit/entity/member.xml",
+            "classpath:dbunit/entity/member_setting.xml"
+    })
+    public void 멤버_연관_설정_조회() {
+        Member member = memberRepository.findById(1L).orElseThrow();
+        MemberSetting memberSetting = member.getMemberSetting();
+
+        assertEquals(1L, memberSetting.getMemberId());
+        assertEquals(17, memberSetting.getDailyEndTime().getHour());
+        assertEquals(11, memberSetting.getDailyEndTime().getMinute());
+        assertEquals(9, memberSetting.getDailyEndTime().getSecond());
+    }
+
+    @Test
+    @DatabaseSetup({
+            "classpath:dbunit/entity/member.xml",
+            "classpath:dbunit/entity/member_attendance.xml"
+    })
+    public void 멤버_연관_출석_조회() {
+        Member member = memberRepository.findById(1L).orElseThrow();
+        MemberAttendance memberAttendance = member.getMemberAttendance();
+
+        assertEquals(1L, memberAttendance.getMemberId());
+        assertEquals(10, memberAttendance.getAttendanceCount());
+        assertEquals(2020, memberAttendance.getLastAttendanceDate().getYear());
+        assertEquals(10, memberAttendance.getLastAttendanceDate().getMonthValue());
+        assertEquals(14, memberAttendance.getLastAttendanceDate().getDayOfMonth());
     }
 }
