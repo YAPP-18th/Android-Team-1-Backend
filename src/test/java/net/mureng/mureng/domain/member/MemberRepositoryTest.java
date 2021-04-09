@@ -28,12 +28,6 @@ public class MemberRepositoryTest {
     @Autowired
     MemberRepository memberRepository;
 
-    @Autowired
-    TodayExpressionRepository todayExpressionRepository;
-
-    @Autowired
-    MemberScrapRepository memberScrapRepository;
-
     @Test
     @ExpectedDatabase(value = "classpath:dbunit/expected/멤버_회원가입.xml",
             assertionMode = DatabaseAssertionMode.NON_STRICT)
@@ -49,34 +43,5 @@ public class MemberRepositoryTest {
                                     .modDate(LocalDateTime.of(2020, 10, 14, 17, 11, 10))
                                     .murengCount(0L)
                                     .build());
-    }
-
-    @Test
-    @DatabaseSetup({
-            "classpath:dbunit/entity/member.xml",
-            "classpath:dbunit/entity/member_scrap.xml",
-            "classpath:dbunit/entity/today_expression.xml"
-    })
-    public void 멤버_스크랩_조회_테스트(){
-        // Member signup
-        Member member = memberRepository.findById(1L).orElseThrow();
-
-        // Make TodayExpression
-        TodayExpression todayExpression = todayExpressionRepository.findById(1L).orElseThrow();
-
-        Long memberId = member.getMemberId();
-        Long expId = todayExpression.getExpId();
-
-        // Make MemberScrapPk
-        MemberScrapPK pk = MemberScrapPK.builder()
-                                        .memberId(memberId)
-                                        .expId(expId)
-                                        .build();
-
-
-        MemberScrap memberScrap = memberScrapRepository.findById(pk).orElseThrow();
-
-        assertThat(todayExpression.getExpression(), is(equalTo("test")));
-        assertThat(memberScrap.getId().getMemberId(), is(equalTo(member.getMemberId())));
     }
 }
