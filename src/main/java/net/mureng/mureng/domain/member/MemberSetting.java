@@ -14,8 +14,13 @@ import java.time.LocalTime;
 @Table(name = "MEMBER_SETTING")
 public class MemberSetting {
 
-    @EmbeddedId
-    private MemberSettingPK memberId;
+    @Id
+    private Long memberId;
+
+    @MapsId
+    @OneToOne
+    @JoinColumn(name = "member_id")
+    private Member member;
 
     @Column(name = "daily_end_time", nullable = false)
     private LocalTime dailyEndTime;
@@ -24,7 +29,7 @@ public class MemberSetting {
     private Boolean isPushActive;
 
     @Builder
-    public MemberSetting(MemberSettingPK memberId, LocalTime dailyEndTime, Boolean isPushActive) {
+    public MemberSetting(Long memberId, LocalTime dailyEndTime, Boolean isPushActive) {
         this.memberId = memberId;
         this.dailyEndTime = dailyEndTime;
         this.isPushActive = isPushActive;
