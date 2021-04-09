@@ -20,6 +20,11 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 
 @MurengDataTest
+@DatabaseSetup({
+        "classpath:dbunit/entity/member.xml",
+        "classpath:dbunit/entity/today_expression.xml",
+        "classpath:dbunit/entity/member_scrap.xml"
+})
 public class MemberScrapRepositoryTest {
 
     private static final Long MEMBER_ID = 1L;
@@ -28,11 +33,6 @@ public class MemberScrapRepositoryTest {
     MemberScrapRepository memberScrapRepository;
 
     @Test
-    @DatabaseSetup({
-            "classpath:dbunit/entity/member.xml",
-            "classpath:dbunit/entity/today_expression.xml",
-            "classpath:dbunit/entity/member_scrap.xml"
-    })
     public void 멤버_스크랩_조회_테스트(){
         // Make MemberScrapPk
         MemberScrapPK pk = MemberScrapPK.builder()
@@ -49,11 +49,6 @@ public class MemberScrapRepositoryTest {
     }
 
     @Test
-    @DatabaseSetup({
-            "classpath:dbunit/entity/member.xml",
-            "classpath:dbunit/entity/today_expression.xml",
-            "classpath:dbunit/entity/member_scrap.xml"
-    })
     public void 멤버로_스크랩목록_조회_테스트(){
         List<MemberScrap> memberScraps = memberScrapRepository.findAllByIdMemberId(MEMBER_ID);
 
@@ -71,11 +66,6 @@ public class MemberScrapRepositoryTest {
     }
 
     @Test
-    @DatabaseSetup({
-            "classpath:dbunit/entity/member.xml",
-            "classpath:dbunit/entity/today_expression.xml",
-            "classpath:dbunit/entity/member_scrap.xml"
-    })
     public void 멤버로_스크랩목록_내용조회_테스트(){
         List<TodayExpression> todayExpressions = memberScrapRepository.findAllByIdMemberId(MEMBER_ID).stream()
                 .map(MemberScrap::getTodayExpression)
