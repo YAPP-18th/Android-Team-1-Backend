@@ -2,7 +2,6 @@ package net.mureng.mureng.domain.question;
 
 import com.github.springtestdbunit.annotation.DatabaseSetup;
 import net.mureng.mureng.annotation.MurengDataTest;
-import net.mureng.mureng.domain.member.Member;
 import net.mureng.mureng.domain.member.MemberRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,38 +28,32 @@ public class QuestionRepositoryTest {
 
     @Test
     public void 전체_질문_목록_조회(){
-        Member member = memberRepository.findById(MEMBER_ID).orElseThrow();
-
         List<Question> questions = questionRepository.findAll();
 
         assertEquals(3, questions.size());
 
         Question question = questions.get(0);
 
-        assertEquals(member, question.getMemberId());
+        assertEquals(MEMBER_ID, question.getMemberId().getMemberId());
         assertEquals("what is your favorite color?", question.getContent());
         assertEquals("당신이 가장 좋아하는 색은 무엇인가요?", question.getKoContent());
     }
 
     @Test
     public void 멤버로_질문_목록_조회(){
-        Member member = memberRepository.findById(MEMBER_ID).orElseThrow(() -> new IllegalArgumentException("No such Member ID"));
+        List<Question> questions = questionRepository.findAllByMemberIdMemberId(MEMBER_ID);
 
-        List<Question> questions = questionRepository.findAllByMemberId(member);
 
-        if(MEMBER_ID == 1L) {
-            assertEquals(2, questions.size());
+        assertEquals(2, questions.size());
 
-            assertEquals(member, questions.get(0).getMemberId());
-            assertEquals("what is your favorite color?", questions.get(0).getContent());
-            assertEquals("당신이 가장 좋아하는 색은 무엇인가요?", questions.get(0).getKoContent());
+        assertEquals(MEMBER_ID, questions.get(0).getMemberId().getMemberId());
+        assertEquals("what is your favorite color?", questions.get(0).getContent());
+        assertEquals("당신이 가장 좋아하는 색은 무엇인가요?", questions.get(0).getKoContent());
 
-            assertEquals(member, questions.get(1).getMemberId());
-            assertEquals("How did you feel when you first heard the mureng?", questions.get(1).getContent());
-            assertEquals("머렝을 처음 들었을 때 어떤 느낌이 들었나요?", questions.get(1).getKoContent());
-        } else if(MEMBER_ID == 3L){
-            assertEquals(0, questions.size());
-        }
+        assertEquals(MEMBER_ID, questions.get(1).getMemberId().getMemberId());
+        assertEquals("How did you feel when you first heard the mureng?", questions.get(1).getContent());
+        assertEquals("머렝을 처음 들었을 때 어떤 느낌이 들었나요?", questions.get(1).getKoContent());
+
 
     }
 }
