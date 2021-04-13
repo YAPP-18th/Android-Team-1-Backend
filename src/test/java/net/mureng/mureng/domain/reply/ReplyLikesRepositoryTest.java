@@ -22,7 +22,7 @@ public class ReplyLikesRepositoryTest {
 
     @Test
     public void 답변_좋아요_수_조회(){
-        Long replyCount = replyLikesRepository.countByIdReplyId(REPLY_ID);
+        int replyCount = replyLikesRepository.countByIdReplyId(REPLY_ID);
 
         assertEquals(2, replyCount);
     }
