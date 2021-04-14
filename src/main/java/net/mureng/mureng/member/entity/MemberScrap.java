@@ -29,7 +29,7 @@ public class MemberScrap {
     private TodayExpression todayExpression;
 
     @Column(name = "reg_date", nullable = false)
-    private LocalDate regDate;
+    private LocalDate regDate = LocalDate.now();
 
     @Builder
     public MemberScrap(MemberScrapPK id, LocalDate regDate) {

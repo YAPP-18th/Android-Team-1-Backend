@@ -28,7 +28,7 @@ public class BadgeAccomplished {
     private Badge badge;
 
     @Column(name = "reg_date", nullable = false)
-    private LocalDateTime regDate;
+    private LocalDateTime regDate = LocalDateTime.now();
 
     @Builder
     public BadgeAccomplished(BadgeAccomplishedPK id, LocalDateTime regDate) {
