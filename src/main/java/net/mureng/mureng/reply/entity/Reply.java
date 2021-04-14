@@ -33,17 +33,17 @@ public class Reply {
     @Column(nullable = false)
     private String image;
 
-    @Column(nullable = false, columnDefinition = "boolean default true")
-    private Boolean visible;
+    @Column(nullable = false)
+    private Boolean visible = true;
 
-    @Column(nullable = false, columnDefinition = "boolean default false")
-    private Boolean deleted;
+    @Column(nullable = false)
+    private Boolean deleted = false;
 
     @Column(name = "reg_date", nullable = false)
-    private LocalDateTime regDate;
+    private LocalDateTime regDate = LocalDateTime.now();
 
     @Column(name = "mod_date", nullable = false)
-    private LocalDateTime modDate;
+    private LocalDateTime modDate = LocalDateTime.now();
 
     @Builder
     public Reply(Long replyId, Member memberId, Question questionId, String content, String image, Boolean visible, Boolean deleted, LocalDateTime regDate, LocalDateTime modDate) {

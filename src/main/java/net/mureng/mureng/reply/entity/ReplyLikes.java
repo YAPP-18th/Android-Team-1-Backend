@@ -27,7 +27,7 @@ public class ReplyLikes {
     private Reply reply;
 
     @Column(name = "reg_date", nullable = false)
-    private LocalDateTime regDate;
+    private LocalDateTime regDate = LocalDateTime.now();
 
     @Builder
     public ReplyLikes(ReplyLikesPK id, LocalDateTime regDate) {

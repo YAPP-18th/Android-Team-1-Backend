@@ -4,7 +4,6 @@ import com.github.springtestdbunit.annotation.DatabaseSetup;
 import net.mureng.mureng.annotation.MurengDataTest;
 import net.mureng.mureng.member.entity.MemberScrap;
 import net.mureng.mureng.member.entity.MemberScrapPK;
-import net.mureng.mureng.member.repository.MemberScrapRepository;
 import net.mureng.mureng.todayexpression.entity.TodayExpression;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,8 +11,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 
@@ -74,11 +71,11 @@ public class MemberScrapRepositoryTest {
         assertEquals("test", todayExpressions.get(0).getExpression());
         assertEquals("테스트", todayExpressions.get(0).getMeaning());
         assertEquals("this is test.", todayExpressions.get(0).getExpressionExample());
-        assertEquals("이것은 테스트이다.", todayExpressions.get(0).getExpressionMeaning());
+        assertEquals("이것은 테스트이다.", todayExpressions.get(0).getExpressionExampleMeaning());
 
         assertEquals("test2", todayExpressions.get(1).getExpression());
         assertEquals("테스트2", todayExpressions.get(1).getMeaning());
         assertEquals("this is test2.", todayExpressions.get(1).getExpressionExample());
-        assertEquals("이것은 테스트2이다.", todayExpressions.get(1).getExpressionMeaning());
+        assertEquals("이것은 테스트2이다.", todayExpressions.get(1).getExpressionExampleMeaning());
     }
 }

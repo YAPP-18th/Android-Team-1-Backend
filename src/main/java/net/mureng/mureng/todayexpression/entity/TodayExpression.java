@@ -27,22 +27,22 @@ public class TodayExpression {
     @Column(name = "expression_example")
     private String expressionExample;
 
-    @Column(name = "expression_meaning") // TODO expression_example_meaning 이 되어야 하는건 아닌지??
-    private String expressionMeaning;
+    @Column(name = "expression_example_meaning")
+    private String expressionExampleMeaning;
 
     @Column(name = "reg_date", nullable = false)
-    private LocalDateTime regDate;
+    private LocalDateTime regDate = LocalDateTime.now();
 
     @Column(name = "mod_date", nullable = false)
-    private LocalDateTime modDate;
+    private LocalDateTime modDate = LocalDateTime.now();
 
     @Builder
-    public TodayExpression(Long expId, String expression, String meaning, String expressionExample, String expressionMeaning, LocalDateTime regDate, LocalDateTime modDate) {
+    public TodayExpression(Long expId, String expression, String meaning, String expressionExample, String expressionExampleMeaning, LocalDateTime regDate, LocalDateTime modDate) {
         this.expId = expId;
         this.expression = expression;
         this.meaning = meaning;
         this.expressionExample = expressionExample;
-        this.expressionMeaning = expressionMeaning;
+        this.expressionExampleMeaning = expressionExampleMeaning;
         this.regDate = regDate;
         this.modDate = modDate;
     }
