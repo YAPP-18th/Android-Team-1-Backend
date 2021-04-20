@@ -29,7 +29,7 @@ public class WordHint {
     private String meaning;
 
     @Column(name = "reg_date", nullable = false)
-    private LocalDateTime regDate;
+    private LocalDateTime regDate = LocalDateTime.now();
 
     @Builder
     public WordHint(Long hintId, Question questionId, String word, String meaning, LocalDateTime regDate) {

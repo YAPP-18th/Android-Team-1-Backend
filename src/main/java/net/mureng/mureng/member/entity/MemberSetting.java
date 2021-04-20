@@ -25,8 +25,8 @@ public class MemberSetting {
     @Column(name = "daily_end_time", nullable = false)
     private LocalTime dailyEndTime;
 
-    @Column(name = "is_push_active", nullable = false, columnDefinition = "boolean default true")
-    private Boolean isPushActive;
+    @Column(name = "is_push_active", nullable = false)
+    private Boolean isPushActive = true;
 
     @Builder
     public MemberSetting(Long memberId, LocalTime dailyEndTime, Boolean isPushActive) {

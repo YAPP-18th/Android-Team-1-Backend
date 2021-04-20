@@ -23,8 +23,8 @@ public class Member {
     @Column(nullable = false)
     private String email;
 
-    @Column(name = "is_active", nullable = false, columnDefinition = "boolean default true")
-    private Boolean isActive;
+    @Column(name = "is_active", nullable = false)
+    private Boolean isActive = true;
 
     @Column(nullable = false, length = 8)
     private String nickname;
@@ -32,13 +32,13 @@ public class Member {
     private String image;
 
     @Column(name = "reg_date", nullable = false)
-    private LocalDateTime regDate;
+    private LocalDateTime regDate = LocalDateTime.now();
 
     @Column(name = "mod_date", nullable = false)
-    private LocalDateTime modDate;
+    private LocalDateTime modDate = LocalDateTime.now();
 
-    @Column(name = "mureng_count", nullable = false, columnDefinition = "int default 0")
-    private Long murengCount;
+    @Column(name = "mureng_count", nullable = false)
+    private Long murengCount = 0L;
 
     @OneToOne(mappedBy = "member")
     private MemberAttendance memberAttendance;

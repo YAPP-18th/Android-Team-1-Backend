@@ -32,7 +32,7 @@ public class Question {
     private String koContent;
 
     @Column(name = "reg_date", nullable = false)
-    private LocalDateTime regDate;
+    private LocalDateTime regDate = LocalDateTime.now();
 
     @Builder
     public Question(Long questionId, Member memberId, String category, String content, String koContent, LocalDateTime regDate) {
