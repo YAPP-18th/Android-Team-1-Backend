@@ -22,7 +22,7 @@ public class JwtAuthenticationFilter extends GenericFilterBean {
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
         String token = jwtTokenProvider.resolveToken((HttpServletRequest) servletRequest);
 
-        if (token != null && jwtTokenProvider.validateToken(token)) { // token 검증
+        if (jwtTokenProvider.validateToken(token)) { // token 검증
             Authentication auth = jwtTokenProvider.getAuthentication(token); // 인증 객체 생성
             SecurityContextHolder.getContext().setAuthentication(auth); // SecurityContextHolder에 인증 객체 저장
         }

@@ -48,7 +48,7 @@ public class JwtTokenProvider {
         return new UsernamePasswordAuthenticationToken(userDetails, "", userDetails.getAuthorities());
     }
 
-    public String getUserEmail(String token){
+    private String getUserEmail(String token){
         return Jwts.parser().setSigningKey(secretKey)
                 .parseClaimsJws(token).getBody().getSubject();
     }
@@ -57,7 +57,7 @@ public class JwtTokenProvider {
         return request.getHeader("X-AUTH-TOKEN");
     }
 
-    public boolean validateToken(String jwtToken) {
+    public boolean validateToken(String jwtToken){
         try {
             Jws<Claims> claims = Jwts.parser().setSigningKey(secretKey).parseClaimsJws(jwtToken);
             return !claims.getBody().getExpiration().before(new Date());
