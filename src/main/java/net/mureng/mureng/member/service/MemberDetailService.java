@@ -1,6 +1,8 @@
 package net.mureng.mureng.member.service;
 
 import lombok.RequiredArgsConstructor;
+import net.mureng.mureng.core.dto.CustomUserDetails;
+import net.mureng.mureng.member.entity.Member;
 import net.mureng.mureng.member.repository.MemberRepository;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -14,7 +16,9 @@ public class MemberDetailService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        return memberRepository.findByEmail(email).orElseThrow();
+        Member member = memberRepository.findByEmail(email).orElseThrow();
+
+        return new CustomUserDetails(member);
     }
 }
 
