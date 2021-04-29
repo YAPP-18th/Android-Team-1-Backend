@@ -1,6 +1,6 @@
 package net.mureng.mureng.web;
 
-import net.mureng.mureng.core.dto.CustomUserDetails;
+import net.mureng.mureng.core.dto.UserDetailsImpl;
 import net.mureng.mureng.core.jwt.JwtTokenProvider;
 import net.mureng.mureng.member.entity.Member;
 import org.junit.jupiter.api.Test;
@@ -56,12 +56,12 @@ class HomeControllerTest extends AbstractControllerTest{
 
         String token = jwtTokenProvider.createToken(member.getEmail(), member.getNickname());
 
-        given(userDetailsService.loadUserByUsername(eq(email))).willReturn(new CustomUserDetails(member));
+        given(userDetailsService.loadUserByUsername(eq(email))).willReturn(new UserDetailsImpl(member));
 
         mockMvc.perform(
                 get("/api/test")
                 .header("X-AUTH-TOKEN", token)
-        );
+        ).andExpect(status().isOk());
     }
 
 }

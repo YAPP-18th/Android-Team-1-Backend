@@ -9,10 +9,10 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-public class CustomUserDetails implements UserDetails {
+public class UserDetailsImpl implements UserDetails {
     private Member member;
 
-    public CustomUserDetails(Member member) {
+    public UserDetailsImpl(Member member) {
         this.member = member;
     }
 
