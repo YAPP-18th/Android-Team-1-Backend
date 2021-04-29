@@ -10,8 +10,8 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 @RequiredArgsConstructor
-@Service
-public class MemberDetailService implements UserDetailsService {
+@Service("userDetailsService")
+public class MemberDetailsService implements UserDetailsService {
     private final MemberRepository memberRepository;
 
     @Override
