@@ -7,6 +7,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 import java.time.LocalDateTime;
 
@@ -16,7 +17,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 
-class HomeControllerTest extends AbstractControllerTest{
+class HomeControllerTest extends AbstractControllerTest {
 
     @Autowired
     private HomeController homeController;
@@ -37,6 +38,7 @@ class HomeControllerTest extends AbstractControllerTest{
         mockMvc.perform(
                 get("/api/test")
         ).andExpect(status().isForbidden());
+        // TODO 403 커스텀 응답 리턴
     }
 
     @Test
@@ -59,9 +61,10 @@ class HomeControllerTest extends AbstractControllerTest{
         given(userDetailsService.loadUserByUsername(eq(email))).willReturn(new UserDetailsImpl(member));
 
         mockMvc.perform(
-                get("/api/test")
-                .header("X-AUTH-TOKEN", token)
-        ).andExpect(status().isOk());
+                    get("/api/test")
+                    .header("X-AUTH-TOKEN", token)
+                ).andExpect(status().isOk())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.message").value("ok"));
     }
 
 }
