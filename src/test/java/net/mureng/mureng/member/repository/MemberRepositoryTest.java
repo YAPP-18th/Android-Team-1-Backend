@@ -27,7 +27,7 @@ public class MemberRepositoryTest {
     @Test
     @ExpectedDatabase(value = "classpath:dbunit/expected/멤버_회원가입.xml",
             assertionMode = DatabaseAssertionMode.NON_STRICT)
-    public void 멤버_회원가입(){
+    public void 멤버_회원가입(){ // TODO 연관 데이터 들어가는지 추가 검증
         Member member = Member.builder()
                 .memberId(1L)
                 .identifier("123")
@@ -36,7 +36,7 @@ public class MemberRepositoryTest {
                 .nickname("Test")
                 .regDate(LocalDateTime.of(2020, 10, 14, 17, 11, 9))
                 .modDate(LocalDateTime.of(2020, 10, 14, 17, 11, 10))
-                .murengCount(0L)
+                .murengCount(0)
                 .build();
 
         memberRepository.save(member);

@@ -27,7 +27,7 @@ class MemberMapperTest {
                                         .nickname("Test")
                                         .regDate(LocalDateTime.of(2020, 10, 14, 17, 11, 9))
                                         .modDate(LocalDateTime.of(2020, 10, 14, 17, 11, 10))
-                                        .murengCount(0L)
+                                        .murengCount(0)
                                         .memberAttendance(MemberAttendance.builder()
                                                 .memberId(1L)
                                                 .attendanceCount(10L)
@@ -44,13 +44,12 @@ class MemberMapperTest {
                                         .memberId(1L)
                                         .identifier("123")
                                         .email("test@gmail.com")
-                                        .isActive(true)
                                         .nickname("Test")
-                                        .murengCount(0L)
+                                        .murengCount(0)
                                         .attendanceCount(10)
-                                        .lastAttendanceDate(LocalDate.of(2020, 10, 14))
+                                        .lastAttendanceDate("2020-10-14")
                                         .isPushActive(true)
-                                        .dailyEndTime(LocalTime.of(11,1,2))
+                                        .dailyEndTime("11:01:02")
                                         .build();
 
     @Test
@@ -59,7 +58,6 @@ class MemberMapperTest {
         assertEquals(mappedDto.getMemberId(), memberDto.getMemberId());
         assertEquals(mappedDto.getIdentifier(), memberDto.getIdentifier());
         assertEquals(mappedDto.getEmail(), memberDto.getEmail());
-        assertEquals(mappedDto.isActive(), memberDto.isActive());
         assertEquals(mappedDto.getNickname(), memberDto.getNickname());
         assertEquals(mappedDto.getMurengCount(), memberDto.getMurengCount());
         assertEquals(mappedDto.getAttendanceCount(), memberDto.getAttendanceCount());

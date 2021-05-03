@@ -14,16 +14,12 @@ import java.time.LocalTime;
 @Table(name = "MEMBER_SETTING")
 public class MemberSetting {
 
-    @Id
+    @Id @GeneratedValue
     private Long memberId;
 
-    @MapsId
-    @OneToOne
-    @JoinColumn(name = "member_id")
-    private Member member;
-
+    @Builder.Default
     @Column(name = "daily_end_time", nullable = false)
-    private LocalTime dailyEndTime;
+    private LocalTime dailyEndTime = LocalTime.of(0, 0, 0);
 
     @Builder.Default
     @Column(name = "is_push_active", nullable = false)

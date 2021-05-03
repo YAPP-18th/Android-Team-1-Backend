@@ -40,14 +40,17 @@ public class Member {
     @Column(name = "mod_date", nullable = false)
     private LocalDateTime modDate = LocalDateTime.now();
 
+    @Builder.Default
     @Column(name = "mureng_count", nullable = false)
-    private Long murengCount = 0L;
+    private int murengCount = 0;
 
-    @OneToOne(mappedBy = "member")
+    @JoinColumn(name = "member_id")
+    @OneToOne(cascade = CascadeType.ALL)
     @Builder.Default
     private MemberAttendance memberAttendance = new MemberAttendance();
 
-    @OneToOne(mappedBy = "member")
+    @JoinColumn(name = "member_id")
+    @OneToOne(cascade = CascadeType.ALL)
     @Builder.Default
     private MemberSetting memberSetting = new MemberSetting();
 }

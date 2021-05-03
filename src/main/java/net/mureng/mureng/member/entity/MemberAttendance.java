@@ -1,29 +1,28 @@
 package net.mureng.mureng.member.entity;
 
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.time.LocalDate;
 
 @Builder
-@Getter @Setter
+@Getter
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
 @Table(name = "MEMBER_ATTENDANCE")
 public class MemberAttendance {
 
-    @Id
+    @Id @GeneratedValue
     private Long memberId;
-
-    @MapsId
-    @OneToOne
-    @JoinColumn(name = "member_id")
-    private Member member;
 
     @Column(name = "attendance_count", nullable = false)
     private long attendanceCount;
 
     @Column(name = "last_attendance_date", nullable = false)
-    private LocalDate lastAttendanceDate;
+    @Builder.Default
+    private LocalDate lastAttendanceDate = LocalDate.now();
 }

@@ -9,6 +9,9 @@ import org.modelmapper.ModelMapper;
 import org.modelmapper.convention.MatchingStrategies;
 import org.springframework.stereotype.Component;
 
+import java.time.LocalDate;
+import java.time.LocalTime;
+
 @Component
 public class MemberMapper {
     private final ModelMapper modelMapper = new ModelMapper();
@@ -21,7 +24,7 @@ public class MemberMapper {
             return MemberAttendance.builder()
                     .memberId(context.getSource().getMemberId())
                     .attendanceCount(context.getSource().getAttendanceCount())
-                    .lastAttendanceDate(context.getSource().getLastAttendanceDate())
+                    .lastAttendanceDate(LocalDate.parse(context.getSource().getLastAttendanceDate()))
                     .build();
         };
 
@@ -31,7 +34,7 @@ public class MemberMapper {
 
             return MemberSetting.builder()
                     .memberId(context.getSource().getMemberId())
-                    .dailyEndTime(context.getSource().getDailyEndTime())
+                    .dailyEndTime(LocalTime.parse(context.getSource().getDailyEndTime()))
                     .isPushActive(context.getSource().isPushActive())
                     .build();
         };
@@ -49,7 +52,8 @@ public class MemberMapper {
                 .addMappings(mapper -> mapper.using(memberSettingConverter)
                         .map(source -> source, Member::setMemberSetting))
                 .addMappings(mapper -> mapper.skip(Member::setRegDate))
-                .addMappings(mapper -> mapper.skip(Member::setModDate));
+                .addMappings(mapper -> mapper.skip(Member::setModDate))
+                .addMappings(mapper -> mapper.skip(Member::setActive));
         modelMapper.validate();
     }
 

@@ -1,12 +1,21 @@
 package net.mureng.mureng.core.dto;
 
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 @Getter
+@ApiModel(value="API 응답 공통 모델")
 public class ApiResult<T> {
+
+    @ApiModelProperty(value = "결과 메세지")
     private final String message;
+
+    @ApiModelProperty(value = "응답 데이터, 실패시 null")
     private final T data;
+
+    @ApiModelProperty(value = "요청 서버 시간")
     private final long timestamp;
 
     public ApiResult(String message, T data) {
