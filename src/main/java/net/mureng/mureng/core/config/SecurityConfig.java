@@ -32,7 +32,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
                     .authorizeRequests()
-                        .antMatchers("/sign/**").anonymous()
+                        .antMatchers("/api/member/signup").anonymous()
                         .antMatchers("/api/test", "/api/test-failure").anonymous()
                         .anyRequest().authenticated()
                 .and()

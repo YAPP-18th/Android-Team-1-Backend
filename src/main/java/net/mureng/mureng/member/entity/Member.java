@@ -1,13 +1,13 @@
 package net.mureng.mureng.member.entity;
 
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
 
-@Getter
+@Getter @Setter
+@Builder
+@AllArgsConstructor
 @NoArgsConstructor
 @Entity
 public class Member {
@@ -23,17 +23,20 @@ public class Member {
     @Column(nullable = false)
     private String email;
 
+    @Builder.Default
     @Column(name = "is_active", nullable = false)
-    private Boolean isActive = true;
+    private boolean isActive = true;
 
-    @Column(nullable = false, length = 8)
+    @Column(nullable = false)
     private String nickname;
 
     private String image;
 
+    @Builder.Default
     @Column(name = "reg_date", nullable = false)
     private LocalDateTime regDate = LocalDateTime.now();
 
+    @Builder.Default
     @Column(name = "mod_date", nullable = false)
     private LocalDateTime modDate = LocalDateTime.now();
 
@@ -41,21 +44,10 @@ public class Member {
     private Long murengCount = 0L;
 
     @OneToOne(mappedBy = "member")
-    private MemberAttendance memberAttendance;
+    @Builder.Default
+    private MemberAttendance memberAttendance = new MemberAttendance();
 
     @OneToOne(mappedBy = "member")
-    private MemberSetting memberSetting;
-
-    @Builder
-    public Member(Long memberId, String identifier, String email, Boolean isActive, String nickname, String image, LocalDateTime regDate, LocalDateTime modDate, Long murengCount) {
-        this.memberId = memberId;
-        this.identifier = identifier;
-        this.email = email;
-        this.isActive = isActive;
-        this.nickname = nickname;
-        this.image = image;
-        this.regDate = regDate;
-        this.modDate = modDate;
-        this.murengCount = murengCount;
-    }
+    @Builder.Default
+    private MemberSetting memberSetting = new MemberSetting();
 }
