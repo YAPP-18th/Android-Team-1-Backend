@@ -21,6 +21,11 @@ public class HomeController {
         return ResponseEntity.ok(ApiResult.ok(new TestObject("test is ok!!!")));
     }
 
+    @GetMapping("/authenticated-test")
+    public ResponseEntity<ApiResult<TestObject>> authenticatedTest() {
+        return ResponseEntity.ok(ApiResult.ok(new TestObject("test is ok!!!")));
+    }
+
     @GetMapping("/test-failure")
     public ResponseEntity<ApiResult<TestObject>> testFailure() {
         throw new MurengException("mureng failure");

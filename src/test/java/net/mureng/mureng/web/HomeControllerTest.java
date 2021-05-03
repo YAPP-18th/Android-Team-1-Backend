@@ -20,25 +20,18 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 class HomeControllerTest extends AbstractControllerTest {
 
     @Autowired
-    private HomeController homeController;
-
-    @Autowired
     private JwtTokenProvider jwtTokenProvider;
 
     @MockBean
     private UserDetailsService userDetailsService;
 
-    @Override
-    protected Object controller() {
-        return homeController;
-    }
-
     @Test
     public void 테스트_GET_비인가사용자() throws Exception {
         mockMvc.perform(
-                get("/api/test")
+                get("/api/authenticated-test")
         ).andExpect(status().isForbidden());
-        // TODO 403 커스텀 응답 리턴
+        // mockMvc 레벨 테스트에서는 필터에 걸러지면 후처리는 안하기 때문에 응답 바디 데이터 검증이 불가능하다.
+        // 즉, /error 엔드포인트까지 도달하지 않는다.
     }
 
     @Test
@@ -61,7 +54,7 @@ class HomeControllerTest extends AbstractControllerTest {
         given(userDetailsService.loadUserByUsername(eq(email))).willReturn(new UserDetailsImpl(member));
 
         mockMvc.perform(
-                    get("/api/test")
+                    get("/api/authenticated-test")
                     .header("X-AUTH-TOKEN", token)
                 ).andExpect(status().isOk())
                 .andExpect(MockMvcResultMatchers.jsonPath("$.message").value("ok"));
