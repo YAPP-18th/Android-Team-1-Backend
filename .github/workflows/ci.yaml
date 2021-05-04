@@ -1,3 +1,5 @@
+name: CI/CD - dev
+
 on:
   #  push:
   #    branches:
@@ -50,16 +52,16 @@ jobs:
           output: deploy.yml
 
       - name: deploy to cluster
-          uses: steebchen/kubectl@master
-          env:
-            KUBE_CONFIG_DATA: ${{ secrets.KUBE_CONFIG_DATA }}
-          with:
-            args: apply -f deploy.yml
+        uses: steebchen/kubectl@master
+        env:
+          KUBE_CONFIG_DATA: ${{ secrets.KUBE_CONFIG_DATA }}
+        with:
+          args: apply -f deploy.yml
 
       - name: verify deployment
-          uses: steebchen/kubectl@master
-          env:
-            KUBE_CONFIG_DATA: ${{ secrets.KUBE_CONFIG_DATA }}
-            KUBECTL_VERSION: "1.15"
-          with:
-            args: '"rollout status deployment/mureng-app-dev"'
+        uses: steebchen/kubectl@master
+        env:
+          KUBE_CONFIG_DATA: ${{ secrets.KUBE_CONFIG_DATA }}
+          KUBECTL_VERSION: "1.15"
+        with:
+          args: '"rollout status deployment/mureng-app-dev"'
