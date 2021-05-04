@@ -1,9 +1,6 @@
 name: CI/CD - dev
 
 on:
-  #  push:
-  #    branches:
-  #      - develop
   workflow_dispatch:
     inputs:
       logLevel:
@@ -12,6 +9,9 @@ on:
         default: 'warning'
       tags:
         description: 'Test scenario tags'
+#  push:
+#    branches:
+#      - develop
 jobs:
   build:
     name: Build, push, and deploy
