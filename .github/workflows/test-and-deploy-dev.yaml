@@ -1,0 +1,108 @@
+name: Test and Deploy with Noti - dev
+
+on:
+  workflow_dispatch:
+    inputs:
+      logLevel:
+        description: 'Log level'
+        required: true
+        default: 'warning'
+      tags:
+        description: 'Test scenario tags'
+  push:
+    branches:
+      - develop
+jobs:
+  test:
+    name: Gradle 테스트
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up JDK 11
+        uses: actions/setup-java@v2
+        with:
+          java-version: '11'
+          distribution: 'adopt'
+      - name: Grant execute permission for gradlew
+        run: chmod +x gradlew
+      - name: Build with Gradle
+        run: ./gradlew build test
+  deployment:
+    if: ${{ github.repository == 'YAPP-18th/Android-Team-1-Backend' }}
+    name: 빌드, 푸쉬 후 개발에 배포
+    needs: test
+    runs-on: ubuntu-latest
+    steps:
+      - name: 소스코드 체크아웃
+        uses: actions/checkout@v2
+
+      - name: SHA 업데이트
+        run: echo $GITHUB_SHA > $GITHUB_WORKSPACE/_meta
+
+      - name: 컨테이너 이미지 빌드
+        run: docker build -t docker.io/hygoogi/mureng:$(echo $GITHUB_SHA | head -c7) .
+
+      - name: 도커 로그인
+        env:
+          DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+          DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+        run: docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
+
+      - name: Docker Hub에 이미지 푸쉬
+        run: docker push docker.io/hygoogi/mureng:$(echo $GITHUB_SHA | head -c7)
+
+      - name: 배포파일 업데이트
+        run: TAG=$(echo $GITHUB_SHA | head -c7) && sed -i 's|<IMAGE>|docker.io/hygoogi/mureng:'${TAG}'|' $GITHUB_WORKSPACE/deployment/deployment-dev.yml
+
+      - name: 환경변수 치환 후 최종 배포 파일 생성
+        uses: danielr1996/envsubst-action@1.0.0
+#        env:
+#          PORT: ${{ secrets.PORT }}
+#          DB_HOST: ${{ secrets.DB_HOST }}
+#          DB_USERNAME: ${{ secrets.DB_USERNAME }}
+#          DB_PORT: ${{ secrets.DB_PORT }}
+#          DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
+#          DB_NAME: ${{ secrets.DB_NAME }}
+        with:
+          input: deployment/deployment-dev.yml
+          output: deploy.yml
+
+      - name: 클러스터에 배포
+        uses: steebchen/kubectl@master
+        env:
+          KUBE_CONFIG_DATA: ${{ secrets.KUBE_CONFIG_DATA }}
+        with:
+          args: apply -f deploy.yml
+
+      - name: 배포 확인
+        uses: steebchen/kubectl@master
+        env:
+          KUBE_CONFIG_DATA: ${{ secrets.KUBE_CONFIG_DATA }}
+          KUBECTL_VERSION: "1.15"
+        with:
+          args: '"rollout status deployment/mureng-app-dev"'
+  notification:
+    name: 슬랙에 알림
+    if: ${{ always() && github.repository == 'YAPP-18th/Android-Team-1-Backend' }}
+    needs: [test, deployment]
+    runs-on: ubuntu-latest
+    steps:
+    - name: 슬랙 성공 알림
+      if: success()
+      env:
+        SLACK_BOT_TOKEN: ${{ secrets.SLACK_NOTIFICATIONS_BOT_TOKEN }}
+      uses: voxmedia/github-action-slack-notify-build@v1
+      with:
+        channel: 1-서버-알림
+        status: SUCCESS
+        color: good
+
+    - name: 슬랙 실패 알림
+      if: failure()
+      env:
+        SLACK_BOT_TOKEN: ${{ secrets.SLACK_NOTIFICATIONS_BOT_TOKEN }}
+      uses: voxmedia/github-action-slack-notify-build@v1
+      with:
+        channel: 1-서버-알림
+        status: FAILED
+        color: danger
