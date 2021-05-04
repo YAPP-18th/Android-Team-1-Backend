@@ -1,0 +1,65 @@
+on:
+  #  push:
+  #    branches:
+  #      - develop
+  workflow_dispatch:
+    inputs:
+      logLevel:
+        description: 'Log level'
+        required: true
+        default: 'warning'
+      tags:
+        description: 'Test scenario tags'
+jobs:
+  build:
+    name: Build, push, and deploy
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout master
+        uses: actions/checkout@master
+
+      - name: Update SHA
+        run: echo $GITHUB_SHA > $GITHUB_WORKSPACE/_meta
+
+      - name: Build container image
+        run: docker build -t docker.io/hygoogi/mureng:dev .
+
+      - name: Docker Login
+        env:
+          DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+          DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+        run: docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
+
+      - name: Push image to Docker Hub
+        run: docker push docker.io/hygoogi/mureng:dev
+
+      - name: Update deployment file
+        run: TAG=dev && sed -i 's|<IMAGE>|docker.io/hygoogi/mureng:'${TAG}'|' $GITHUB_WORKSPACE/deployment/deployment-dev.yml
+
+      - name: Replace Environment Variables
+        uses: danielr1996/envsubst-action@1.0.0
+#        env:
+#          PORT: ${{ secrets.PORT }}
+#          DB_HOST: ${{ secrets.DB_HOST }}
+#          DB_USERNAME: ${{ secrets.DB_USERNAME }}
+#          DB_PORT: ${{ secrets.DB_PORT }}
+#          DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
+#          DB_NAME: ${{ secrets.DB_NAME }}
+        with:
+          input: deployment-dev.yml
+          output: deploy.yml
+
+      - name: deploy to cluster
+          uses: steebchen/kubectl@master
+          env:
+            KUBE_CONFIG_DATA: ${{ secrets.KUBE_CONFIG_DATA }}
+          with:
+            args: apply -f deploy.yml
+
+      - name: verify deployment
+          uses: steebchen/kubectl@master
+          env:
+            KUBE_CONFIG_DATA: ${{ secrets.KUBE_CONFIG_DATA }}
+            KUBECTL_VERSION: "1.15"
+          with:
+            args: '"rollout status deployment/mureng-app-dev"'
