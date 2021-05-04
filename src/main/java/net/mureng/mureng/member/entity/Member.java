@@ -3,6 +3,8 @@ package net.mureng.mureng.member.entity;
 import lombok.*;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 
 @Getter @Setter
@@ -12,14 +14,15 @@ import java.time.LocalDateTime;
 @Entity
 public class Member {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "member_id", nullable = false)
     private Long memberId;
 
+    @NotNull
     @Column(nullable = false)
     private String identifier;
 
+    @NotNull
     @Column(nullable = false)
     private String email;
 
@@ -27,6 +30,7 @@ public class Member {
     @Column(name = "is_active", nullable = false)
     private boolean isActive = true;
 
+    @NotNull
     @Column(nullable = false)
     private String nickname;
 

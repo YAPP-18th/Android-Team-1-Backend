@@ -15,6 +15,8 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
+
 @Api(value = "회원 관련 엔드포인트")
 @RestController
 @RequiredArgsConstructor
@@ -25,9 +27,12 @@ public class MemberController {
 
     @ApiOperation(value = "신규 회원 가입", notes = "신규 회원가입입니다.")
     @PostMapping("/signup")
-    public ResponseEntity<ApiResult<MemberDto>> signup(@ApiParam(value = "신규 회원 정보", required = true) @RequestBody MemberDto memberDto) {
-        Member member = memberMapper.map(memberDto);
+    public ResponseEntity<ApiResult<MemberDto>> signup(
+            @ApiParam(value = "신규 회원 정보", required = true)
+            @RequestBody @Valid MemberDto memberDto) {
+
+        Member newMember = memberMapper.map(memberDto);
         return ResponseEntity.ok(ApiResult.ok(
-                memberMapper.map(memberService.signup(member))));
+                memberMapper.map(memberService.signup(newMember))));
     }
 }

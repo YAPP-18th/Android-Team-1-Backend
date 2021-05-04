@@ -1,16 +1,14 @@
 package net.mureng.mureng.member.dto;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.*;
-import net.mureng.mureng.member.entity.MemberAttendance;
-import net.mureng.mureng.member.entity.MemberSetting;
+import net.mureng.mureng.core.validation.annotation.DateFormat;
+import net.mureng.mureng.core.validation.annotation.TimeFormat;
 
-import javax.persistence.Column;
-import javax.persistence.OneToOne;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.LocalTime;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotEmpty;
 
 @Builder
 @Getter @Setter
@@ -18,15 +16,19 @@ import java.time.LocalTime;
 @AllArgsConstructor
 @ApiModel(value="회원 모델", description="회원을 나타내는 모델")
 public class MemberDto {
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     @ApiModelProperty(value = "회원 기본키")
     private Long memberId;
 
+    @NotEmpty
     @ApiModelProperty(value = "회원 식별값")
     private String identifier;
 
+    @Email
     @ApiModelProperty(value = "이메일 주소")
     private String email;
 
+    @NotEmpty
     @ApiModelProperty(value = "닉네임")
     private String nickname;
 
@@ -39,9 +41,11 @@ public class MemberDto {
     @ApiModelProperty(value = "출석 횟수")
     private long attendanceCount;
 
+    @DateFormat
     @ApiModelProperty(value = "마지막 출석 날짜 (yyyy-MM-dd)")
     private String lastAttendanceDate;
 
+    @TimeFormat
     @ApiModelProperty(value = "하루가 끝나는 시간 (hh:mm:ss)")
     private String dailyEndTime;
 
