@@ -1,4 +1,4 @@
-name: CI/CD - dev
+name: CI/CD
 
 on:
   workflow_dispatch:
