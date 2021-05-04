@@ -16,7 +16,7 @@ import javax.validation.constraints.NotEmpty;
 @AllArgsConstructor
 @ApiModel(value="회원 모델", description="회원을 나타내는 모델")
 public class MemberDto {
-    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     @ApiModelProperty(value = "회원 기본키")
     private Long memberId;
 
@@ -42,11 +42,11 @@ public class MemberDto {
     private long attendanceCount;
 
     @DateFormat
-    @ApiModelProperty(value = "마지막 출석 날짜 (yyyy-MM-dd)")
+    @ApiModelProperty(value = "마지막 출석 날짜", allowableValues = "yyyy-MM-dd")
     private String lastAttendanceDate;
 
     @TimeFormat
-    @ApiModelProperty(value = "하루가 끝나는 시간 (hh:mm:ss)")
+    @ApiModelProperty(value = "하루가 끝나는 시간", allowableValues = "HH:mm:ss")
     private String dailyEndTime;
 
     @ApiModelProperty(value = "푸쉬 알림 여부")

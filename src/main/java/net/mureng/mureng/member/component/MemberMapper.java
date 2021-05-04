@@ -11,12 +11,33 @@ import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 
 @Component
 public class MemberMapper {
     private final ModelMapper modelMapper = new ModelMapper();
 
     protected MemberMapper() {
+        modelMapper.getConfiguration()
+                .setMatchingStrategy(MatchingStrategies.STANDARD);
+
+        initEntityToDtoMapping();
+        initDtoToEntityMapping();
+
+        modelMapper.validate();
+    }
+
+    private void initEntityToDtoMapping() {
+        modelMapper.createTypeMap(Member.class, MemberDto.class)
+                .addMapping(src -> src.getMemberAttendance().getAttendanceCount(), MemberDto::setAttendanceCount)
+                .addMapping(src -> src.getMemberAttendance().getLastAttendanceDate(), MemberDto::setLastAttendanceDate)
+                .addMappings(mapper -> mapper.using(context ->
+                        ((LocalTime)context.getSource()).format(DateTimeFormatter.ofPattern("HH:mm:ss")))
+                        .map(src -> src.getMemberSetting().getDailyEndTime(), MemberDto::setDailyEndTime))
+                .addMapping(src -> src.getMemberSetting().isPushActive(), MemberDto::setPushActive);
+    }
+
+    private void initDtoToEntityMapping() {
         final Converter<MemberDto, MemberAttendance> memberAttendanceConverter = context -> {
             if (context == null)
                 return null;
@@ -39,13 +60,6 @@ public class MemberMapper {
                     .build();
         };
 
-        modelMapper.getConfiguration()
-                .setMatchingStrategy(MatchingStrategies.STANDARD);
-        modelMapper.createTypeMap(Member.class, MemberDto.class)
-                .addMapping(src -> src.getMemberAttendance().getAttendanceCount(), MemberDto::setAttendanceCount)
-                .addMapping(src -> src.getMemberAttendance().getLastAttendanceDate(), MemberDto::setLastAttendanceDate)
-                .addMapping(src -> src.getMemberSetting().getDailyEndTime(), MemberDto::setDailyEndTime)
-                .addMapping(src -> src.getMemberSetting().isPushActive(), MemberDto::setPushActive);
         modelMapper.createTypeMap(MemberDto.class, Member.class)
                 .addMappings(mapper -> mapper.using(memberAttendanceConverter)
                         .map(source -> source, Member::setMemberAttendance))
@@ -54,7 +68,6 @@ public class MemberMapper {
                 .addMappings(mapper -> mapper.skip(Member::setRegDate))
                 .addMappings(mapper -> mapper.skip(Member::setModDate))
                 .addMappings(mapper -> mapper.skip(Member::setActive));
-        modelMapper.validate();
     }
 
     public Member map(MemberDto memberDto) {

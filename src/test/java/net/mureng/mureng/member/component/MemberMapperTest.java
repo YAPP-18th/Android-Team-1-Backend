@@ -36,7 +36,7 @@ class MemberMapperTest {
                                         .memberSetting(MemberSetting.builder()
                                                 .memberId(1L)
                                                 .isPushActive(true)
-                                                .dailyEndTime(LocalTime.of(11,1,2))
+                                                .dailyEndTime(LocalTime.of(11,0,0))
                                                 .build())
                                         .build();
 
@@ -49,7 +49,7 @@ class MemberMapperTest {
                                         .attendanceCount(10)
                                         .lastAttendanceDate("2020-10-14")
                                         .isPushActive(true)
-                                        .dailyEndTime("11:01:02")
+                                        .dailyEndTime("11:00:00")
                                         .build();
 
     @Test
