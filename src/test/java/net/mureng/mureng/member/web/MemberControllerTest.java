@@ -40,4 +40,14 @@ class MemberControllerTest extends AbstractControllerTest {
                 .andExpect(MockMvcResultMatchers.jsonPath("$.data.nickname").value("최대여섯글자"))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.data.pushActive").value(true));
     }
+
+    @Test
+    public void 사용자_닉네임중복체크_테스트() throws Exception {
+        mockMvc.perform(
+                get("/api/member/nickname-exists/테스트이름")
+                        .contentType(MediaType.APPLICATION_JSON)
+        ).andExpect(status().isOk())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.message").value("ok"))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.data.duplicated").value(false));
+    }
 }

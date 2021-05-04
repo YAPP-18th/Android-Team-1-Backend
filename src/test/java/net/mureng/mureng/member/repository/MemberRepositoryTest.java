@@ -15,7 +15,7 @@ import java.time.LocalDateTime;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
 
 
 @MurengDataTest
@@ -71,5 +71,14 @@ public class MemberRepositoryTest {
         assertEquals(2020, memberAttendance.getLastAttendanceDate().getYear());
         assertEquals(10, memberAttendance.getLastAttendanceDate().getMonthValue());
         assertEquals(14, memberAttendance.getLastAttendanceDate().getDayOfMonth());
+    }
+
+    @Test
+    @DatabaseSetup({
+            "classpath:dbunit/entity/member.xml"
+    })
+    public void 닉네임_존재_조회() {
+        assertTrue(memberRepository.existsByNickname("Test"));
+        assertFalse(memberRepository.existsByNickname("Non-exist"));
     }
 }

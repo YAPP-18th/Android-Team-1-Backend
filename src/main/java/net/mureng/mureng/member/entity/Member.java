@@ -19,7 +19,7 @@ public class Member {
     private Long memberId;
 
     @NotNull
-    @Column(nullable = false)
+    @Column(nullable = false, unique = true)
     private String identifier;
 
     @NotNull
@@ -31,7 +31,7 @@ public class Member {
     private boolean isActive = true;
 
     @NotNull
-    @Column(nullable = false)
+    @Column(nullable = false, unique = true)
     private String nickname;
 
     private String image;
