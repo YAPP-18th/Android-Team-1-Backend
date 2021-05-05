@@ -1,5 +1,6 @@
 package net.mureng.mureng.member.entity;
 
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -7,30 +8,21 @@ import lombok.NoArgsConstructor;
 import javax.persistence.*;
 import java.time.LocalDate;
 
+@Builder
 @Getter
 @NoArgsConstructor
+@AllArgsConstructor
 @Entity
 @Table(name = "MEMBER_ATTENDANCE")
 public class MemberAttendance {
 
-    @Id
+    @Id @GeneratedValue
     private Long memberId;
 
-    @MapsId
-    @OneToOne
-    @JoinColumn(name = "member_id")
-    private Member member;
-
     @Column(name = "attendance_count", nullable = false)
-    private Long attendanceCount;
+    private long attendanceCount;
 
     @Column(name = "last_attendance_date", nullable = false)
-    private LocalDate lastAttendanceDate;
-
-    @Builder
-    public MemberAttendance(Long memberId, Long attendanceCount, LocalDate lastAttendanceDate) {
-        this.memberId = memberId;
-        this.attendanceCount = attendanceCount;
-        this.lastAttendanceDate = lastAttendanceDate;
-    }
+    @Builder.Default
+    private LocalDate lastAttendanceDate = LocalDate.now();
 }

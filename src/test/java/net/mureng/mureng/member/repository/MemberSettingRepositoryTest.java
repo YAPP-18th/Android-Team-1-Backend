@@ -8,9 +8,10 @@ import net.mureng.mureng.member.repository.MemberSettingRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.equalTo;
+import java.time.LocalTime;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 @MurengDataTest
 class MemberSettingRepositoryTest {
@@ -25,10 +26,9 @@ class MemberSettingRepositoryTest {
     })
     public void 회원_설정_조회_연관_테스트() {
         MemberSetting memberSetting = memberSettingRepository.findById(1L).orElseThrow();
-        Member member = memberSetting.getMember();
 
-        assertThat(memberSetting.getMemberId(), is(equalTo(1L)));
-        assertThat(member.getMemberId(), is(equalTo(1L)));
-        assertThat(member.getIdentifier(), is(equalTo("123")));
+        assertEquals(1L, (long)memberSetting.getMemberId());
+        assertEquals(LocalTime.of(17,11,9), memberSetting.getDailyEndTime());
+        assertTrue(memberSetting.isPushActive());
     }
 }

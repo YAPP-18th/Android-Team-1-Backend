@@ -15,7 +15,7 @@ import java.time.LocalDateTime;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
 
 
 @MurengDataTest
@@ -27,7 +27,7 @@ public class MemberRepositoryTest {
     @Test
     @ExpectedDatabase(value = "classpath:dbunit/expected/멤버_회원가입.xml",
             assertionMode = DatabaseAssertionMode.NON_STRICT)
-    public void 멤버_회원가입(){
+    public void 멤버_회원가입(){ // TODO 연관 데이터 들어가는지 추가 검증
         Member member = Member.builder()
                 .memberId(1L)
                 .identifier("123")
@@ -36,7 +36,7 @@ public class MemberRepositoryTest {
                 .nickname("Test")
                 .regDate(LocalDateTime.of(2020, 10, 14, 17, 11, 9))
                 .modDate(LocalDateTime.of(2020, 10, 14, 17, 11, 10))
-                .murengCount(0L)
+                .murengCount(0)
                 .build();
 
         memberRepository.save(member);
@@ -71,5 +71,14 @@ public class MemberRepositoryTest {
         assertEquals(2020, memberAttendance.getLastAttendanceDate().getYear());
         assertEquals(10, memberAttendance.getLastAttendanceDate().getMonthValue());
         assertEquals(14, memberAttendance.getLastAttendanceDate().getDayOfMonth());
+    }
+
+    @Test
+    @DatabaseSetup({
+            "classpath:dbunit/entity/member.xml"
+    })
+    public void 닉네임_존재_조회() {
+        assertTrue(memberRepository.existsByNickname("Test"));
+        assertFalse(memberRepository.existsByNickname("Non-exist"));
     }
 }

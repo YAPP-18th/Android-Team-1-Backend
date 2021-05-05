@@ -8,6 +8,7 @@ import org.springframework.boot.web.servlet.error.ErrorController;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import springfox.documentation.annotations.ApiIgnore;
 
@@ -18,7 +19,7 @@ import javax.servlet.http.HttpServletRequest;
 @RestController
 public class ErrorControllerImpl implements ErrorController {
 
-    @GetMapping("/error")
+    @RequestMapping("/error")
     public ResponseEntity<?> error(HttpServletRequest request) {
         Object statusObj = request.getAttribute(RequestDispatcher.ERROR_STATUS_CODE);
         if (statusObj != null) {
