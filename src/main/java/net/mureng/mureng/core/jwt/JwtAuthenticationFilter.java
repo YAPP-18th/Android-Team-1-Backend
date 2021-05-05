@@ -11,19 +11,21 @@ import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 
 public class JwtAuthenticationFilter extends GenericFilterBean {
-    private JwtTokenProvider jwtTokenProvider;
+    private JwtResolver jwtResolver;
+    private JwtValidator jwtValidator;
 
-    public JwtAuthenticationFilter(JwtTokenProvider jwtTokenProvider) {
-        this.jwtTokenProvider = jwtTokenProvider;
+    public JwtAuthenticationFilter(JwtResolver jwtResolver, JwtValidator jwtValidator) {
+        this.jwtResolver = jwtResolver;
+        this.jwtValidator = jwtValidator;
     }
 
     // Request로 들어오는 Jwt Token의 유효성을 검증하는 filter를 FilterChain에 등록
     @Override
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
-        String token = jwtTokenProvider.resolveToken((HttpServletRequest) servletRequest);
+        String token = jwtResolver.resolveToken((HttpServletRequest) servletRequest);
 
-        if (jwtTokenProvider.validateToken(token)) { // token 검증
-            Authentication auth = jwtTokenProvider.getAuthentication(token); // 인증 객체 생성
+        if (jwtValidator.validateToken(token)) { // token 검증
+            Authentication auth = jwtResolver.getAuthentication(token); // 인증 객체 생성
             SecurityContextHolder.getContext().setAuthentication(auth); // SecurityContextHolder에 인증 객체 저장
         }
 
