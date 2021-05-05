@@ -8,9 +8,12 @@ import net.mureng.mureng.member.repository.MemberAttendanceRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.time.LocalDate;
+
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
+import static org.junit.Assert.assertEquals;
 
 @MurengDataTest
 class MemberAttendanceRepositoryTest {
@@ -24,10 +27,9 @@ class MemberAttendanceRepositoryTest {
     })
     public void 회원_출석_조회_연관_테스트() {
         MemberAttendance memberAttendance = memberAttendanceRepository.findById(1L).orElseThrow();
-        Member member = memberAttendance.getMember();
 
-        assertThat(memberAttendance.getMemberId(), is(equalTo(1L)));
-        assertThat(member.getMemberId(), is(equalTo(1L)));
-        assertThat(member.getIdentifier(), is(equalTo("123")));
+        assertEquals(1L, (long)memberAttendance.getMemberId());
+        assertEquals(10, memberAttendance.getAttendanceCount());
+        assertEquals(LocalDate.of(2020, 10, 14), memberAttendance.getLastAttendanceDate());
     }
 }

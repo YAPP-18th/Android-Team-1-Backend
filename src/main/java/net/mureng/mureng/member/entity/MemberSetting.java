@@ -1,37 +1,27 @@
 package net.mureng.mureng.member.entity;
 
 
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 import java.time.LocalTime;
 
-@Getter
+@Builder
+@Getter @Setter
 @NoArgsConstructor
+@AllArgsConstructor
 @Entity
 @Table(name = "MEMBER_SETTING")
 public class MemberSetting {
 
-    @Id
+    @Id @GeneratedValue
     private Long memberId;
 
-    @MapsId
-    @OneToOne
-    @JoinColumn(name = "member_id")
-    private Member member;
-
+    @Builder.Default
     @Column(name = "daily_end_time", nullable = false)
-    private LocalTime dailyEndTime;
+    private LocalTime dailyEndTime = LocalTime.of(0, 0, 0);
 
+    @Builder.Default
     @Column(name = "is_push_active", nullable = false)
-    private Boolean isPushActive = true;
-
-    @Builder
-    public MemberSetting(Long memberId, LocalTime dailyEndTime, Boolean isPushActive) {
-        this.memberId = memberId;
-        this.dailyEndTime = dailyEndTime;
-        this.isPushActive = isPushActive;
-    }
+    private boolean isPushActive = true;
 }
