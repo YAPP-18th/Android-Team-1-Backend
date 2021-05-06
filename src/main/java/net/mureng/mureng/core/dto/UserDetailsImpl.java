@@ -1,5 +1,6 @@
 package net.mureng.mureng.core.dto;
 
+import lombok.Getter;
 import net.mureng.mureng.member.entity.Member;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -10,7 +11,8 @@ import java.util.Collection;
 import java.util.List;
 
 public class UserDetailsImpl implements UserDetails {
-    private Member member;
+    @Getter
+    private final Member member;
 
     public UserDetailsImpl(Member member) {
         this.member = member;

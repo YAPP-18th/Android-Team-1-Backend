@@ -1,5 +1,6 @@
 package net.mureng.mureng.member.component;
 
+import net.mureng.mureng.core.component.EntityMapper;
 import net.mureng.mureng.member.dto.MemberDto;
 import net.mureng.mureng.member.entity.Member;
 import net.mureng.mureng.member.entity.MemberAttendance;
@@ -14,27 +15,15 @@ import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 
 @Component
-public class MemberMapper {
-    private final ModelMapper modelMapper = new ModelMapper();
-
-    protected MemberMapper() {
-        modelMapper.getConfiguration()
-                .setMatchingStrategy(MatchingStrategies.STANDARD);
-
-        initEntityToDtoMapping();
-        initDtoToEntityMapping();
-
-        modelMapper.validate();
-    }
-
-    private void initEntityToDtoMapping() {
+public class MemberMapper extends EntityMapper {
+    protected void initEntityToDtoMapping() {
         modelMapper.createTypeMap(Member.class, MemberDto.class)
                 .addMapping(src -> src.getMemberAttendance().getAttendanceCount(), MemberDto::setAttendanceCount)
                 .addMapping(src -> src.getMemberAttendance().getLastAttendanceDate(), MemberDto::setLastAttendanceDate)
                 .addMapping(src -> src.getMemberSetting().isPushActive(), MemberDto::setPushActive);
     }
 
-    private void initDtoToEntityMapping() {
+    protected void initDtoToEntityMapping() {
         final Converter<MemberDto, MemberAttendance> memberAttendanceConverter = context -> {
             if (context == null)
                 return null;
