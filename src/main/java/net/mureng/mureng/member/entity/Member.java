@@ -12,6 +12,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
+@Table(name = "member")
 public class Member {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -23,7 +24,7 @@ public class Member {
     private String identifier;
 
     @NotNull
-    @Column(nullable = false)
+    @Column(nullable = false, unique = true)
     private String email;
 
     @Builder.Default
@@ -48,13 +49,11 @@ public class Member {
     @Column(name = "mureng_count", nullable = false)
     private int murengCount = 0;
 
-    @JoinColumn(name = "member_id")
-    @OneToOne(cascade = CascadeType.ALL)
+    @Embedded
     @Builder.Default
     private MemberAttendance memberAttendance = new MemberAttendance();
 
-    @JoinColumn(name = "member_id")
-    @OneToOne(cascade = CascadeType.ALL)
+    @Embedded
     @Builder.Default
     private MemberSetting memberSetting = new MemberSetting();
 }

@@ -11,7 +11,7 @@ import java.time.LocalDateTime;
 @Getter
 @NoArgsConstructor
 @Entity
-@Table(name = "BADGE_ACCOMPLISHED")
+@Table(name = "badge_accomplished")
 public class BadgeAccomplished {
 
     @EmbeddedId

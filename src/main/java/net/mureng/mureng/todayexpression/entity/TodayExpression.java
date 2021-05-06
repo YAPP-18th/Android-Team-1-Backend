@@ -10,7 +10,7 @@ import java.time.LocalDateTime;
 @Getter
 @NoArgsConstructor
 @Entity
-@Table(name = "TODAY_EXPRESSION")
+@Table(name = "today_expression")
 public class TodayExpression {
 
     @Id

@@ -31,9 +31,6 @@ public class MemberMapper {
         modelMapper.createTypeMap(Member.class, MemberDto.class)
                 .addMapping(src -> src.getMemberAttendance().getAttendanceCount(), MemberDto::setAttendanceCount)
                 .addMapping(src -> src.getMemberAttendance().getLastAttendanceDate(), MemberDto::setLastAttendanceDate)
-                .addMappings(mapper -> mapper.using(context ->
-                        ((LocalTime)context.getSource()).format(DateTimeFormatter.ofPattern("HH:mm:ss")))
-                        .map(src -> src.getMemberSetting().getDailyEndTime(), MemberDto::setDailyEndTime))
                 .addMapping(src -> src.getMemberSetting().isPushActive(), MemberDto::setPushActive);
     }
 
@@ -43,7 +40,6 @@ public class MemberMapper {
                 return null;
 
             return MemberAttendance.builder()
-                    .memberId(context.getSource().getMemberId())
                     .attendanceCount(context.getSource().getAttendanceCount())
                     .lastAttendanceDate(LocalDate.parse(context.getSource().getLastAttendanceDate()))
                     .build();
@@ -54,8 +50,6 @@ public class MemberMapper {
                 return null;
 
             return MemberSetting.builder()
-                    .memberId(context.getSource().getMemberId())
-                    .dailyEndTime(LocalTime.parse(context.getSource().getDailyEndTime()))
                     .isPushActive(context.getSource().isPushActive())
                     .build();
         };
