@@ -1,4 +1,4 @@
-package net.mureng.mureng.core.jwt;
+package net.mureng.mureng.core.jwt.component;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;

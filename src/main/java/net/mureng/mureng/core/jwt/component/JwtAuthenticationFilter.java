@@ -1,4 +1,4 @@
-package net.mureng.mureng.core.jwt;
+package net.mureng.mureng.core.jwt.component;
 
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;

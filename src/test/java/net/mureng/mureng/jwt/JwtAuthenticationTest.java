@@ -1,7 +1,7 @@
 package net.mureng.mureng.jwt;
 
-import net.mureng.mureng.core.jwt.JwtCreator;
-import net.mureng.mureng.core.jwt.JwtValidator;
+import net.mureng.mureng.core.jwt.component.JwtCreator;
+import net.mureng.mureng.core.jwt.component.JwtValidator;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;

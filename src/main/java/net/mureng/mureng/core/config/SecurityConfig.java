@@ -1,9 +1,9 @@
 package net.mureng.mureng.core.config;
 
 import lombok.RequiredArgsConstructor;
-import net.mureng.mureng.core.jwt.JwtAuthenticationFilter;
-import net.mureng.mureng.core.jwt.JwtResolver;
-import net.mureng.mureng.core.jwt.JwtValidator;
+import net.mureng.mureng.core.jwt.component.JwtAuthenticationFilter;
+import net.mureng.mureng.core.jwt.component.JwtResolver;
+import net.mureng.mureng.core.jwt.component.JwtValidator;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;

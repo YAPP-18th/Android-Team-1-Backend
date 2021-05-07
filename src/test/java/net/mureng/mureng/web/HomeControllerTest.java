@@ -1,7 +1,7 @@
 package net.mureng.mureng.web;
 
 import net.mureng.mureng.core.dto.UserDetailsImpl;
-import net.mureng.mureng.core.jwt.JwtCreator;
+import net.mureng.mureng.core.jwt.component.JwtCreator;
 import net.mureng.mureng.member.entity.Member;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
