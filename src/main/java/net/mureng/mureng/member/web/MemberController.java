@@ -7,6 +7,8 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import net.mureng.mureng.core.dto.ApiResult;
+import net.mureng.mureng.core.oauth2.dto.OAuth2Profile;
+import net.mureng.mureng.core.oauth2.service.OAuth2Service;
 import net.mureng.mureng.member.component.MemberMapper;
 import net.mureng.mureng.member.dto.MemberDto;
 import net.mureng.mureng.member.entity.Member;
@@ -24,6 +26,7 @@ import javax.validation.Valid;
 public class MemberController {
     private final MemberService memberService;
     private final MemberMapper memberMapper;
+    private final OAuth2Service oAuth2Service;
 
     @ApiOperation(value = "신규 회원 가입", notes = "신규 회원가입입니다.")
     @PostMapping("/signup")
@@ -33,7 +36,7 @@ public class MemberController {
 
         Member newMember = memberMapper.map(memberDto);
         return ResponseEntity.ok(ApiResult.ok(memberMapper.map(
-                memberService.signup(newMember)
+            memberService.signup(newMember)
         )));
     }
 
@@ -48,10 +51,29 @@ public class MemberController {
         ));
     }
 
+    @ApiOperation(value = "사용자 존재 체크", notes = "기존에 있던 사용자인지 체크합니다.")
+    @PostMapping("/user-exists/{provider}")
+    public ResponseEntity<ApiResult<ExistCheckDto>> userExists(
+            @ApiParam(value = "서비스 제공자 provider", required = true, defaultValue = "google") @PathVariable String provider,
+            @ApiParam(value = "액세스 토큰", required = true) @RequestBody String accessToken) {
+
+        OAuth2Profile profile = oAuth2Service.getProfile(provider, accessToken);
+        return ResponseEntity.ok(ApiResult.ok(
+                new ExistCheckDto(memberService.isEmailExist(profile.getEmail())), profile.getEmail()
+        ));
+    }
+
     @ApiIgnore
     @AllArgsConstructor
     @Getter
     public static class DuplicatedCheckDto {
         private final boolean duplicated;
+    }
+
+    @ApiIgnore
+    @AllArgsConstructor
+    @Getter
+    public static class ExistCheckDto {
+        private final boolean exist;
     }
 }
