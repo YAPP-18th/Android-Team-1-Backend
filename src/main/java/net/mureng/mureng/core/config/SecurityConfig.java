@@ -35,8 +35,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                     .authorizeRequests()
                         .antMatchers("/api/member/signup",
-                                "/api/member/nickname-exists/**").anonymous()
+                                "/api/member/nickname-exists/**",
+                                "/api/member/user-exists/**").anonymous()
                         .antMatchers("/api/test", "/api/test-failure").anonymous()
+                        .antMatchers("/api/jwt").anonymous()
                         .anyRequest().authenticated()
                 .and()
                     .addFilterBefore(new JwtAuthenticationFilter(jwtResolver, jwtValidator), UsernamePasswordAuthenticationFilter.class);
