@@ -54,13 +54,13 @@ public class MemberController {
 
     @ApiOperation(value = "사용자 존재 체크", notes = "기존에 있던 사용자인지 체크합니다.")
     @PostMapping("/user-exists/{provider}")
-    public ResponseEntity<ApiResult<ExistCheckDto>> userExists(
+    public ResponseEntity<ApiResult<UserCheckDto>> userExists(
             @ApiParam(value = "서비스 제공자 provider", required = true, defaultValue = "google") @PathVariable String provider,
             @ApiParam(value = "액세스 토큰", required = true) @RequestBody @Valid TokenDto token) {
 
         OAuth2Profile profile = oAuth2Service.getProfile(provider, token.getAccessToken());
         return ResponseEntity.ok(ApiResult.ok(
-                new ExistCheckDto(memberService.isEmailExist(profile.getEmail())), profile.getEmail()
+                new UserCheckDto(memberService.isEmailExist(profile.getEmail()), profile.getEmail())
         ));
     }
 
@@ -74,7 +74,8 @@ public class MemberController {
     @ApiIgnore
     @AllArgsConstructor
     @Getter
-    public static class ExistCheckDto {
+    public static class UserCheckDto {
         private final boolean exist;
+        private final String email;
     }
 }

@@ -76,8 +76,9 @@ class MemberControllerTest extends AbstractControllerTest {
                 .content(accessTokenJson)
                 .contentType(MediaType.APPLICATION_JSON)
         ).andExpect(status().isOk())
-                .andExpect(MockMvcResultMatchers.jsonPath("$.message").value("test@gmail.com"))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.message").value("ok"))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.data.exist").value(true))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.data.email").value("test@gmail.com"))
                 .andDo(print());
     }
 }
