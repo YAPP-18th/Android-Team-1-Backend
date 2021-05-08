@@ -1,12 +1,18 @@
 package net.mureng.mureng.core.oauth2.dto;
 
-import lombok.RequiredArgsConstructor;
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
+import lombok.*;
 
-@RequiredArgsConstructor
+import javax.validation.constraints.Email;
+
+@Builder
+@Getter @Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@ApiModel(value="OAuth Profile", description="OAuth Profile 모델")
 public class OAuth2Profile {
-    private final String email;
-
-    public String getEmail(){
-        return email;
-    };
+    @Email
+    @ApiModelProperty(value = "이메일 주소")
+    private String email;
 }
