@@ -2,6 +2,8 @@ package net.mureng.mureng.jwt;
 
 import net.mureng.mureng.core.jwt.component.JwtCreator;
 import net.mureng.mureng.core.jwt.component.JwtValidator;
+import net.mureng.mureng.core.jwt.dto.TokenDto;
+import net.mureng.mureng.core.jwt.service.JwtService;
 import net.mureng.mureng.member.entity.Member;
 import net.mureng.mureng.member.repository.MemberRepository;
 import net.mureng.mureng.web.AbstractControllerTest;
@@ -30,6 +32,9 @@ public class JwtAuthenticationTest extends AbstractControllerTest {
     JwtValidator jwtValidator;
 
     @MockBean
+    private JwtService jwtService;
+
+    @MockBean
     private MemberRepository memberRepository;
 
     private final String emailJsonString = "{\"email\": \"test@gmail.com\"}";
@@ -56,7 +61,7 @@ public class JwtAuthenticationTest extends AbstractControllerTest {
                 .murengCount(0)
                 .build();
 
-        given(memberRepository.findByEmail(eq("test@gmail.com"))).willReturn(java.util.Optional.ofNullable(member));
+        given(jwtService.issue(eq("test@gmail.com"))).willReturn(new TokenDto("testToken", null));
 
         mockMvc.perform(
                 post("/api/jwt")
@@ -64,6 +69,7 @@ public class JwtAuthenticationTest extends AbstractControllerTest {
                         .contentType(MediaType.APPLICATION_JSON)
         ).andExpect(status().isOk())
                 .andExpect(MockMvcResultMatchers.jsonPath("$.message").value("ok"))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.data.accessToken").value("testToken"))
                 .andDo(print());
     }
 }
