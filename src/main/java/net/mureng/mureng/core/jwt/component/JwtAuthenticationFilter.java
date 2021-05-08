@@ -19,14 +19,13 @@ public class JwtAuthenticationFilter extends GenericFilterBean {
         this.jwtValidator = jwtValidator;
     }
 
-    // Request로 들어오는 Jwt Token의 유효성을 검증하는 filter를 FilterChain에 등록
     @Override
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
         String token = jwtResolver.resolveToken((HttpServletRequest) servletRequest);
 
-        if (jwtValidator.validateToken(token)) { // token 검증
-            Authentication auth = jwtResolver.getAuthentication(token); // 인증 객체 생성
-            SecurityContextHolder.getContext().setAuthentication(auth); // SecurityContextHolder에 인증 객체 저장
+        if (jwtValidator.validateToken(token)) {
+            Authentication auth = jwtResolver.getAuthentication(token);
+            SecurityContextHolder.getContext().setAuthentication(auth);
         }
 
         filterChain.doFilter(servletRequest, servletResponse);

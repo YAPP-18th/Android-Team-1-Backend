@@ -7,6 +7,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import net.mureng.mureng.core.dto.ApiResult;
+import net.mureng.mureng.core.jwt.dto.TokenDto;
 import net.mureng.mureng.core.oauth2.dto.OAuth2Profile;
 import net.mureng.mureng.core.oauth2.service.OAuth2Service;
 import net.mureng.mureng.member.component.MemberMapper;
@@ -55,9 +56,9 @@ public class MemberController {
     @PostMapping("/user-exists/{provider}")
     public ResponseEntity<ApiResult<ExistCheckDto>> userExists(
             @ApiParam(value = "서비스 제공자 provider", required = true, defaultValue = "google") @PathVariable String provider,
-            @ApiParam(value = "액세스 토큰", required = true) @RequestBody String accessToken) {
+            @ApiParam(value = "액세스 토큰", required = true) @RequestBody @Valid TokenDto token) {
 
-        OAuth2Profile profile = oAuth2Service.getProfile(provider, accessToken);
+        OAuth2Profile profile = oAuth2Service.getProfile(provider, token.getAccessToken());
         return ResponseEntity.ok(ApiResult.ok(
                 new ExistCheckDto(memberService.isEmailExist(profile.getEmail())), profile.getEmail()
         ));

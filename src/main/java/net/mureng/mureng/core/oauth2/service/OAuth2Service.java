@@ -19,17 +19,18 @@ public class OAuth2Service {
     private final Environment env;
 
     public OAuth2Profile getProfile(String provider, String accessToken) {
-        // Set header : Content-type: application/x-www-form-urlencoded
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
-        headers.set("Authorization", "Bearer " + accessToken);
+        headers.setBearerAuth(accessToken);
 
-        // Set http entity
         HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<>(null, headers);
 
         try {
-            // Request profile
-            ResponseEntity<String> response = restTemplate.postForEntity(env.getProperty(String.format("spring.social.%s.url.profile", provider)), request, String.class);
+            ResponseEntity<String> response = restTemplate.postForEntity(
+                    env.getProperty(String.format("spring.social.%s.url.profile", provider)),
+                    request,
+                    String.class
+            );
 
             if (response.getStatusCode() == HttpStatus.OK){
                 ObjectMapper objectMapper = new ObjectMapper();
@@ -37,8 +38,8 @@ public class OAuth2Service {
                 return objectMapper.readValue(response.getBody(), OAuth2Profile.class);
             }
         } catch (Exception e) {
-            throw new BadRequestException();
+            throw new BadRequestException("HTTP 요청 에러입니다.");
         }
-        throw new BadRequestException();
+        throw new BadRequestException("OAuth 존재하지 않는 사용자입니다.");
     }
 }
