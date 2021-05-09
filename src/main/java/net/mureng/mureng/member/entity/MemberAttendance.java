@@ -8,19 +8,14 @@ import lombok.NoArgsConstructor;
 import javax.persistence.*;
 import java.time.LocalDate;
 
+@Embeddable
 @Builder
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-@Entity
-@Table(name = "MEMBER_ATTENDANCE")
 public class MemberAttendance {
-
-    @Id @GeneratedValue
-    private Long memberId;
-
     @Column(name = "attendance_count", nullable = false)
-    private long attendanceCount;
+    private int attendanceCount;
 
     @Column(name = "last_attendance_date", nullable = false)
     @Builder.Default

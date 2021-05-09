@@ -36,6 +36,8 @@ dependencies {
 	testImplementation 'org.dbunit:dbunit:2.6.0'
 	testImplementation 'com.github.springtestdbunit:spring-test-dbunit:1.3.0'
 	implementation 'org.springframework.boot:spring-boot-starter-security'
+	implementation 'org.liquibase:liquibase-core:4.3.5'
+	implementation 'mysql:mysql-connector-java'
 }
 
 test {

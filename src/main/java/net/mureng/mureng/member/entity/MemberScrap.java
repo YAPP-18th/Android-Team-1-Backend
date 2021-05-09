@@ -8,12 +8,13 @@ import net.mureng.mureng.todayexpression.entity.TodayExpression;
 
 import javax.persistence.*;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Getter
 @Setter
 @NoArgsConstructor
 @Entity
-@Table(name = "MEMBER_SCRAP")
+@Table(name = "member_scrap")
 public class MemberScrap {
     @EmbeddedId
     private MemberScrapPK id;
@@ -29,10 +30,10 @@ public class MemberScrap {
     private TodayExpression todayExpression;
 
     @Column(name = "reg_date", nullable = false)
-    private LocalDate regDate = LocalDate.now();
+    private LocalDateTime regDate = LocalDateTime.now();
 
     @Builder
-    public MemberScrap(MemberScrapPK id, LocalDate regDate) {
+    public MemberScrap(MemberScrapPK id, LocalDateTime regDate) {
         this.id = id;
         this.regDate = regDate;
     }

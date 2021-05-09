@@ -5,7 +5,6 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.*;
 import net.mureng.mureng.core.validation.annotation.DateFormat;
-import net.mureng.mureng.core.validation.annotation.TimeFormat;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
@@ -39,15 +38,11 @@ public class MemberDto {
     private int murengCount;
 
     @ApiModelProperty(value = "출석 횟수")
-    private long attendanceCount;
+    private int attendanceCount;
 
     @DateFormat
     @ApiModelProperty(value = "마지막 출석 날짜", allowableValues = "yyyy-MM-dd")
     private String lastAttendanceDate;
-
-    @TimeFormat
-    @ApiModelProperty(value = "하루가 끝나는 시간", allowableValues = "HH:mm:ss")
-    private String dailyEndTime;
 
     @ApiModelProperty(value = "푸쉬 알림 여부")
     private boolean isPushActive;
