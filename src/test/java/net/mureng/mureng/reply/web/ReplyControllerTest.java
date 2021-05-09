@@ -67,7 +67,7 @@ public class ReplyControllerTest extends AbstractControllerTest {
         long notRepliedMemberId = 1;
 
         given(questionService.getQuestionById(eq(questionId))).willReturn(question);
-        given(replyService.postReply(any())).willReturn(newReply);
+        given(replyService.postReply(any(), eq(questionId), any())).willReturn(newReply);
         given(replyService.isAlreadyReplied(eq(notRepliedMemberId))).willReturn(false);
         given(questionService.existsById(eq(questionId))).willReturn(true);
         given(questionService.isAlreadyReplied(eq(questionId), eq(notRepliedMemberId))).willReturn(false);
