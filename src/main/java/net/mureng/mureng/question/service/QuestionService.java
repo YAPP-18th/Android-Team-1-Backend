@@ -22,5 +22,5 @@ public class QuestionService {
     }
 
     @Transactional(readOnly = true)
-    public boolean isAlreadyAnswered(Long questionId, Long memberId) { return questionRepository.existsByQuestionIdAndMemberMemberId(questionId, memberId); }
+    public boolean isAlreadyReplied(Long questionId, Long memberId) { return questionRepository.existsByQuestionIdAndMemberMemberId(questionId, memberId); }
 }

@@ -32,13 +32,13 @@ public class ReplyController {
     public ResponseEntity<ApiResult> postReply(@CurrentUser Member member, @RequestBody @Valid ReplyDto replyDto, @PathVariable @NotNull Long questionId){
         Long memberId = member.getMemberId();
 
-        if(replyService.isAlreadyAnswered(memberId))
+        if(replyService.isAlreadyReplied(memberId))
             throw new BadRequestException("이미 오늘 답변한 사용자입니다.");
 
         if(!questionService.existsById(questionId))
             throw new BadRequestException("존재하지 않는 질문에 대한 요청입니다.");
 
-        if(questionService.isAlreadyAnswered(questionId, memberId))
+        if(questionService.isAlreadyReplied(questionId, memberId))
             throw new BadRequestException("이미 답변한 질문입니다.");
 
         Reply newReply = replyMapper.map(replyDto);

@@ -63,8 +63,14 @@ public class ReplyControllerTest extends AbstractControllerTest {
     @Test
     @WithMockMurengUser
     public void 답변_등록_테스트() throws Exception {
-        given(questionService.getQuestionById(eq(1L))).willReturn(question);
+        long questionId = 1;
+        long notRepliedMemberId = 1;
+
+        given(questionService.getQuestionById(eq(questionId))).willReturn(question);
         given(replyService.postReply(any())).willReturn(newReply);
+        given(replyService.isAlreadyReplied(eq(notRepliedMemberId))).willReturn(false);
+        given(questionService.existsById(eq(questionId))).willReturn(true);
+        given(questionService.isAlreadyReplied(eq(questionId), eq(notRepliedMemberId))).willReturn(false);
 
         mockMvc.perform(
                 post("/api/reply/1")
@@ -77,4 +83,7 @@ public class ReplyControllerTest extends AbstractControllerTest {
                 .andExpect(MockMvcResultMatchers.jsonPath("$.data.image").value("image-path"))
                 .andDo(print());
     }
+
+
+
 }

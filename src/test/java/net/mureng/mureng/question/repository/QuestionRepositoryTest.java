@@ -59,11 +59,11 @@ public class QuestionRepositoryTest {
 
     @Test
     public void 이미_답변한_질문인지_테스트(){
-        long alreadyAnsweredMemberId = 1;
-        long notAnsweredMemberId = 3;
+        long alreadyRepliedMemberId = 1;
+        long notRepliedMemberId = 3;
 
-        boolean isExist = questionRepository.existsByQuestionIdAndMemberMemberId(1L, alreadyAnsweredMemberId);
-        boolean isExist2 = questionRepository.existsByQuestionIdAndMemberMemberId(1L, notAnsweredMemberId);
+        boolean isExist = questionRepository.existsByQuestionIdAndMemberMemberId(1L, alreadyRepliedMemberId);
+        boolean isExist2 = questionRepository.existsByQuestionIdAndMemberMemberId(1L, notRepliedMemberId);
 
         assertTrue(isExist);
         assertFalse(isExist2);

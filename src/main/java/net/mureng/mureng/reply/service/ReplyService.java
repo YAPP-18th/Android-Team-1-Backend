@@ -22,7 +22,7 @@ public class ReplyService {
     }
 
     @Transactional(readOnly = true)
-    public boolean isAlreadyAnswered(Long memberId){
+    public boolean isAlreadyReplied(Long memberId){
         LocalDateTime startDateTime = LocalDateTime.of(LocalDate.now(), LocalTime.of(0,0,0)); // 오늘 00:00:00
         LocalDateTime endDatetime = LocalDateTime.of(LocalDate.now(), LocalTime.of(23,59,59)); //오늘 23:59:59
 
