@@ -7,14 +7,11 @@ import net.mureng.mureng.annotation.MurengDataTest;
 import net.mureng.mureng.member.entity.Member;
 import net.mureng.mureng.member.entity.MemberAttendance;
 import net.mureng.mureng.member.entity.MemberSetting;
-import net.mureng.mureng.member.repository.MemberRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.time.LocalDateTime;
 
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 
 
@@ -74,5 +71,14 @@ public class MemberRepositoryTest {
     public void 닉네임_존재_조회() {
         assertTrue(memberRepository.existsByNickname("Test"));
         assertFalse(memberRepository.existsByNickname("Non-exist"));
+    }
+
+    @Test
+    @DatabaseSetup({
+            "classpath:dbunit/entity/member.xml"
+    })
+    public void 이메일_존재_조회(){
+        assertTrue(memberRepository.existsByEmail("test@gmail.com"));
+        assertFalse(memberRepository.existsByEmail("bleum@gmail.com"));
     }
 }

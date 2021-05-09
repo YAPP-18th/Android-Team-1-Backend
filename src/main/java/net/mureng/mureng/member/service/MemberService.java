@@ -1,16 +1,14 @@
 package net.mureng.mureng.member.service;
 
 import lombok.RequiredArgsConstructor;
-import net.mureng.mureng.member.dto.MemberDto;
 import net.mureng.mureng.member.entity.Member;
 import net.mureng.mureng.member.repository.MemberRepository;
-import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
 
 import javax.validation.Valid;
+import java.util.Optional;
 
 @Validated
 @Service
@@ -27,4 +25,10 @@ public class MemberService {
     public boolean isNicknameDuplicated(String nickname) {
         return memberRepository.existsByNickname(nickname);
     }
+
+    @Transactional(readOnly = true)
+    public boolean isEmailExist(String email) { return memberRepository.existsByEmail(email); }
+
+    @Transactional(readOnly = true)
+    public Optional<Member> findByEmail(String email) { return memberRepository.findByEmail(email); }
 }

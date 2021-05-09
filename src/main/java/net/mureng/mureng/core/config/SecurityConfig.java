@@ -1,8 +1,9 @@
 package net.mureng.mureng.core.config;
 
 import lombok.RequiredArgsConstructor;
-import net.mureng.mureng.core.jwt.JwtAuthenticationFilter;
-import net.mureng.mureng.core.jwt.JwtTokenProvider;
+import net.mureng.mureng.core.jwt.component.JwtAuthenticationFilter;
+import net.mureng.mureng.core.jwt.component.JwtResolver;
+import net.mureng.mureng.core.jwt.component.JwtValidator;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -17,7 +18,8 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @RequiredArgsConstructor
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
-    private final JwtTokenProvider jwtTokenProvider;
+    private final JwtResolver jwtResolver;
+    private final JwtValidator jwtValidator;
 
     @Override
     public AuthenticationManager authenticationManagerBean() throws Exception {
@@ -33,11 +35,13 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                     .authorizeRequests()
                         .antMatchers("/api/member/signup",
-                                "/api/member/nickname-exists/**").anonymous()
+                                "/api/member/nickname-exists/**",
+                                "/api/member/user-exists/**").anonymous()
                         .antMatchers("/api/test", "/api/test-failure").anonymous()
+                        .antMatchers("/api/jwt").anonymous()
                         .anyRequest().authenticated()
                 .and()
-                    .addFilterBefore(new JwtAuthenticationFilter(jwtTokenProvider), UsernamePasswordAuthenticationFilter.class);
+                    .addFilterBefore(new JwtAuthenticationFilter(jwtResolver, jwtValidator), UsernamePasswordAuthenticationFilter.class);
     }
 
     @Override

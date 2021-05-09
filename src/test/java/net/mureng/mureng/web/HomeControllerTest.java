@@ -1,7 +1,7 @@
 package net.mureng.mureng.web;
 
 import net.mureng.mureng.core.dto.UserDetailsImpl;
-import net.mureng.mureng.core.jwt.JwtTokenProvider;
+import net.mureng.mureng.core.jwt.component.JwtCreator;
 import net.mureng.mureng.member.entity.Member;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,7 +20,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 class HomeControllerTest extends AbstractControllerTest {
 
     @Autowired
-    private JwtTokenProvider jwtTokenProvider;
+    private JwtCreator jwtCreator;
 
     @MockBean
     private UserDetailsService userDetailsService;
@@ -49,7 +49,7 @@ class HomeControllerTest extends AbstractControllerTest {
                             .murengCount(0)
                             .build();
 
-        String token = jwtTokenProvider.createToken(member.getEmail(), member.getNickname());
+        String token = jwtCreator.createToken(member.getEmail(), member.getNickname());
 
         given(userDetailsService.loadUserByUsername(eq(email))).willReturn(new UserDetailsImpl(member));
 

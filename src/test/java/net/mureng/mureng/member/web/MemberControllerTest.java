@@ -3,10 +3,8 @@ package net.mureng.mureng.member.web;
 import net.mureng.mureng.member.entity.Member;
 import net.mureng.mureng.member.entity.MemberAttendance;
 import net.mureng.mureng.member.entity.MemberSetting;
-import net.mureng.mureng.member.repository.MemberRepository;
 import net.mureng.mureng.member.service.MemberService;
 import net.mureng.mureng.web.AbstractControllerTest;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
@@ -14,7 +12,6 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 import java.time.LocalDate;
 
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
