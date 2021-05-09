@@ -26,7 +26,7 @@ public class JwtController {
     private final JwtService jwtService;
 
     @ApiOperation(value = "JWT 발급", notes = "JWT를 발급합니다.")
-    @PostMapping()
+    @PostMapping
     public ResponseEntity<ApiResult<TokenDto>> issue(
             @ApiParam(value = "사용자 Email", required = true) @RequestBody @Valid OAuth2Profile profile
             ) {

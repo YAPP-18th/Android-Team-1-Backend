@@ -4,7 +4,6 @@ import net.mureng.mureng.core.jwt.component.JwtCreator;
 import net.mureng.mureng.core.jwt.component.JwtValidator;
 import net.mureng.mureng.core.jwt.dto.TokenDto;
 import net.mureng.mureng.core.jwt.service.JwtService;
-import net.mureng.mureng.member.entity.Member;
 import net.mureng.mureng.member.repository.MemberRepository;
 import net.mureng.mureng.web.AbstractControllerTest;
 import org.junit.jupiter.api.Test;
@@ -13,8 +12,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
-
-import java.time.LocalDateTime;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.eq;
@@ -49,18 +46,7 @@ public class JwtAuthenticationTest extends AbstractControllerTest {
     }
 
     @Test
-    public void JWT발급() throws Exception {
-        Member member = Member.builder()
-                .memberId(1L)
-                .identifier("123")
-                .email("test@gmail.com")
-                .isActive(true)
-                .nickname("Test")
-                .regDate(LocalDateTime.of(2020, 10, 14, 17, 11, 9))
-                .modDate(LocalDateTime.of(2020, 10, 14, 17, 11, 10))
-                .murengCount(0)
-                .build();
-
+    public void JWT_발급() throws Exception {
         given(jwtService.issue(eq("test@gmail.com"))).willReturn(new TokenDto("testToken", null));
 
         mockMvc.perform(
