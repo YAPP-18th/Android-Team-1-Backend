@@ -6,8 +6,13 @@ import net.mureng.mureng.reply.entity.Reply;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.List;
 
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @MurengDataTest
@@ -51,5 +56,24 @@ public class ReplyRepositoryTest {
         assertEquals(QUESTION_ID, replyList.get(1).getQuestion().getQuestionId());
         assertEquals("red", replyList.get(1).getContent());
         assertEquals("red image", replyList.get(1).getImage());
+    }
+
+    @Test
+    public void 이미_답변한_멤버_존재여부_테스트(){
+        LocalDate date = LocalDate.of(2020,10,14);
+        LocalDateTime startDateTime = LocalDateTime.of(date, LocalTime.of(0,0,0));
+        LocalDateTime endDateTime = LocalDateTime.of(date, LocalTime.of(23,59,59));
+
+        LocalDate date2 = LocalDate.of(2020,10,16);
+        LocalDateTime startDateTime2 = LocalDateTime.of(date2, LocalTime.of(0,0,0));
+        LocalDateTime endDateTime2 = LocalDateTime.of(date2, LocalTime.of(23,59,59));
+
+        long memberId = 1;
+
+        boolean isExist = replyRepository.existsByRegDateBetweenAndMemberMemberId(startDateTime, endDateTime, memberId);
+        boolean isExist2 = replyRepository.existsByRegDateBetweenAndMemberMemberId(startDateTime2, endDateTime2, memberId);
+
+        assertTrue(isExist);
+        assertFalse(isExist2);
     }
 }

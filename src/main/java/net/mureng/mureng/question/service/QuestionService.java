@@ -15,4 +15,12 @@ public class QuestionService {
     public Question getQuestionById(Long questionId){
         return questionRepository.findById(questionId).orElseThrow();
     }
+
+    @Transactional(readOnly = true)
+    public boolean existsById(Long questionId){
+        return questionRepository.existsById(questionId);
+    }
+
+    @Transactional(readOnly = true)
+    public boolean isAlreadyAnswered(Long questionId, Long memberId) { return questionRepository.existsByQuestionIdAndMemberMemberId(questionId, memberId); }
 }
