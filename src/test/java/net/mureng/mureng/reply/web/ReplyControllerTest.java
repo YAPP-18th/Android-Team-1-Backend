@@ -58,8 +58,7 @@ public class ReplyControllerTest extends AbstractControllerTest {
             .build();
 
     private final String newReplyJsonString = "{\"content\": \"Test Reply\",\n" +
-            "  \"image\": \"image-path\" ,\n" +
-            "}";
+            "  \"image\": \"image-path\" }";
 
     @Test
     @WithMockMurengUser
