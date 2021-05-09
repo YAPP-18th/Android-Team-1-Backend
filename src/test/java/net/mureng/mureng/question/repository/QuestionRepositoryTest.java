@@ -36,23 +36,23 @@ public class QuestionRepositoryTest {
 
         Question question = questions.get(0);
 
-        assertEquals(MEMBER_ID, question.getMemberId().getMemberId());
+        assertEquals(MEMBER_ID, question.getMember().getMemberId());
         assertEquals("what is your favorite color?", question.getContent());
         assertEquals("당신이 가장 좋아하는 색은 무엇인가요?", question.getKoContent());
     }
 
     @Test
     public void 멤버로_질문_목록_조회(){
-        List<Question> questions = questionRepository.findAllByMemberIdMemberId(MEMBER_ID);
+        List<Question> questions = questionRepository.findAllByMemberMemberId(MEMBER_ID);
 
 
         assertEquals(2, questions.size());
 
-        assertEquals(MEMBER_ID, questions.get(0).getMemberId().getMemberId());
+        assertEquals(MEMBER_ID, questions.get(0).getMember().getMemberId());
         assertEquals("what is your favorite color?", questions.get(0).getContent());
         assertEquals("당신이 가장 좋아하는 색은 무엇인가요?", questions.get(0).getKoContent());
 
-        assertEquals(MEMBER_ID, questions.get(1).getMemberId().getMemberId());
+        assertEquals(MEMBER_ID, questions.get(1).getMember().getMemberId());
         assertEquals("How did you feel when you first heard the mureng?", questions.get(1).getContent());
         assertEquals("머렝을 처음 들었을 때 어떤 느낌이 들었나요?", questions.get(1).getKoContent());
 

@@ -1,15 +1,18 @@
 package net.mureng.mureng.question.entity;
 
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import net.mureng.mureng.member.entity.Member;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
-@Getter
+@Builder
+@Getter @Setter
 @NoArgsConstructor
+@AllArgsConstructor
 @Entity
 @Table(name = "question")
 public class Question {
@@ -21,7 +24,7 @@ public class Question {
 
     @ManyToOne
     @JoinColumn(name = "member_id")
-    private Member memberId;
+    private Member member;
 
     @Column(length = 20)
     private String category;
@@ -32,16 +35,11 @@ public class Question {
     @Column(name = "ko_content", nullable = false)
     private String koContent;
 
+    @Builder.Default
+    @OneToMany(mappedBy = "question", fetch = FetchType.EAGER)
+    private Set<WordHint> wordHints = new HashSet<>();
+
+    @Builder.Default
     @Column(name = "reg_date", nullable = false)
     private LocalDateTime regDate = LocalDateTime.now();
-
-    @Builder
-    public Question(Long questionId, Member memberId, String category, String content, String koContent, LocalDateTime regDate) {
-        this.questionId = questionId;
-        this.memberId = memberId;
-        this.category = category;
-        this.content = content;
-        this.koContent = koContent;
-        this.regDate = regDate;
-    }
 }
