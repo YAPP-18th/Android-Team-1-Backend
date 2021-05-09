@@ -4,12 +4,13 @@ import com.github.springtestdbunit.annotation.DatabaseSetup;
 import net.mureng.mureng.annotation.MurengDataTest;
 import net.mureng.mureng.member.repository.MemberRepository;
 import net.mureng.mureng.question.entity.Question;
-import net.mureng.mureng.question.repository.QuestionRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
 
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @MurengDataTest
@@ -45,7 +46,6 @@ public class QuestionRepositoryTest {
     public void 멤버로_질문_목록_조회(){
         List<Question> questions = questionRepository.findAllByMemberMemberId(MEMBER_ID);
 
-
         assertEquals(2, questions.size());
 
         assertEquals(MEMBER_ID, questions.get(0).getMember().getMemberId());
@@ -55,7 +55,17 @@ public class QuestionRepositoryTest {
         assertEquals(MEMBER_ID, questions.get(1).getMember().getMemberId());
         assertEquals("How did you feel when you first heard the mureng?", questions.get(1).getContent());
         assertEquals("머렝을 처음 들었을 때 어떤 느낌이 들었나요?", questions.get(1).getKoContent());
+    }
 
+    @Test
+    public void 이미_답변한_질문인지_테스트(){
+        long alreadyRepliedMemberId = 1;
+        long notRepliedMemberId = 3;
 
+        boolean isExist = questionRepository.existsByQuestionIdAndMemberMemberId(1L, alreadyRepliedMemberId);
+        boolean isExist2 = questionRepository.existsByQuestionIdAndMemberMemberId(1L, notRepliedMemberId);
+
+        assertTrue(isExist);
+        assertFalse(isExist2);
     }
 }
