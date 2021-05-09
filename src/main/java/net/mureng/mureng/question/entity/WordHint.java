@@ -10,7 +10,7 @@ import java.time.LocalDateTime;
 @Getter
 @NoArgsConstructor
 @Entity
-@Table(name = "WORD_HINT")
+@Table(name = "word_hint")
 public class WordHint {
 
     @Id

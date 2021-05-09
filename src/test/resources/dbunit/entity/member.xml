@@ -1,9 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <dataset>
     <member member_id="1" identifier="123" email="test@gmail.com" is_active="true" nickname="Test" mureng_count="0"
+            attendance_count="10" last_attendance_date="2020-10-14 17:11:09" is_push_active="true"
             mod_date="2020-10-14 17:11:10" reg_date="2020-10-14 17:11:09"/>
     <member member_id="2" identifier="124" email="test2@gmail.com" is_active="true" nickname="Test2" mureng_count="0"
+            attendance_count="11" last_attendance_date="2020-10-15 18:11:09" is_push_active="false"
             mod_date="2020-10-14 17:11:10" reg_date="2020-10-14 17:11:09"/>
     <member member_id="3" identifier="125" email="test3@gmail.com" is_active="true" nickname="Test3" mureng_count="0"
+            attendance_count="12" last_attendance_date="2020-10-16 19:11:09" is_push_active="true"
             mod_date="2020-10-14 17:11:10" reg_date="2020-10-14 17:11:09"/>
 </dataset>

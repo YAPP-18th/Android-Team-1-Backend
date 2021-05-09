@@ -29,14 +29,11 @@ class MemberMapperTest {
                                         .modDate(LocalDateTime.of(2020, 10, 14, 17, 11, 10))
                                         .murengCount(0)
                                         .memberAttendance(MemberAttendance.builder()
-                                                .memberId(1L)
-                                                .attendanceCount(10L)
+                                                .attendanceCount(10)
                                                 .lastAttendanceDate(LocalDate.of(2020, 10, 14))
                                                 .build())
                                         .memberSetting(MemberSetting.builder()
-                                                .memberId(1L)
                                                 .isPushActive(true)
-                                                .dailyEndTime(LocalTime.of(11,0,0))
                                                 .build())
                                         .build();
 
@@ -49,7 +46,6 @@ class MemberMapperTest {
                                         .attendanceCount(10)
                                         .lastAttendanceDate("2020-10-14")
                                         .isPushActive(true)
-                                        .dailyEndTime("11:00:00")
                                         .build();
 
     @Test
@@ -63,7 +59,6 @@ class MemberMapperTest {
         assertEquals(mappedDto.getAttendanceCount(), memberDto.getAttendanceCount());
         assertEquals(mappedDto.getLastAttendanceDate(), memberDto.getLastAttendanceDate());
         assertEquals(mappedDto.isPushActive(), memberDto.isPushActive());
-        assertEquals(mappedDto.getDailyEndTime(), memberDto.getDailyEndTime());
     }
 
     @Test
@@ -77,7 +72,6 @@ class MemberMapperTest {
         assertEquals(mappedMember.getMurengCount(), member.getMurengCount());
         assertEquals(mappedMember.getMemberAttendance().getAttendanceCount(), member.getMemberAttendance().getAttendanceCount());
         assertEquals(mappedMember.getMemberAttendance().getLastAttendanceDate(), member.getMemberAttendance().getLastAttendanceDate());
-        assertEquals(mappedMember.getMemberSetting().getDailyEndTime(), member.getMemberSetting().getDailyEndTime());
         assertEquals(mappedMember.getMemberSetting().isPushActive(), member.getMemberSetting().isPushActive());
     }
 }

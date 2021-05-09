@@ -28,7 +28,6 @@ jobs:
       - name: Build with Gradle
         run: ./gradlew build test
   deployment:
-    if: ${{ github.repository == 'YAPP-18th/Android-Team-1-Backend' }}
     name: 빌드, 푸쉬 후 개발에 배포
     needs: test
     runs-on: ubuntu-latest
@@ -56,13 +55,11 @@ jobs:
 
       - name: 환경변수 치환 후 최종 배포 파일 생성
         uses: danielr1996/envsubst-action@1.0.0
-#        env:
-#          PORT: ${{ secrets.PORT }}
-#          DB_HOST: ${{ secrets.DB_HOST }}
-#          DB_USERNAME: ${{ secrets.DB_USERNAME }}
-#          DB_PORT: ${{ secrets.DB_PORT }}
-#          DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
-#          DB_NAME: ${{ secrets.DB_NAME }}
+        env:
+          DEV_DB_DRIVER: ${{ secrets.DEV_DB_DRIVER }}
+          DEV_DB_URL: ${{ secrets.DEV_DB_URL }}
+          DEV_DB_USERNAME: ${{ secrets.DEV_DB_USERNAME }}
+          DEV_DB_PASSWORD: ${{ secrets.DEV_DB_PASSWORD }}
         with:
           input: deployment/deployment-dev.yml
           output: deploy.yml
@@ -80,10 +77,10 @@ jobs:
           KUBE_CONFIG_DATA: ${{ secrets.KUBE_CONFIG_DATA }}
           KUBECTL_VERSION: "1.15"
         with:
-          args: '"rollout status deployment/mureng-app-dev"'
-  notification:
-    name: 슬랙에 알림
-    if: ${{ always() && github.repository == 'YAPP-18th/Android-Team-1-Backend' }}
+          args: '"rollout status deployment/mureng-app-dev-deployment"'
+  notification-success:
+    name: 슬랙에 성공 알림
+    if: success()
     needs: [test, deployment]
     runs-on: ubuntu-latest
     steps:
@@ -97,6 +94,12 @@ jobs:
         status: SUCCESS
         color: good
 
+  notification-failure:
+    name: 슬랙에 실패 알림
+    if: failure()
+    needs: [ test, deployment ]
+    runs-on: ubuntu-latest
+    steps:
     - name: 슬랙 실패 알림
       if: failure()
       env:

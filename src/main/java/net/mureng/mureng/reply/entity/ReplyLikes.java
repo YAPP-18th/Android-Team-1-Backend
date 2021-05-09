@@ -11,7 +11,7 @@ import java.time.LocalDateTime;
 @Getter
 @NoArgsConstructor
 @Entity
-@Table(name = "REPLY_LIKES")
+@Table(name = "reply_likes")
 public class ReplyLikes {
     @EmbeddedId
     private ReplyLikesPK id;
