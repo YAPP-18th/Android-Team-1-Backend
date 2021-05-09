@@ -5,6 +5,9 @@ import net.mureng.mureng.member.entity.Member;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 @Builder
 @Getter @Setter
@@ -31,6 +34,10 @@ public class Question {
 
     @Column(name = "ko_content", nullable = false)
     private String koContent;
+
+    @Builder.Default
+    @OneToMany(mappedBy = "question", fetch = FetchType.EAGER)
+    private Set<WordHint> wordHints = new HashSet<>();
 
     @Builder.Default
     @Column(name = "reg_date", nullable = false)

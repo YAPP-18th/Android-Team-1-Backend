@@ -33,7 +33,7 @@ public class WordHintRepositoryTest {
     public void 질문의_단어_힌트_조회(){
         Question question = questionRepository.findById(QUESTION_ID).orElseThrow();
 
-        List<WordHint> wordHintList = wordHintRepository.findAllByQuestionId(question);
+        List<WordHint> wordHintList = wordHintRepository.findAllByQuestion(question);
 
         assertEquals(2, wordHintList.size());
 

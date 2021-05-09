@@ -1,14 +1,14 @@
 package net.mureng.mureng.question.entity;
 
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
 
-@Getter
+@Builder
+@Getter @Setter
 @NoArgsConstructor
+@AllArgsConstructor
 @Entity
 @Table(name = "word_hint")
 public class WordHint {
@@ -20,7 +20,7 @@ public class WordHint {
 
     @ManyToOne
     @JoinColumn(name = "question_id")
-    private Question questionId;
+    private Question question;
 
     @Column(nullable = false)
     private String word;
@@ -28,15 +28,7 @@ public class WordHint {
     @Column(nullable = false)
     private String meaning;
 
+    @Builder.Default
     @Column(name = "reg_date", nullable = false)
     private LocalDateTime regDate = LocalDateTime.now();
-
-    @Builder
-    public WordHint(Long hintId, Question questionId, String word, String meaning, LocalDateTime regDate) {
-        this.hintId = hintId;
-        this.questionId = questionId;
-        this.word = word;
-        this.meaning = meaning;
-        this.regDate = regDate;
-    }
 }

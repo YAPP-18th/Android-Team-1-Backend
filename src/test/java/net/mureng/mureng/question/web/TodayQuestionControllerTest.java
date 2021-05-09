@@ -7,6 +7,7 @@ import net.mureng.mureng.member.repository.MemberRepository;
 import net.mureng.mureng.member.service.MemberService;
 import net.mureng.mureng.member.service.UserDetailsServiceImpl;
 import net.mureng.mureng.question.entity.Question;
+import net.mureng.mureng.question.entity.WordHint;
 import net.mureng.mureng.question.service.TodayQuestionService;
 import net.mureng.mureng.web.AbstractControllerTest;
 import org.junit.jupiter.api.Test;
@@ -19,6 +20,8 @@ import org.springframework.test.web.servlet.request.RequestPostProcessor;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 import java.time.LocalDateTime;
+import java.util.HashSet;
+import java.util.List;
 import java.util.Optional;
 
 import static org.mockito.ArgumentMatchers.eq;
@@ -37,6 +40,15 @@ class TodayQuestionControllerTest extends AbstractControllerTest {
             .content("This is english content.")
             .koContent("이것은 한글 내용입니다.")
             .regDate(LocalDateTime.parse("2020-10-14T11:00:00"))
+            .wordHints(new HashSet<>(List.of(
+                    WordHint.builder()
+                            .hintId(1L)
+                            .question(Question.builder().build())
+                            .word("apple")
+                            .meaning("사과")
+                            .regDate(LocalDateTime.parse("2020-10-14T11:00:00"))
+                            .build()
+            )))
             .build();
 
     @Test
@@ -52,6 +64,9 @@ class TodayQuestionControllerTest extends AbstractControllerTest {
                 .andExpect(MockMvcResultMatchers.jsonPath("$.data.questionId").value(1))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.data.category").value("카테고리"))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.data.content").value("This is english content."))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.data.koContent").value("이것은 한글 내용입니다."));
+                .andExpect(MockMvcResultMatchers.jsonPath("$.data.koContent").value("이것은 한글 내용입니다."))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.data.wordHints[0].hintId").value(1))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.data.wordHints[0].word").value("apple"))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.data.wordHints[0].meaning").value("사과"));
     }
 }
