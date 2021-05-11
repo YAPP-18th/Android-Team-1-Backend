@@ -10,6 +10,7 @@ import net.mureng.mureng.web.AbstractControllerTest;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
+import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 import java.time.LocalDateTime;
@@ -97,6 +98,29 @@ public class ReplyControllerTest extends AbstractControllerTest {
                 .andExpect(MockMvcResultMatchers.jsonPath("$.data.replyId").value(1L))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.data.content").value("Test Reply"))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.data.image").value("image-path"))
+                .andDo(print());
+    }
+
+    @Test
+    @WithMockMurengUser
+    public void 이미지_업로드_테스트() throws Exception {
+        MockMultipartFile mockMultipartFile = new MockMultipartFile(
+                "image",
+                "hello.txt",
+                MediaType.TEXT_PLAIN_VALUE,
+                "Hello, World!".getBytes()
+        );
+
+
+        given(replyService.uploadReplyImageFile(any())).willReturn("/image/save/path/reply");
+
+        mockMvc.perform(
+                multipart("/api/reply/image")
+                        .file(mockMultipartFile)
+                        .contentType(MediaType.MULTIPART_FORM_DATA)
+        ).andExpect(status().isOk())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.message").value("ok"))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.data.imagePath").value("/image/save/path/reply"))
                 .andDo(print());
     }
 }
