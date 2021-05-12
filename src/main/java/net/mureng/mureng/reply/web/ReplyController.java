@@ -12,6 +12,7 @@ import net.mureng.mureng.reply.entity.Reply;
 import net.mureng.mureng.reply.service.ReplyService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import springfox.documentation.annotations.ApiIgnore;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
