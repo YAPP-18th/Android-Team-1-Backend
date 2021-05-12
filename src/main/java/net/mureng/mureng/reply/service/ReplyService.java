@@ -4,7 +4,6 @@ import lombok.RequiredArgsConstructor;
 import net.mureng.mureng.core.exception.BadRequestException;
 import net.mureng.mureng.member.entity.Member;
 import net.mureng.mureng.question.service.QuestionService;
-import net.mureng.mureng.reply.component.ReplyMapper;
 import net.mureng.mureng.reply.entity.Reply;
 import net.mureng.mureng.reply.repository.ReplyRepository;
 import org.springframework.stereotype.Service;
@@ -18,7 +17,6 @@ import java.time.LocalTime;
 @RequiredArgsConstructor
 public class ReplyService {
     private final ReplyRepository replyRepository;
-    private final ReplyMapper replyMapper;
     private final QuestionService questionService;
 
     @Transactional
@@ -46,5 +44,19 @@ public class ReplyService {
         LocalDateTime endDatetime = LocalDateTime.of(LocalDate.now(), LocalTime.of(23,59,59)); //오늘 23:59:59
 
         return replyRepository.existsByRegDateBetweenAndMemberMemberId(startDateTime, endDatetime, memberId);
+    }
+
+    @Transactional
+    public Reply patchReply(Member member, Long questionId, Reply newReply) {
+        Long memberId = member.getMemberId();
+
+        Reply oldReply =  replyRepository.findByMemberMemberIdAndQuestionQuestionId(memberId, questionId)
+                                            .orElseThrow(() -> new BadRequestException("존재하지 않는 질문에 대한 요청입니다."));
+
+        oldReply.setContent(newReply.getContent());
+        oldReply.setImage(newReply.getImage());
+        oldReply.setModDate(LocalDateTime.now());
+
+        return replyRepository.saveAndFlush(oldReply);
     }
 }
