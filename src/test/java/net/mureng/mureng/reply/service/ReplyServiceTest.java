@@ -61,7 +61,7 @@ public class ReplyServiceTest {
             given(replyRepository.saveAndFlush(any())).willReturn(newReply);
 
             // when
-            Reply createdReply = replyService.postReply(member, QUESTION_ID, newReply);
+            Reply createdReply = replyService.create(member, QUESTION_ID, newReply);
 
             // then
             assertEquals(newReply.getReplyId(), createdReply.getReplyId());
@@ -81,7 +81,7 @@ public class ReplyServiceTest {
             given(replyRepository.existsByRegDateBetweenAndMemberMemberId(any(), any(), eq(repliedMemberId))).willReturn(true);
 
             // when
-            BadRequestException exception =  assertThrows(BadRequestException.class, () -> replyService.postReply(member, QUESTION_ID, newReply));
+            BadRequestException exception =  assertThrows(BadRequestException.class, () -> replyService.create(member, QUESTION_ID, newReply));
 
             // then
             assertEquals("이미 오늘 답변한 사용자입니다.", exception.getMessage());
@@ -100,7 +100,7 @@ public class ReplyServiceTest {
             given(questionService.existsById(eq(QUESTION_ID))).willReturn(false);
 
             // when
-            BadRequestException exception =  assertThrows(BadRequestException.class, () -> replyService.postReply(member, QUESTION_ID, newReply));
+            BadRequestException exception =  assertThrows(BadRequestException.class, () -> replyService.create(member, QUESTION_ID, newReply));
 
             // then
             assertEquals("존재하지 않는 질문에 대한 요청입니다.", exception.getMessage());
@@ -120,7 +120,7 @@ public class ReplyServiceTest {
             given(questionService.isAlreadyReplied(eq(QUESTION_ID), eq(repliedMemberId))).willReturn(true);
 
             // when
-            BadRequestException exception =  assertThrows(BadRequestException.class, () -> replyService.postReply(member, QUESTION_ID, newReply));
+            BadRequestException exception =  assertThrows(BadRequestException.class, () -> replyService.create(member, QUESTION_ID, newReply));
 
             // then
             assertEquals("이미 답변한 질문입니다.", exception.getMessage());
@@ -147,7 +147,7 @@ public class ReplyServiceTest {
             given(replyRepository.findByMemberMemberIdAndQuestionQuestionId(eq(MEMBER_ID), eq(QUESTION_ID))).willReturn(java.util.Optional.ofNullable(oldReply));
             given(replyRepository.saveAndFlush(any())).willReturn(oldReply);
 
-            Reply modifiedReply = replyService.modifyReply(member, QUESTION_ID, newReply);
+            Reply modifiedReply = replyService.update(member, QUESTION_ID, newReply);
 
             // then
             assertEquals(oldReply.getReplyId(), modifiedReply.getReplyId());
@@ -174,7 +174,7 @@ public class ReplyServiceTest {
             given(replyRepository.findByMemberMemberIdAndQuestionQuestionId(eq(MEMBER_ID), eq(QUESTION_ID))).willThrow(new BadRequestException("존재하지 않는 질문에 대한 요청입니다."));
 
             // when
-            BadRequestException exception =  assertThrows(BadRequestException.class, () -> replyService.modifyReply(member, QUESTION_ID, newReply));
+            BadRequestException exception =  assertThrows(BadRequestException.class, () -> replyService.update(member, QUESTION_ID, newReply));
 
             // then
             assertEquals("존재하지 않는 질문에 대한 요청입니다.", exception.getMessage());

@@ -27,6 +27,7 @@ public class ReplyRepositoryTest {
 
     private static final Long MEMBER_ID = 1L;
     private static final Long QUESTION_ID = 1L;
+    private static final Long REPLY_ID = 1L;
 
     @Test
     public void 멤버_답변_목록_조회(){
@@ -84,5 +85,12 @@ public class ReplyRepositoryTest {
         assertEquals(QUESTION_ID, oldReply.getQuestion().getQuestionId());
         assertEquals("yellow", oldReply.getContent());
         assertEquals("yellow image", oldReply.getImage());
+    }
+
+    @Test
+    public void 답변_삭제_테스트(){
+        replyRepository.deleteById(REPLY_ID);
+
+        assertFalse(replyRepository.existsById(REPLY_ID));
     }
 }

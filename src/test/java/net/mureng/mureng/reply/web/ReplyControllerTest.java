@@ -73,7 +73,7 @@ public class ReplyControllerTest extends AbstractControllerTest {
     @Test
     @WithMockMurengUser
     public void 답변_등록_테스트() throws Exception {
-        given(replyService.postReply(any(), eq(QUESTION_ID), any())).willReturn(newReply);
+        given(replyService.create(any(), eq(QUESTION_ID), any())).willReturn(newReply);
 
         mockMvc.perform(
                 post("/api/reply/1")
@@ -90,7 +90,7 @@ public class ReplyControllerTest extends AbstractControllerTest {
     @Test
     @WithMockMurengUser
     public void 답변_수정_테스트() throws Exception {
-        given(replyService.modifyReply(any(), eq(QUESTION_ID), any())).willReturn(newReply);
+        given(replyService.update(any(), eq(QUESTION_ID), any())).willReturn(newReply);
 
         mockMvc.perform(
                 patch("/api/reply/1")

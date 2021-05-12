@@ -26,26 +26,26 @@ public class ReplyController {
 
     @ApiOperation(value = "답변 작성하기", notes = "현재 질문에 대한 답변을 작성합니다.")
     @PostMapping("/{questionId}")
-    public ResponseEntity<ApiResult> postReply(@CurrentUser Member member,
-                                               @RequestBody @Valid ReplyDto replyDto,
-                                               @PathVariable @NotNull Long questionId){
+    public ResponseEntity<ApiResult> create(@CurrentUser Member member,
+                                            @RequestBody @Valid ReplyDto replyDto,
+                                            @PathVariable @NotNull Long questionId){
         Reply newReply = replyMapper.map(replyDto);
 
         return ResponseEntity.ok(ApiResult.ok(replyMapper.map(
-                replyService.postReply(member, questionId, newReply)
+                replyService.create(member, questionId, newReply)
         )));
     }
 
     @ApiOperation(value = "답변 수정하기", notes = "답변을 수정합니다.")
-    @PatchMapping("/{questionId}")
-    public ResponseEntity<ApiResult> patchReply(@CurrentUser Member member,
-                                                @RequestBody @Valid ReplyDto replyDto,
-                                                @PathVariable @NotNull Long questionId){
+    @PutMapping("/{questionId}")
+    public ResponseEntity<ApiResult> update(@CurrentUser Member member,
+                                            @RequestBody @Valid ReplyDto replyDto,
+                                            @PathVariable @NotNull Long questionId){
 
         Reply newReply = replyMapper.map(replyDto);
 
         return ResponseEntity.ok(ApiResult.ok(replyMapper.map(
-                replyService.modifyReply(member, questionId, newReply)
+                replyService.update(member, questionId, newReply)
         )));
     }
 }
