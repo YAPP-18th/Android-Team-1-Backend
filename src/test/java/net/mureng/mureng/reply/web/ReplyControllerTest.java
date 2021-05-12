@@ -4,9 +4,8 @@ import net.mureng.mureng.annotation.WithMockMurengUser;
 import net.mureng.mureng.member.entity.Member;
 import net.mureng.mureng.question.entity.Question;
 import net.mureng.mureng.question.entity.WordHint;
-import net.mureng.mureng.question.service.QuestionService;
 import net.mureng.mureng.reply.entity.Reply;
-import net.mureng.mureng.reply.repository.ReplyRepository;
+import net.mureng.mureng.reply.service.ReplyService;
 import net.mureng.mureng.web.AbstractControllerTest;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -26,11 +25,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 public class ReplyControllerTest extends AbstractControllerTest {
-    @MockBean
-    private QuestionService questionService;
 
     @MockBean
-    private ReplyRepository replyRepository;
+    private ReplyService replyService;
 
     private final Question question = Question.builder()
             .questionId(1L)
@@ -76,14 +73,7 @@ public class ReplyControllerTest extends AbstractControllerTest {
     @Test
     @WithMockMurengUser
     public void 답변_등록_테스트() throws Exception {
-        long notRepliedMemberId = 1;
-
-        given(questionService.getQuestionById(eq(QUESTION_ID))).willReturn(question);
-        given(replyRepository.existsByRegDateBetweenAndMemberMemberId(any(), any(), eq(notRepliedMemberId))).willReturn(false);
-        given(questionService.existsById(eq(QUESTION_ID))).willReturn(true);
-        given(questionService.isAlreadyReplied(eq(QUESTION_ID), eq(notRepliedMemberId))).willReturn(false);
-        given(replyRepository.saveAndFlush(any())).willReturn(newReply);
-
+        given(replyService.postReply(any(), eq(QUESTION_ID), any())).willReturn(newReply);
 
         mockMvc.perform(
                 post("/api/reply/1")
@@ -100,8 +90,7 @@ public class ReplyControllerTest extends AbstractControllerTest {
     @Test
     @WithMockMurengUser
     public void 답변_수정_테스트() throws Exception {
-        given(replyRepository.findByMemberMemberIdAndQuestionQuestionId(eq(MEMBER_ID), eq(QUESTION_ID))).willReturn(java.util.Optional.ofNullable(oldReply));
-        given(replyRepository.saveAndFlush(any())).willReturn(newReply);
+        given(replyService.modifyReply(any(), eq(QUESTION_ID), any())).willReturn(newReply);
 
         mockMvc.perform(
                 patch("/api/reply/1")

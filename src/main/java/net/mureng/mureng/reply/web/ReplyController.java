@@ -45,7 +45,7 @@ public class ReplyController {
         Reply newReply = replyMapper.map(replyDto);
 
         return ResponseEntity.ok(ApiResult.ok(replyMapper.map(
-                replyService.patchReply(member, questionId, newReply)
+                replyService.modifyReply(member, questionId, newReply)
         )));
     }
 }

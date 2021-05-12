@@ -47,15 +47,13 @@ public class ReplyService {
     }
 
     @Transactional
-    public Reply patchReply(Member member, Long questionId, Reply newReply) {
+    public Reply modifyReply(Member member, Long questionId, Reply newReply) {
         Long memberId = member.getMemberId();
 
         Reply oldReply =  replyRepository.findByMemberMemberIdAndQuestionQuestionId(memberId, questionId)
                                             .orElseThrow(() -> new BadRequestException("존재하지 않는 질문에 대한 요청입니다."));
 
-        oldReply.setContent(newReply.getContent());
-        oldReply.setImage(newReply.getImage());
-        oldReply.setModDate(LocalDateTime.now());
+        oldReply.modifyReply(newReply);
 
         return replyRepository.saveAndFlush(oldReply);
     }
