@@ -24,30 +24,10 @@ public class MemberMapper extends EntityMapper {
     }
 
     protected void initDtoToEntityMapping() {
-        final Converter<MemberDto, MemberAttendance> memberAttendanceConverter = context -> {
-            if (context == null)
-                return null;
-
-            return MemberAttendance.builder()
-                    .attendanceCount(context.getSource().getAttendanceCount())
-                    .lastAttendanceDate(LocalDate.parse(context.getSource().getLastAttendanceDate()))
-                    .build();
-        };
-
-        final Converter<MemberDto, MemberSetting> memberSettingConverter = context -> {
-            if (context == null)
-                return null;
-
-            return MemberSetting.builder()
-                    .isPushActive(context.getSource().isPushActive())
-                    .build();
-        };
-
         modelMapper.createTypeMap(MemberDto.class, Member.class)
-                .addMappings(mapper -> mapper.using(memberAttendanceConverter)
-                        .map(source -> source, Member::setMemberAttendance))
-                .addMappings(mapper -> mapper.using(memberSettingConverter)
-                        .map(source -> source, Member::setMemberSetting))
+                .addMappings(mapper -> mapper.skip(Member::setMemberAttendance))
+                .addMappings(mapper -> mapper.skip(Member::setMemberSetting))
+                .addMappings(mapper -> mapper.skip(Member::setMurengCount))
                 .addMappings(mapper -> mapper.skip(Member::setRegDate))
                 .addMappings(mapper -> mapper.skip(Member::setModDate))
                 .addMappings(mapper -> mapper.skip(Member::setActive));

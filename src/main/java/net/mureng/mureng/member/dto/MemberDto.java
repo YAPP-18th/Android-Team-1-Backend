@@ -15,8 +15,7 @@ import javax.validation.constraints.NotEmpty;
 @AllArgsConstructor
 @ApiModel(value="회원 모델", description="회원을 나타내는 모델")
 public class MemberDto {
-    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
-    @ApiModelProperty(value = "회원 기본키")
+    @ApiModelProperty(hidden = true, accessMode = ApiModelProperty.AccessMode.READ_ONLY)
     private Long memberId;
 
     @NotEmpty
@@ -34,16 +33,15 @@ public class MemberDto {
     @ApiModelProperty(value = "프로필 이미지 경로")
     private String image;
 
-    @ApiModelProperty(value = "머렝 갯수")
+    @ApiModelProperty(hidden = true, accessMode = ApiModelProperty.AccessMode.READ_ONLY)
     private int murengCount;
 
-    @ApiModelProperty(value = "출석 횟수")
+    @ApiModelProperty(hidden = true, accessMode = ApiModelProperty.AccessMode.READ_ONLY)
     private int attendanceCount;
 
-    @DateFormat
-    @ApiModelProperty(value = "마지막 출석 날짜", allowableValues = "yyyy-MM-dd")
+    @ApiModelProperty(hidden = true, accessMode = ApiModelProperty.AccessMode.READ_ONLY)
     private String lastAttendanceDate;
 
-    @ApiModelProperty(value = "푸쉬 알림 여부")
+    @ApiModelProperty(hidden = true, accessMode = ApiModelProperty.AccessMode.READ_ONLY)
     private boolean isPushActive;
 }

@@ -14,6 +14,7 @@ import net.mureng.mureng.member.component.MemberMapper;
 import net.mureng.mureng.member.dto.MemberDto;
 import net.mureng.mureng.member.entity.Member;
 import net.mureng.mureng.member.service.MemberService;
+import net.mureng.mureng.member.service.MemberSignupService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import springfox.documentation.annotations.ApiIgnore;
@@ -26,6 +27,7 @@ import javax.validation.Valid;
 @RequestMapping("/api/member")
 public class MemberController {
     private final MemberService memberService;
+    private final MemberSignupService memberSignupService;
     private final MemberMapper memberMapper;
     private final OAuth2Service oAuth2Service;
 
@@ -37,7 +39,7 @@ public class MemberController {
 
         Member newMember = memberMapper.map(memberDto);
         return ResponseEntity.ok(ApiResult.ok(memberMapper.map(
-            memberService.signup(newMember)
+                memberSignupService.signup(newMember)
         )));
     }
 

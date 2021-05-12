@@ -1,6 +1,8 @@
 package net.mureng.mureng.member.service;
 
 import lombok.RequiredArgsConstructor;
+import net.mureng.mureng.core.exception.BadRequestException;
+import net.mureng.mureng.core.exception.MurengException;
 import net.mureng.mureng.member.entity.Member;
 import net.mureng.mureng.member.repository.MemberRepository;
 import org.springframework.stereotype.Service;
@@ -17,7 +19,11 @@ public class MemberService {
     private final MemberRepository memberRepository;
 
     @Transactional
-    public Member signup(@Valid Member newMember) {
+    public Member saveMember(@Valid Member newMember) {
+        if (isNicknameDuplicated(newMember.getNickname())) {
+            throw new BadRequestException("중복된 닉네임입니다.");
+        }
+
         return memberRepository.saveAndFlush(newMember);
     }
 
