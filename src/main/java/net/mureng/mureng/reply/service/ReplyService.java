@@ -1,6 +1,7 @@
 package net.mureng.mureng.reply.service;
 
 import lombok.RequiredArgsConstructor;
+import net.mureng.mureng.core.exception.AccessNotAllowedException;
 import net.mureng.mureng.core.exception.BadRequestException;
 import net.mureng.mureng.member.entity.Member;
 import net.mureng.mureng.question.service.QuestionService;
@@ -20,7 +21,7 @@ public class ReplyService {
     private final QuestionService questionService;
 
     @Transactional
-    public Reply postReply(Member member, Long questionId, Reply newReply) {
+    public Reply create(Member member, Long questionId, Reply newReply) {
         Long memberId = member.getMemberId();
 
         if(isAlreadyReplied(memberId))
@@ -47,7 +48,7 @@ public class ReplyService {
     }
 
     @Transactional
-    public Reply modifyReply(Member member, Long questionId, Reply newReply) {
+    public Reply update(Member member, Long questionId, Reply newReply) {
         Long memberId = member.getMemberId();
 
         Reply oldReply =  replyRepository.findByMemberMemberIdAndQuestionQuestionId(memberId, questionId)
@@ -56,5 +57,16 @@ public class ReplyService {
         oldReply.modifyReply(newReply);
 
         return replyRepository.saveAndFlush(oldReply);
+    }
+
+    @Transactional
+    public void delete(Member member, Long replyId){
+        Reply reply = replyRepository.findById(replyId)
+                .orElseThrow(() -> new BadRequestException("존재하지 않는 답변에 대한 요청입니다."));
+
+        if(!reply.isWriter(member))
+            throw new AccessNotAllowedException("접근 권한이 없습니다.");
+
+        replyRepository.deleteById(replyId);
     }
 }

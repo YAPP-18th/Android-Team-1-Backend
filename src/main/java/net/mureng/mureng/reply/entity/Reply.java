@@ -56,4 +56,8 @@ public class Reply {
         this.modDate = LocalDateTime.now();
     }
 
+    public boolean isWriter(Member member){
+        return this.member.getMemberId() == member.getMemberId();
+    }
+
 }

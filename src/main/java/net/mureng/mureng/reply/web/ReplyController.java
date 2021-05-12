@@ -48,4 +48,12 @@ public class ReplyController {
                 replyService.update(member, questionId, newReply)
         )));
     }
+
+    @ApiOperation(value = "답변 삭제하기", notes = "답변을 삭제합니다.")
+    @DeleteMapping("/{replyId}")
+    public ResponseEntity<ApiResult> deleteReply(@CurrentUser Member member,
+                                                 @PathVariable @NotNull Long replyId){
+        replyService.delete(member, replyId);
+        return ResponseEntity.ok(ApiResult.ok("답변 삭제 완료"));
+    }
 }

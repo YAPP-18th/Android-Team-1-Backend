@@ -80,7 +80,7 @@ public class ReplyRepositoryTest {
     public void 멤버와_질문으로_답변_찾기_테스트() {
         Reply oldReply = replyRepository.findByMemberMemberIdAndQuestionQuestionId(MEMBER_ID, QUESTION_ID).orElseThrow();
 
-        assertEquals(1, oldReply.getReplyId());
+        assertEquals(REPLY_ID, oldReply.getReplyId());
         assertEquals(MEMBER_ID, oldReply.getMember().getMemberId());
         assertEquals(QUESTION_ID, oldReply.getQuestion().getQuestionId());
         assertEquals("yellow", oldReply.getContent());
