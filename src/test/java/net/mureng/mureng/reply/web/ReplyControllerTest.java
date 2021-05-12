@@ -19,8 +19,7 @@ import java.util.List;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -55,19 +54,12 @@ public class ReplyControllerTest extends AbstractControllerTest {
             .image("image-path")
             .build();
 
-    private final Reply oldReply = Reply.builder()
-            .replyId(1L)
-            .member(Member.builder().build())
-            .question(question)
-            .content("Old Test Reply")
-            .image("old image-path")
-            .build();
-
     private final String newReplyJsonString = "{\"content\": \"Test Reply\",\n" +
             "  \"image\": \"image-path\" }";
 
     private static final Long MEMBER_ID = 1L;
     private static final Long QUESTION_ID = 1L;
+    private static final Long REPLY_ID = 1L;
 
 
     @Test
@@ -90,10 +82,10 @@ public class ReplyControllerTest extends AbstractControllerTest {
     @Test
     @WithMockMurengUser
     public void 답변_수정_테스트() throws Exception {
-        given(replyService.update(any(), eq(QUESTION_ID), any())).willReturn(newReply);
+        given(replyService.update(any(), eq(REPLY_ID), any())).willReturn(newReply);
 
         mockMvc.perform(
-                patch("/api/reply/1")
+                put("/api/reply/1")
                         .content(newReplyJsonString)
                         .contentType(MediaType.APPLICATION_JSON)
         ).andExpect(status().isOk())

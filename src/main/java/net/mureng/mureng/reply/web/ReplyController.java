@@ -37,15 +37,15 @@ public class ReplyController {
     }
 
     @ApiOperation(value = "답변 수정하기", notes = "답변을 수정합니다.")
-    @PutMapping("/{questionId}")
+    @PutMapping("/{replyId}")
     public ResponseEntity<ApiResult> update(@CurrentUser Member member,
                                             @RequestBody @Valid ReplyDto replyDto,
-                                            @PathVariable @NotNull Long questionId){
+                                            @PathVariable @NotNull Long replyId){
 
         Reply newReply = replyMapper.map(replyDto);
 
         return ResponseEntity.ok(ApiResult.ok(replyMapper.map(
-                replyService.update(member, questionId, newReply)
+                replyService.update(member, replyId, newReply)
         )));
     }
 

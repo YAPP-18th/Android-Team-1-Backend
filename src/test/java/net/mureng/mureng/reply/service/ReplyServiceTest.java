@@ -43,7 +43,7 @@ public class ReplyServiceTest {
 
     @Nested
     @DisplayName("답변 등록 테스트")
-    class PostReplyTest {
+    class Create {
         @Test
         public void 답변_등록_테스트() {
             // given
@@ -128,7 +128,7 @@ public class ReplyServiceTest {
     }
 
     @Nested
-    class ModifyReplyTest {
+    class Update {
         @Test
         public void 답변_수정_테스트(){
             // given
@@ -144,7 +144,7 @@ public class ReplyServiceTest {
             Reply oldReply = createReplyEntity();
             oldReply.modifyReply(newReply);
 
-            given(replyRepository.findByMemberMemberIdAndQuestionQuestionId(eq(MEMBER_ID), eq(QUESTION_ID))).willReturn(java.util.Optional.ofNullable(oldReply));
+            given(replyRepository.findById(eq(REPLY_ID))).willReturn(java.util.Optional.ofNullable(oldReply));
             given(replyRepository.saveAndFlush(any())).willReturn(oldReply);
 
             Reply modifiedReply = replyService.update(member, QUESTION_ID, newReply);
@@ -171,7 +171,7 @@ public class ReplyServiceTest {
             Reply oldReply = createReplyEntity();
             oldReply.modifyReply(newReply);
 
-            given(replyRepository.findByMemberMemberIdAndQuestionQuestionId(eq(MEMBER_ID), eq(QUESTION_ID))).willThrow(new BadRequestException("존재하지 않는 질문에 대한 요청입니다."));
+            given(replyRepository.findById(eq(REPLY_ID))).willThrow(new BadRequestException("존재하지 않는 질문에 대한 요청입니다."));
 
             // when
             BadRequestException exception =  assertThrows(BadRequestException.class, () -> replyService.update(member, QUESTION_ID, newReply));
