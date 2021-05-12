@@ -1,10 +1,10 @@
 package net.mureng.mureng.reply.service;
 
 import lombok.RequiredArgsConstructor;
+import net.mureng.mureng.core.exception.AccessNotAllowedException;
 import net.mureng.mureng.core.exception.BadRequestException;
 import net.mureng.mureng.member.entity.Member;
 import net.mureng.mureng.question.service.QuestionService;
-import net.mureng.mureng.reply.component.ReplyMapper;
 import net.mureng.mureng.reply.entity.Reply;
 import net.mureng.mureng.reply.repository.ReplyRepository;
 import org.springframework.stereotype.Service;
@@ -18,11 +18,10 @@ import java.time.LocalTime;
 @RequiredArgsConstructor
 public class ReplyService {
     private final ReplyRepository replyRepository;
-    private final ReplyMapper replyMapper;
     private final QuestionService questionService;
 
     @Transactional
-    public Reply postReply(Member member, Long questionId, Reply newReply) {
+    public Reply create(Member member, Long questionId, Reply newReply) {
         Long memberId = member.getMemberId();
 
         if(isAlreadyReplied(memberId))
@@ -45,6 +44,30 @@ public class ReplyService {
         LocalDateTime startDateTime = LocalDateTime.of(LocalDate.now(), LocalTime.of(0,0,0)); // 오늘 00:00:00
         LocalDateTime endDatetime = LocalDateTime.of(LocalDate.now(), LocalTime.of(23,59,59)); //오늘 23:59:59
 
-        return replyRepository.existsByRegDateBetweenAndMemberMemberId(startDateTime, endDatetime, memberId);
+        return replyRepository.existsByRegDateBetweenAndMemberMemberId (startDateTime, endDatetime, memberId);
+    }
+
+    @Transactional
+    public Reply update(Member member, Long replyId, Reply newReply) {
+        Reply oldReply =  replyRepository.findById(replyId)
+                                            .orElseThrow(() -> new BadRequestException("존재하지 않는 질문에 대한 요청입니다."));
+
+        if(!oldReply.isWriter(member))
+            throw new AccessNotAllowedException("접근 권한이 없습니다.");
+
+        oldReply.modifyReply(newReply);
+
+        return replyRepository.saveAndFlush(oldReply);
+    }
+
+    @Transactional
+    public void delete(Member member, Long replyId){
+        Reply reply = replyRepository.findById(replyId)
+                                        .orElseThrow(() -> new BadRequestException("존재하지 않는 답변에 대한 요청입니다."));
+
+        if(!reply.isWriter(member))
+            throw new AccessNotAllowedException("접근 권한이 없습니다.");
+
+        replyRepository.deleteById(replyId);
     }
 }

@@ -27,6 +27,7 @@ public class ReplyRepositoryTest {
 
     private static final Long MEMBER_ID = 1L;
     private static final Long QUESTION_ID = 1L;
+    private static final Long REPLY_ID = 1L;
 
     @Test
     public void 멤버_답변_목록_조회(){
@@ -68,12 +69,28 @@ public class ReplyRepositoryTest {
         LocalDateTime startDateTime2 = LocalDateTime.of(date2, LocalTime.of(0,0,0));
         LocalDateTime endDateTime2 = LocalDateTime.of(date2, LocalTime.of(23,59,59));
 
-        long memberId = 1;
-
-        boolean isExist = replyRepository.existsByRegDateBetweenAndMemberMemberId(startDateTime, endDateTime, memberId);
-        boolean isExist2 = replyRepository.existsByRegDateBetweenAndMemberMemberId(startDateTime2, endDateTime2, memberId);
+        boolean isExist = replyRepository.existsByRegDateBetweenAndMemberMemberId(startDateTime, endDateTime, MEMBER_ID);
+        boolean isExist2 = replyRepository.existsByRegDateBetweenAndMemberMemberId(startDateTime2, endDateTime2, MEMBER_ID);
 
         assertTrue(isExist);
         assertFalse(isExist2);
+    }
+
+    @Test
+    public void 멤버와_질문으로_답변_찾기_테스트() {
+        Reply oldReply = replyRepository.findByMemberMemberIdAndQuestionQuestionId(MEMBER_ID, QUESTION_ID).orElseThrow();
+
+        assertEquals(REPLY_ID, oldReply.getReplyId());
+        assertEquals(MEMBER_ID, oldReply.getMember().getMemberId());
+        assertEquals(QUESTION_ID, oldReply.getQuestion().getQuestionId());
+        assertEquals("yellow", oldReply.getContent());
+        assertEquals("yellow image", oldReply.getImage());
+    }
+
+    @Test
+    public void 답변_삭제_테스트(){
+        replyRepository.deleteById(REPLY_ID);
+
+        assertFalse(replyRepository.existsById(REPLY_ID));
     }
 }

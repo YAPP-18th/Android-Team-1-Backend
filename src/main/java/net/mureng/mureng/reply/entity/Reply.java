@@ -50,4 +50,14 @@ public class Reply {
     @Column(name = "mod_date", nullable = false)
     private LocalDateTime modDate = LocalDateTime.now();
 
+    public void modifyReply(Reply newReply) {
+        this.content = newReply.getContent();
+        this.image= newReply.getImage();
+        this.modDate = LocalDateTime.now();
+    }
+
+    public boolean isWriter(Member member){
+        return this.member.getMemberId() == member.getMemberId();
+    }
+
 }
