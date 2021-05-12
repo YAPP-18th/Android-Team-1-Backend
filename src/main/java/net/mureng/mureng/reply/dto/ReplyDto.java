@@ -13,6 +13,9 @@ public class ReplyDto {
     @ApiModelProperty(value = "답변 기본키")
     private Long replyId;
 
+    @ApiModelProperty(value = "질문 기본키")
+    private Long questionId;
+
     @NotEmpty
     @ApiModelProperty(value = "답변 내용")
     private String content;

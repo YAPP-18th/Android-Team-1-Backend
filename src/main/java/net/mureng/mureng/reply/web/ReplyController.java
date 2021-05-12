@@ -25,14 +25,14 @@ public class ReplyController {
     private final ReplyService replyService;
 
     @ApiOperation(value = "답변 작성하기", notes = "현재 질문에 대한 답변을 작성합니다.")
-    @PostMapping("/{questionId}")
+    @PostMapping
     public ResponseEntity<ApiResult> create(@CurrentUser Member member,
-                                            @RequestBody @Valid ReplyDto replyDto,
-                                            @PathVariable @NotNull Long questionId){
+                                            @RequestBody @Valid ReplyDto replyDto){
+
         Reply newReply = replyMapper.map(replyDto);
 
         return ResponseEntity.ok(ApiResult.ok(replyMapper.map(
-                replyService.create(member, questionId, newReply)
+                replyService.create(member, replyDto.getQuestionId(), newReply)
         )));
     }
 

@@ -55,7 +55,8 @@ public class ReplyControllerTest extends AbstractControllerTest {
             .build();
 
     private final String newReplyJsonString = "{\"content\": \"Test Reply\",\n" +
-            "  \"image\": \"image-path\" }";
+            "  \"image\": \"image-path\" ,\n" +
+            "  \"questionId\" : 1 }";
 
     private static final Long MEMBER_ID = 1L;
     private static final Long QUESTION_ID = 1L;
@@ -65,10 +66,10 @@ public class ReplyControllerTest extends AbstractControllerTest {
     @Test
     @WithMockMurengUser
     public void 답변_등록_테스트() throws Exception {
-        given(replyService.create(any(), eq(QUESTION_ID), any())).willReturn(newReply);
+        given(replyService.create(any(), any(), any())).willReturn(newReply);
 
         mockMvc.perform(
-                post("/api/reply/1")
+                post("/api/reply")
                 .content(newReplyJsonString)
                 .contentType(MediaType.APPLICATION_JSON)
         ).andExpect(status().isOk())
