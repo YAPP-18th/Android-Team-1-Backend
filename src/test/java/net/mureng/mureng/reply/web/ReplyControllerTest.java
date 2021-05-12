@@ -58,6 +58,9 @@ public class ReplyControllerTest extends AbstractControllerTest {
             "  \"image\": \"image-path\" ,\n" +
             "  \"questionId\" : 1 }";
 
+    private final String updateReplyJsonString = "{\"content\": \"Test Reply\",\n" +
+            "  \"image\": \"image-path\" }";
+
     private static final Long MEMBER_ID = 1L;
     private static final Long QUESTION_ID = 1L;
     private static final Long REPLY_ID = 1L;
@@ -87,7 +90,7 @@ public class ReplyControllerTest extends AbstractControllerTest {
 
         mockMvc.perform(
                 put("/api/reply/1")
-                        .content(newReplyJsonString)
+                        .content(updateReplyJsonString)
                         .contentType(MediaType.APPLICATION_JSON)
         ).andExpect(status().isOk())
                 .andExpect(MockMvcResultMatchers.jsonPath("$.message").value("ok"))

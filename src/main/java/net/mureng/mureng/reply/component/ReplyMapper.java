@@ -11,7 +11,8 @@ import org.springframework.stereotype.Component;
 public class ReplyMapper extends EntityMapper {
     @Override
     protected void initEntityToDtoMapping() {
-        modelMapper.createTypeMap(Reply.class, ReplyDto.class);
+        modelMapper.createTypeMap(Reply.class, ReplyDto.class)
+                .addMappings(mapper -> mapper.skip(ReplyDto::setQuestionId));
     }
 
     @Override
