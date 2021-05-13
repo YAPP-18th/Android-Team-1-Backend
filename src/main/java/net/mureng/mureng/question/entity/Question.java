@@ -2,9 +2,11 @@ package net.mureng.mureng.question.entity;
 
 import lombok.*;
 import net.mureng.mureng.member.entity.Member;
+import net.mureng.mureng.reply.entity.Reply;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -38,6 +40,10 @@ public class Question {
     @Builder.Default
     @OneToMany(mappedBy = "question", fetch = FetchType.EAGER)
     private Set<WordHint> wordHints = new HashSet<>();
+
+    @Builder.Default
+    @OneToMany(mappedBy = "question")
+    private List<Reply> replies = new ArrayList<>();
 
     @Builder.Default
     @Column(name = "reg_date", nullable = false)

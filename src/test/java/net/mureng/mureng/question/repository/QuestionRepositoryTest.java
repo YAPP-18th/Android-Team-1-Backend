@@ -8,6 +8,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 
 import java.util.List;
 
@@ -19,7 +20,8 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 @DatabaseSetup({
         "classpath:dbunit/entity/member.xml",
         "classpath:dbunit/entity/question.xml",
-        "classpath:dbunit/entity/word_hint.xml"
+        "classpath:dbunit/entity/word_hint.xml",
+        "classpath:dbunit/entity/reply.xml"
 })
 public class QuestionRepositoryTest {
 
@@ -72,21 +74,37 @@ public class QuestionRepositoryTest {
     }
 
     @Test
-    public void 질문_목록_페이징_테스트(){
+    public void 질문_목록_인기순_페이징_조회_테스트(){
         int page = 0;
-        int size = 2;
+        int size = 3;
         int id = 1;
 
-        Page<Question> questionPageList = questionRepository.findAll(PageRequest.of(page, size));
-        List<Question> questionList = questionPageList.getContent();
+        Page<Question> questionPage = questionRepository.findAllOrderByRepliesSizeDesc(PageRequest.of(page, size));
+        List<Question> questionList = questionPage.getContent();
 
-        assertEquals(2, questionPageList.getTotalPages());
-        assertEquals(2, questionList.size());
+        assertEquals(3, questionPage.getNumberOfElements());
+        assertEquals(3, questionList.size());
 
         for(Question question : questionList){
             assertEquals(id++, question.getQuestionId());
         }
+    }
 
+    @Test
+    public void 질문_목록_최신순_페이징_조회_테스트(){
+        int page = 0;
+        int size = 3;
+        int id = 3;
+
+        Page<Question> questionPage = questionRepository.findAll(PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "regDate")));
+        List<Question> questionList = questionPage.getContent();
+
+        assertEquals(3, questionPage.getNumberOfElements());
+        assertEquals(3, questionList.size());
+
+        for(Question question : questionList){
+            assertEquals(id--, question.getQuestionId());
+        }
     }
 
 }

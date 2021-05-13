@@ -27,13 +27,14 @@ public class QuestionController {
     private final QuestionMapper questionMapper;
 
 //    @ApiOperation(value = "질문에 대한 답변 목록 가져오기", notes = "질문에 대한 답변 목록을 가져옵니다.")
-    @ApiOperation(value = "질문 목록 가져오기", notes = "질문 목록 가져오기")
+    @ApiOperation(value = "질문 목록 정렬 페이징 조회", notes = "질문 목록을 정렬 페이징해서 가져옵니다.")
     @GetMapping
     public ResponseEntity<ApiResult<List<QuestionDto>>> getQuestionList(
             @RequestParam(required = false, defaultValue = "0") int page,
-            @RequestParam(required = false, defaultValue = "10") int size ){
+            @RequestParam(required = false, defaultValue = "10") int size,
+            @RequestParam(required = false, defaultValue = "popular") String sort){
 
-        Page<Question> questionList = questionService.getQuestionList(page, size);
+        Page<Question> questionList = questionService.getQuestionList(page, size, sort);
 
         return ResponseEntity.ok(ApiResult.ok(
                 questionList.stream()
