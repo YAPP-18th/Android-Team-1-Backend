@@ -70,7 +70,7 @@ public class ReplyControllerTest extends AbstractControllerTest {
     @Test
     @WithMockMurengUser
     public void 답변_등록_테스트() throws Exception {
-        given(replyService.create(any(), any(), any())).willReturn(newReply);
+        given(replyService.create(any())).willReturn(newReply);
 
         mockMvc.perform(
                 post("/api/reply")

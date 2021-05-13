@@ -49,19 +49,17 @@ public class ReplyServiceTest {
             // given
             long notRepliedMemberId = 1;
 
-            Member member = createMemberEntity();
-            Question question = createQuestionEntity();
             Reply newReply = createReplyEntity();
 
             // mocking
             given(replyRepository.existsByRegDateBetweenAndMemberMemberId(any(), any(), eq(notRepliedMemberId))).willReturn(false);
             given(questionService.existsById(eq(QUESTION_ID))).willReturn(true);
             given(questionService.isAlreadyReplied(eq(QUESTION_ID), eq(notRepliedMemberId))).willReturn(false);
-            given(questionService.getQuestionById(eq(QUESTION_ID))).willReturn(question);
+            given(questionService.getQuestionById(eq(QUESTION_ID))).willReturn(newReply.getQuestion());
             given(replyRepository.saveAndFlush(any())).willReturn(newReply);
 
             // when
-            Reply createdReply = replyService.create(member, QUESTION_ID, newReply);
+            Reply createdReply = replyService.create(newReply);
 
             // then
             assertEquals(newReply.getReplyId(), createdReply.getReplyId());
@@ -74,14 +72,13 @@ public class ReplyServiceTest {
             // given
             long repliedMemberId = 1;
 
-            Member member = createMemberEntity();
             Reply newReply = createReplyEntity();
 
             // mocking
             given(replyRepository.existsByRegDateBetweenAndMemberMemberId(any(), any(), eq(repliedMemberId))).willReturn(true);
 
             // when
-            BadRequestException exception =  assertThrows(BadRequestException.class, () -> replyService.create(member, QUESTION_ID, newReply));
+            BadRequestException exception =  assertThrows(BadRequestException.class, () -> replyService.create(newReply));
 
             // then
             assertEquals("이미 오늘 답변한 사용자입니다.", exception.getMessage());
@@ -92,7 +89,6 @@ public class ReplyServiceTest {
             // given
             long notRepliedMemberId = 1;
 
-            Member member = createMemberEntity();
             Reply newReply = createReplyEntity();
 
             // mocking
@@ -100,7 +96,7 @@ public class ReplyServiceTest {
             given(questionService.existsById(eq(QUESTION_ID))).willReturn(false);
 
             // when
-            BadRequestException exception =  assertThrows(BadRequestException.class, () -> replyService.create(member, QUESTION_ID, newReply));
+            BadRequestException exception =  assertThrows(BadRequestException.class, () -> replyService.create(newReply));
 
             // then
             assertEquals("존재하지 않는 질문에 대한 요청입니다.", exception.getMessage());
@@ -111,7 +107,6 @@ public class ReplyServiceTest {
             // given
             long repliedMemberId = 1;
 
-            Member member = createMemberEntity();
             Reply newReply = createReplyEntity();
 
             // mocking
@@ -120,7 +115,7 @@ public class ReplyServiceTest {
             given(questionService.isAlreadyReplied(eq(QUESTION_ID), eq(repliedMemberId))).willReturn(true);
 
             // when
-            BadRequestException exception =  assertThrows(BadRequestException.class, () -> replyService.create(member, QUESTION_ID, newReply));
+            BadRequestException exception =  assertThrows(BadRequestException.class, () -> replyService.create(newReply));
 
             // then
             assertEquals("이미 답변한 질문입니다.", exception.getMessage());

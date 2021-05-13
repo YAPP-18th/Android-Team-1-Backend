@@ -8,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 import net.mureng.mureng.core.annotation.CurrentUser;
 import net.mureng.mureng.core.dto.ApiResult;
 import net.mureng.mureng.member.entity.Member;
+import net.mureng.mureng.question.entity.Question;
 import net.mureng.mureng.reply.component.ReplyMapper;
 import net.mureng.mureng.reply.dto.ReplyDto;
 import net.mureng.mureng.reply.entity.Reply;
@@ -15,7 +16,6 @@ import net.mureng.mureng.reply.service.ReplyService;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import springfox.documentation.annotations.ApiIgnore;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
@@ -35,9 +35,11 @@ public class ReplyController {
                                             @RequestBody @Valid ReplyDto replyDto){
 
         Reply newReply = replyMapper.map(replyDto);
+        newReply.setMember(member);
+        newReply.setQuestion(Question.builder().questionId(replyDto.getQuestionId()).build());
 
         return ResponseEntity.ok(ApiResult.ok(replyMapper.map(
-                replyService.create(member, replyDto.getQuestionId(), newReply)
+                replyService.create(newReply)
         )));
     }
 
