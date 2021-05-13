@@ -94,6 +94,7 @@ public class ReplyService {
      * @return 웹상에서 저장된 경로
      */
     public String uploadReplyImageFile(MultipartFile imageFile) {
-        return fileUploader.saveMultiPartFile(imageFile, replyImageDirName);
+        return fileUploader.saveMultiPartFile(imageFile, replyImageDirName)
+                .replace(mediaBaseDirName, "");
     }
 }

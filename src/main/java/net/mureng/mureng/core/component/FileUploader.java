@@ -22,7 +22,7 @@ public class FileUploader {
         try {
             makeAbsoluteDirectory(filePath);
             String generatedFileName = generateFileName(mFile);
-            String completePath = filePath + generatedFileName;
+            String completePath = filePath + "/" + generatedFileName;
             File saveFile = new File(completePath);
             mFile.transferTo(saveFile);
             return saveFile.getAbsolutePath();
