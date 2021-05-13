@@ -63,11 +63,13 @@ public class ReplyService {
     }
 
     @Transactional
-    public Reply update(Member member, Long replyId, Reply newReply) {
+    public Reply update(Reply newReply) {
+        Long replyId = newReply.getReplyId();
+
         Reply oldReply =  replyRepository.findById(replyId)
                                             .orElseThrow(() -> new BadRequestException("존재하지 않는 질문에 대한 요청입니다."));
 
-        if(!oldReply.isWriter(member))
+        if(!oldReply.isWriter(newReply.getMember()))
             throw new AccessNotAllowedException("접근 권한이 없습니다.");
 
         oldReply.modifyReply(newReply);

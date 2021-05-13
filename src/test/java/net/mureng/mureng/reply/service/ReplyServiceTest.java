@@ -130,19 +130,20 @@ public class ReplyServiceTest {
             LocalDateTime now = LocalDateTime.now();
 
             Reply newReply = Reply.builder()
+                            .replyId(REPLY_ID)
+                            .member(createMemberEntity())
                             .content("New Test Content")
                             .image("New Image Path")
                             .modDate(now)
                             .build();
 
-            Member member = createMemberEntity();
             Reply oldReply = createReplyEntity();
             oldReply.modifyReply(newReply);
 
             given(replyRepository.findById(eq(REPLY_ID))).willReturn(java.util.Optional.ofNullable(oldReply));
             given(replyRepository.saveAndFlush(any())).willReturn(oldReply);
 
-            Reply modifiedReply = replyService.update(member, QUESTION_ID, newReply);
+            Reply modifiedReply = replyService.update(newReply);
 
             // then
             assertEquals(oldReply.getReplyId(), modifiedReply.getReplyId());
@@ -157,10 +158,12 @@ public class ReplyServiceTest {
             LocalDateTime now = LocalDateTime.now();
 
             Reply newReply = Reply.builder()
-                    .content("New Test Content")
-                    .image("New Image Path")
-                    .modDate(now)
-                    .build();
+                            .replyId(REPLY_ID)
+                            .member(createMemberEntity())
+                            .content("New Test Content")
+                            .image("New Image Path")
+                            .modDate(now)
+                            .build();
 
             Member member = createMemberEntity();
             Reply oldReply = createReplyEntity();
@@ -169,7 +172,7 @@ public class ReplyServiceTest {
             given(replyRepository.findById(eq(REPLY_ID))).willThrow(new BadRequestException("존재하지 않는 질문에 대한 요청입니다."));
 
             // when
-            BadRequestException exception =  assertThrows(BadRequestException.class, () -> replyService.update(member, QUESTION_ID, newReply));
+            BadRequestException exception =  assertThrows(BadRequestException.class, () -> replyService.update(newReply));
 
             // then
             assertEquals("존재하지 않는 질문에 대한 요청입니다.", exception.getMessage());

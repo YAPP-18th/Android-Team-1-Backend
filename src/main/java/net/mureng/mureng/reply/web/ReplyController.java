@@ -50,9 +50,11 @@ public class ReplyController {
                                             @PathVariable @NotNull Long replyId){
 
         Reply newReply = replyMapper.map(replyDto);
+        newReply.setMember(member);
+        newReply.setReplyId(replyId);
 
         return ResponseEntity.ok(ApiResult.ok(replyMapper.map(
-                replyService.update(member, replyId, newReply)
+                replyService.update(newReply)
         )));
     }
 
