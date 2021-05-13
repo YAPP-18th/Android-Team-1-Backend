@@ -2,14 +2,18 @@ package net.mureng.mureng.reply.service;
 
 import lombok.RequiredArgsConstructor;
 import net.mureng.mureng.core.exception.AccessNotAllowedException;
+import net.mureng.mureng.core.component.FileUploader;
 import net.mureng.mureng.core.exception.BadRequestException;
 import net.mureng.mureng.member.entity.Member;
 import net.mureng.mureng.question.service.QuestionService;
 import net.mureng.mureng.reply.entity.Reply;
 import net.mureng.mureng.reply.repository.ReplyRepository;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
+import javax.annotation.PostConstruct;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -19,7 +23,19 @@ import java.time.LocalTime;
 public class ReplyService {
     private final ReplyRepository replyRepository;
     private final QuestionService questionService;
+    private final FileUploader fileUploader;
 
+    @Value("${media.base.dir.name}")
+    private String mediaBaseDirName;
+    private String replyImageDirName = "/reply";
+
+    @PostConstruct
+    protected void init() {
+        replyImageDirName = mediaBaseDirName + replyImageDirName;
+    }
+
+    // TODO 이걸 3개의 인자 대신 member와 question 모두 newReply 하나의 인자로도 해결 가능할 듯!
+    // 메서드 인자는 가능하면 하나만 받는게 좋음!
     @Transactional
     public Reply create(Member member, Long questionId, Reply newReply) {
         Long memberId = member.getMemberId();
@@ -69,5 +85,15 @@ public class ReplyService {
             throw new AccessNotAllowedException("접근 권한이 없습니다.");
 
         replyRepository.deleteById(replyId);
+    }
+
+    /**
+     * Multipart File 을 저장하고, 저장 경로를 리턴한다.
+     *
+     * @param imageFile 요청으로 들어온 Multipart File
+     * @return 웹상에서 저장된 경로
+     */
+    public String uploadReplyImageFile(MultipartFile imageFile) {
+        return fileUploader.saveMultiPartFile(imageFile, replyImageDirName);
     }
 }
