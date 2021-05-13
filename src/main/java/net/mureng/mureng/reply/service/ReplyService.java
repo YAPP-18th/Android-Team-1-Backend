@@ -9,6 +9,10 @@ import net.mureng.mureng.question.service.QuestionService;
 import net.mureng.mureng.reply.entity.Reply;
 import net.mureng.mureng.reply.repository.ReplyRepository;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -39,13 +43,13 @@ public class ReplyService {
         Long memberId = newReply.getMember().getMemberId();
         Long questionId = newReply.getQuestion().getQuestionId();
 
-        if(isAlreadyReplied(memberId))
+        if (isAlreadyReplied(memberId))
             throw new BadRequestException("이미 오늘 답변한 사용자입니다.");
 
-        if(!questionService.existsById(questionId))
+        if (!questionService.existsById(questionId))
             throw new BadRequestException("존재하지 않는 질문에 대한 요청입니다.");
 
-        if(questionService.isAlreadyReplied(questionId, memberId))
+        if (questionService.isAlreadyReplied(questionId, memberId))
             throw new BadRequestException("이미 답변한 질문입니다.");
 
         newReply.setMember(newReply.getMember());
@@ -55,21 +59,21 @@ public class ReplyService {
     }
 
     @Transactional(readOnly = true)
-    public boolean isAlreadyReplied(Long memberId){
-        LocalDateTime startDateTime = LocalDateTime.of(LocalDate.now(), LocalTime.of(0,0,0)); // 오늘 00:00:00
-        LocalDateTime endDatetime = LocalDateTime.of(LocalDate.now(), LocalTime.of(23,59,59)); //오늘 23:59:59
+    public boolean isAlreadyReplied(Long memberId) {
+        LocalDateTime startDateTime = LocalDateTime.of(LocalDate.now(), LocalTime.of(0, 0, 0)); // 오늘 00:00:00
+        LocalDateTime endDatetime = LocalDateTime.of(LocalDate.now(), LocalTime.of(23, 59, 59)); //오늘 23:59:59
 
-        return replyRepository.existsByRegDateBetweenAndMemberMemberId (startDateTime, endDatetime, memberId);
+        return replyRepository.existsByRegDateBetweenAndMemberMemberId(startDateTime, endDatetime, memberId);
     }
 
     @Transactional
     public Reply update(Reply newReply) {
         Long replyId = newReply.getReplyId();
 
-        Reply oldReply =  replyRepository.findById(replyId)
-                                            .orElseThrow(() -> new BadRequestException("존재하지 않는 질문에 대한 요청입니다."));
+        Reply oldReply = replyRepository.findById(replyId)
+                .orElseThrow(() -> new BadRequestException("존재하지 않는 질문에 대한 요청입니다."));
 
-        if(!oldReply.isWriter(newReply.getMember()))
+        if (!oldReply.isWriter(newReply.getMember()))
             throw new AccessNotAllowedException("접근 권한이 없습니다.");
 
         oldReply.modifyReply(newReply);
@@ -78,11 +82,11 @@ public class ReplyService {
     }
 
     @Transactional
-    public void delete(Member member, Long replyId){
+    public void delete(Member member, Long replyId) {
         Reply reply = replyRepository.findById(replyId)
-                                        .orElseThrow(() -> new BadRequestException("존재하지 않는 답변에 대한 요청입니다."));
+                .orElseThrow(() -> new BadRequestException("존재하지 않는 답변에 대한 요청입니다."));
 
-        if(!reply.isWriter(member))
+        if (!reply.isWriter(member))
             throw new AccessNotAllowedException("접근 권한이 없습니다.");
 
         replyRepository.deleteById(replyId);
@@ -97,5 +101,17 @@ public class ReplyService {
     public String uploadReplyImageFile(MultipartFile imageFile) {
         return fileUploader.saveMultiPartFile(imageFile, replyImageDirName)
                 .replace(mediaBaseDirName, "");
+    }
+
+    @Transactional(readOnly = true)
+    public Page<Reply> findRepliesByQuestionId(Long questionId, Pageable pageable, String sort) {
+
+        if (sort.equals("popular")) // TODO ENUM 으로 변경하면 더 직관적일 것 같다.
+            return replyRepository.findAllByQuestionQuestionIdOrderByReplyLikesSize(questionId, pageable);
+        else if (sort.equals("newest"))
+            return replyRepository.findAllByQuestionQuestionId(questionId, PageRequest.of(pageable.getPageNumber(),
+                    pageable.getPageSize(), Sort.by(Sort.Direction.DESC, "regDate")));
+
+        throw new BadRequestException("잘못된 요청입니다.");
     }
 }

@@ -5,13 +5,19 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import lombok.RequiredArgsConstructor;
 import net.mureng.mureng.core.annotation.CurrentUser;
+import net.mureng.mureng.core.dto.ApiPageRequest;
+import net.mureng.mureng.core.dto.ApiPageResult;
 import net.mureng.mureng.core.dto.ApiResult;
 import net.mureng.mureng.member.entity.Member;
 import net.mureng.mureng.question.component.QuestionMapper;
 import net.mureng.mureng.question.dto.QuestionDto;
 import net.mureng.mureng.question.entity.Question;
 import net.mureng.mureng.question.service.QuestionService;
+import net.mureng.mureng.reply.component.ReplyMapper;
+import net.mureng.mureng.reply.dto.ReplyDto;
+import net.mureng.mureng.reply.service.ReplyService;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -25,16 +31,17 @@ import java.util.stream.Collectors;
 @RequestMapping("/api/questions")
 public class QuestionController {
     private final QuestionService questionService;
+    private final ReplyService replyService;
     private final QuestionMapper questionMapper;
+    private final ReplyMapper replyMapper;
 
     @ApiOperation(value = "질문 목록 정렬 페이징 조회", notes = "질문 목록을 정렬 페이징해서 가져옵니다.")
     @GetMapping
-    public ResponseEntity<ApiResult<List<QuestionDto>>> getQuestionList(
-            @ApiParam(value = "페이지 번호" ,required = false) @RequestParam(required = false, defaultValue = "0") int page,
-            @ApiParam(value = "한 페이지 크기" ,required = false) @RequestParam(required = false, defaultValue = "10") int size,
-            @ApiParam(value = "페이지 정렬 방식(popular, newest)" ,required = false) @RequestParam(required = false, defaultValue = "popular") String sort){
+    public ResponseEntity<ApiResult<List<QuestionDto>>> getQuestionList(ApiPageRequest pageRequest,
+            @ApiParam(value = "페이지 정렬 방식(popular, newest)" ,required = false)
+            @RequestParam(required = false, defaultValue = "popular") String sort) {
 
-        Page<Question> questionList = questionService.getQuestionList(page, size, sort);
+        Page<Question> questionList = questionService.getQuestionList(pageRequest.convert(), sort);
 
         return ResponseEntity.ok(ApiResult.ok(
                 questionList.stream()
@@ -65,5 +72,20 @@ public class QuestionController {
         ));
     }
 
+    @ApiOperation(value = "질문 관련 답변 가져오기", notes = "질문 관련 답변 가져오기")
+    @GetMapping("/{questionId}/replies")
+    public ResponseEntity<ApiResult<List<ReplyDto>>> getQuestionReplies(
+            @ApiParam(value = "질문 id" ,required = true) @PathVariable Long questionId, ApiPageRequest pageRequest,
+            @ApiParam(value = "페이지 정렬 방식(popular, newest)")
+            @RequestParam(required = false, defaultValue = "popular") String sort) {
 
+        return ResponseEntity.ok(
+                ApiResult.ok(
+                        replyService.findRepliesByQuestionId(questionId, pageRequest.convert(), sort)
+                        .stream()
+                        .map(replyMapper::map)
+                        .collect(Collectors.toList())
+                )
+        );
+    }
 }

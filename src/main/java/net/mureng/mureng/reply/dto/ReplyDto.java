@@ -26,4 +26,7 @@ public class ReplyDto {
 
     @ApiModelProperty(value = "이미지")
     private String image;
+
+    @ApiModelProperty(value = "좋아요 갯수")
+    private int replyLikeCount;
 }

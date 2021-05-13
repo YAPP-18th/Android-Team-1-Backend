@@ -6,6 +6,8 @@ import net.mureng.mureng.question.entity.Question;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.HashSet;
+import java.util.Set;
 
 @Builder
 @Getter @Setter
@@ -49,6 +51,10 @@ public class Reply {
     @Builder.Default
     @Column(name = "mod_date", nullable = false)
     private LocalDateTime modDate = LocalDateTime.now();
+
+    @Builder.Default
+    @OneToMany(mappedBy = "reply", cascade = CascadeType.ALL)
+    private Set<ReplyLikes> replyLikes = new HashSet<>();
 
     public void modifyReply(Reply newReply) {
         this.content = newReply.getContent();

@@ -22,7 +22,7 @@ public class ReplyLikes {
     private Member member;
 
     @MapsId("replyId")
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "reply_id")
     private Reply reply;
 

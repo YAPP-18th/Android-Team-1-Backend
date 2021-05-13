@@ -5,6 +5,7 @@ import net.mureng.mureng.common.EntityCreator;
 import net.mureng.mureng.question.entity.Question;
 import net.mureng.mureng.question.service.QuestionService;
 import net.mureng.mureng.reply.entity.Reply;
+import net.mureng.mureng.reply.service.ReplyService;
 import net.mureng.mureng.web.AbstractControllerTest;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -12,11 +13,13 @@ import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
 
 import static org.mockito.ArgumentMatchers.any;
@@ -29,6 +32,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 public class QuestionControllerTest extends AbstractControllerTest {
     @MockBean
     private QuestionService questionService;
+
+    @MockBean
+    private ReplyService replyService;
 
     private static final Long QUESTION_ID = 1L;
 
@@ -52,7 +58,7 @@ public class QuestionControllerTest extends AbstractControllerTest {
 
             Page<Question> questionPage = new PageImpl<>(questionList);
 
-            given(questionService.getQuestionList(eq(page), eq(size), eq("popular"))).willReturn(questionPage);
+            given(questionService.getQuestionList(eq(PageRequest.of(page, size)), eq("popular"))).willReturn(questionPage);
 
             mockMvc.perform(
                     get("/api/questions?page=0&size=2&sort=popular")
@@ -79,7 +85,7 @@ public class QuestionControllerTest extends AbstractControllerTest {
 
             Page<Question> questionPage = new PageImpl<>(questionList);
 
-            given(questionService.getQuestionList(eq(page), eq(size), eq("newest"))).willReturn(questionPage);
+            given(questionService.getQuestionList(eq(PageRequest.of(page, size)), eq("newest"))).willReturn(questionPage);
 
             mockMvc.perform(
                     get("/api/questions?page=0&size=2&sort=newest")
@@ -132,6 +138,32 @@ public class QuestionControllerTest extends AbstractControllerTest {
                 .andExpect(MockMvcResultMatchers.jsonPath("$.data[0].repliesCount").value(2))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.data[1].content").value("This is english content."))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.data[1].repliesCount").value(0))
+                .andDo(print());
+    }
+
+    @Test
+    @WithMockMurengUser
+    public void 질문_관련_답변_목록_가져오기_테스트() throws Exception {
+        Reply reply1 = EntityCreator.createReplyEntity();
+        reply1.setContent("content1");
+        Reply reply2 = EntityCreator.createReplyEntity();
+        reply2.setContent("content2");
+        reply2.setReplyLikes(new HashSet<>());
+        List<Reply> replies = Arrays.asList(reply1, reply2);
+        int page = 0;
+        int size = 2;
+
+        given(replyService.findRepliesByQuestionId(eq(1L), eq(PageRequest.of(page, size)), any()))
+                .willReturn(new PageImpl<>(replies));
+
+        mockMvc.perform(
+                get("/api/questions/1/replies?page=0&size=2")
+        ).andExpect(status().isOk())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.message").value("ok"))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.data[0].content").value("content1"))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.data[0].replyLikeCount").value(2))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.data[1].content").value("content2"))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.data[1].replyLikeCount").value(0))
                 .andDo(print());
     }
 }

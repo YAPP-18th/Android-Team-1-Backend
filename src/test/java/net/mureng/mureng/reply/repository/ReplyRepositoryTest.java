@@ -5,6 +5,8 @@ import net.mureng.mureng.annotation.MurengDataTest;
 import net.mureng.mureng.reply.entity.Reply;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -19,7 +21,8 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 @DatabaseSetup({
         "classpath:dbunit/entity/member.xml",
         "classpath:dbunit/entity/question.xml",
-        "classpath:dbunit/entity/reply.xml"
+        "classpath:dbunit/entity/reply.xml",
+        "classpath:dbunit/entity/reply_likes.xml"
 })
 public class ReplyRepositoryTest {
     @Autowired
@@ -60,6 +63,18 @@ public class ReplyRepositoryTest {
     }
 
     @Test
+    public void 질문_답변_목록_조회_페이징(){
+        List<Reply> replyList = replyRepository.findAllByQuestionQuestionId(
+                QUESTION_ID, PageRequest.of(0, 1)).getContent();
+
+        assertEquals(1, replyList.size());
+
+        assertEquals(QUESTION_ID, replyList.get(0).getQuestion().getQuestionId());
+        assertEquals("yellow", replyList.get(0).getContent());
+        assertEquals("yellow image", replyList.get(0).getImage());
+    }
+
+    @Test
     public void 이미_답변한_멤버_존재여부_테스트(){
         LocalDate date = LocalDate.of(2020,10,14);
         LocalDateTime startDateTime = LocalDateTime.of(date, LocalTime.of(0,0,0));
@@ -92,5 +107,25 @@ public class ReplyRepositoryTest {
         replyRepository.deleteById(REPLY_ID);
 
         assertFalse(replyRepository.existsById(REPLY_ID));
+    }
+
+    @Test
+    public void 질문_연관_답변_조회_최신순_테스트() {
+        List<Reply> replies = replyRepository.findAllByQuestionQuestionId(REPLY_ID, PageRequest.of(0,
+                2, Sort.by(Sort.Direction.DESC, "regDate"))).getContent();
+
+        assertEquals(2, replies.size());
+        assertEquals(2L, replies.get(0).getReplyId());
+        assertEquals(1L, replies.get(1).getReplyId());
+    }
+
+    @Test
+    public void 질문_연관_답변_조회_인기순_테스트() {
+        List<Reply> replies = replyRepository.findAllByQuestionQuestionIdOrderByReplyLikesSize(REPLY_ID, PageRequest.of(0,
+                2)).getContent();
+
+        assertEquals(2, replies.size());
+        assertEquals(2, replies.get(0).getReplyLikes().size());
+        assertEquals(0, replies.get(1).getReplyLikes().size());
     }
 }

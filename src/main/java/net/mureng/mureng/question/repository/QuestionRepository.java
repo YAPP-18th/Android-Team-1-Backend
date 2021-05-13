@@ -11,6 +11,7 @@ import java.util.List;
 public interface QuestionRepository extends JpaRepository<Question, Long> {
     List<Question> findAllByMemberMemberIdOrderByRegDateDesc(Long memberId);
     boolean existsByQuestionIdAndMemberMemberId(Long questionId, Long memberId);
+
     @Query("Select q from Question q order by q.replies.size desc")
     Page<Question> findAllOrderByRepliesSizeDesc(Pageable page);
 }
