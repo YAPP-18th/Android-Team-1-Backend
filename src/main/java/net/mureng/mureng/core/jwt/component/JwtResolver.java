@@ -17,7 +17,7 @@ import java.util.Base64;
 @RequiredArgsConstructor
 public class JwtResolver {
 
-    @Value("spring.jwt.secret")
+    @Value("${spring.jwt.secret}")
     private String secretKey;
 
     private final UserDetailsService userDetailsService;

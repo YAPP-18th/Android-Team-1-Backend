@@ -15,7 +15,7 @@ import java.util.Date;
 @RequiredArgsConstructor
 public class JwtValidator {
 
-    @Value("spring.jwt.secret")
+    @Value("${spring.jwt.secret}")
     private String secretKey;
 
     @PostConstruct

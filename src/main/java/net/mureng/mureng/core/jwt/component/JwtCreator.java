@@ -16,7 +16,7 @@ import java.util.Date;
 public class JwtCreator {
     private final long TOKEN_VALID_MILISECOND = 1000l * 60 * 60 * 24; // 24 시간
 
-    @Value("spring.jwt.secret")
+    @Value("${spring.jwt.secret}")
     private String secretKey;
 
     @PostConstruct
