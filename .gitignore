@@ -39,3 +39,6 @@ out/
 ### properties ###
 application-oauth.properties
 /src/main/resources/application-local.yml
+/deployment/deployment-local.yml
+/.secrets
+

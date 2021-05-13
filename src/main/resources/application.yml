@@ -41,3 +41,8 @@ server:
           enabled: false
 
 
+# media
+media:
+  base:
+    dir:
+      name: /home/gradle/mount

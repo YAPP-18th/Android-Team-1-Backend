@@ -34,6 +34,9 @@ spec:
             limits:
               memory: "512Mi"
               cpu: "600m"
+          volumeMounts:
+            - name: content-server-volume
+              mountPath: /home/gradle/mount
           ports:
             - containerPort: 8080
           env:
@@ -47,3 +50,23 @@ spec:
               value: "$DEV_DB_USERNAME"
             - name: SPRING_DATASOURCE_PASSWORD
               value: "$DEV_DB_PASSWORD"
+        - name: apache
+          image: httpd
+          resources:
+            requests:
+              memory: "256Mi"
+              cpu: "300m"
+            limits:
+              memory: "512Mi"
+              cpu: "500m"
+          volumeMounts:
+            - name: content-server-volume
+              mountPath: /usr/local/apache2/htdocs
+          ports:
+            - containerPort: 80
+      volumes:
+        - name: content-server-volume
+          hostPath:
+            path: "$DEV_STATIC_DATA_PATH" # secret
+            type: Directory
+

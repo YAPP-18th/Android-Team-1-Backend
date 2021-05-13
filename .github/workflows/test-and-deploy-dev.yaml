@@ -60,6 +60,7 @@ jobs:
           DEV_DB_URL: ${{ secrets.DEV_DB_URL }}
           DEV_DB_USERNAME: ${{ secrets.DEV_DB_USERNAME }}
           DEV_DB_PASSWORD: ${{ secrets.DEV_DB_PASSWORD }}
+          DEV_STATIC_DATA_PATH: ${{ secrets.DEV_STATIC_DATA_PATH }}
         with:
           input: deployment/deployment-dev.yml
           output: deploy.yml
