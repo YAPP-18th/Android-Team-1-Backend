@@ -4,6 +4,7 @@ import net.mureng.mureng.member.entity.Member;
 import net.mureng.mureng.member.entity.MemberAttendance;
 import net.mureng.mureng.member.entity.MemberSetting;
 import net.mureng.mureng.member.service.MemberService;
+import net.mureng.mureng.member.service.MemberSignupService;
 import net.mureng.mureng.web.AbstractControllerTest;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -35,12 +36,10 @@ class MemberControllerTest extends AbstractControllerTest {
                                                     .build())
                                             .build();
 
-    private final String newMemberJsonString = "{\"attendanceCount\": 0,\n" +
+    private final String newMemberJsonString = "{" +
                                                 "  \"email\": \"example@email.com\",\n" +
                                                 "  \"identifier\": \"user-identifier\",\n" +
                                                 "  \"image\": \"image-path\",\n" +
-                                                "  \"lastAttendanceDate\": \"2020-10-14\",\n" +
-                                                "  \"murengCount\": 0,\n" +
                                                 "  \"nickname\": \"최대여섯글자\",\n" +
                                                 "  \"pushActive\": true\n" +
                                                 "}";
@@ -48,9 +47,12 @@ class MemberControllerTest extends AbstractControllerTest {
     @MockBean
     MemberService memberService;
 
+    @MockBean
+    MemberSignupService memberSignupService;
+
     @Test
     public void 사용자_회원가입_테스트() throws Exception {
-        given(memberService.signup(any())).willReturn(newMember);
+        given(memberSignupService.signup(any())).willReturn(newMember);
 
         mockMvc.perform(
                 post("/api/member/signup")

@@ -1,5 +1,6 @@
 package net.mureng.mureng.question.dto;
 
+import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.*;
 import net.mureng.mureng.question.entity.Question;
@@ -14,6 +15,7 @@ import java.time.LocalDateTime;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@ApiModel(value="단어 힌트 모델", description="단어 힌트를 나타내는 모델")
 public class WordHintDto {
     @ApiModelProperty(value = "단어 힌트 기본키")
     private Long hintId;
