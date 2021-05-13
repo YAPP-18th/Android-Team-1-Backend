@@ -34,11 +34,10 @@ public class ReplyService {
         replyImageDirName = mediaBaseDirName + replyImageDirName;
     }
 
-    // TODO 이걸 3개의 인자 대신 member와 question 모두 newReply 하나의 인자로도 해결 가능할 듯!
-    // 메서드 인자는 가능하면 하나만 받는게 좋음!
     @Transactional
-    public Reply create(Member member, Long questionId, Reply newReply) {
-        Long memberId = member.getMemberId();
+    public Reply create(Reply newReply) {
+        Long memberId = newReply.getMember().getMemberId();
+        Long questionId = newReply.getQuestion().getQuestionId();
 
         if(isAlreadyReplied(memberId))
             throw new BadRequestException("이미 오늘 답변한 사용자입니다.");
@@ -49,7 +48,7 @@ public class ReplyService {
         if(questionService.isAlreadyReplied(questionId, memberId))
             throw new BadRequestException("이미 답변한 질문입니다.");
 
-        newReply.setMember(member);
+        newReply.setMember(newReply.getMember());
         newReply.setQuestion(questionService.getQuestionById(questionId));
 
         return replyRepository.saveAndFlush(newReply);
@@ -64,11 +63,13 @@ public class ReplyService {
     }
 
     @Transactional
-    public Reply update(Member member, Long replyId, Reply newReply) {
+    public Reply update(Reply newReply) {
+        Long replyId = newReply.getReplyId();
+
         Reply oldReply =  replyRepository.findById(replyId)
                                             .orElseThrow(() -> new BadRequestException("존재하지 않는 질문에 대한 요청입니다."));
 
-        if(!oldReply.isWriter(member))
+        if(!oldReply.isWriter(newReply.getMember()))
             throw new AccessNotAllowedException("접근 권한이 없습니다.");
 
         oldReply.modifyReply(newReply);

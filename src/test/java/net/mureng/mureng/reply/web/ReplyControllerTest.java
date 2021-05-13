@@ -18,7 +18,6 @@ import java.util.HashSet;
 import java.util.List;
 
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -70,7 +69,7 @@ public class ReplyControllerTest extends AbstractControllerTest {
     @Test
     @WithMockMurengUser
     public void 답변_등록_테스트() throws Exception {
-        given(replyService.create(any(), any(), any())).willReturn(newReply);
+        given(replyService.create(any())).willReturn(newReply);
 
         mockMvc.perform(
                 post("/api/reply")
@@ -87,7 +86,7 @@ public class ReplyControllerTest extends AbstractControllerTest {
     @Test
     @WithMockMurengUser
     public void 답변_수정_테스트() throws Exception {
-        given(replyService.update(any(), eq(REPLY_ID), any())).willReturn(newReply);
+        given(replyService.update(any())).willReturn(newReply);
 
         mockMvc.perform(
                 put("/api/reply/1")
