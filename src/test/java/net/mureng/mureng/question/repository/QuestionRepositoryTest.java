@@ -6,6 +6,8 @@ import net.mureng.mureng.member.repository.MemberRepository;
 import net.mureng.mureng.question.entity.Question;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 
 import java.util.List;
 
@@ -68,4 +70,23 @@ public class QuestionRepositoryTest {
         assertTrue(isExist);
         assertFalse(isExist2);
     }
+
+    @Test
+    public void 질문_목록_페이징_테스트(){
+        int page = 0;
+        int size = 2;
+        int id = 1;
+
+        Page<Question> questionPageList = questionRepository.findAll(PageRequest.of(page, size));
+        List<Question> questionList = questionPageList.getContent();
+
+        assertEquals(2, questionPageList.getTotalPages());
+        assertEquals(2, questionList.size());
+
+        for(Question question : questionList){
+            assertEquals(id++, question.getQuestionId());
+        }
+
+    }
+
 }
