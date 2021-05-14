@@ -17,7 +17,7 @@ public class QuestionService {
 
     @Transactional(readOnly = true)
     public Question getQuestionById(Long questionId){
-        return questionRepository.findById(questionId).orElseThrow();
+        return questionRepository.findById(questionId).orElseThrow(() -> new BadRequestException("존재하지 않는 질문입니다."));
     }
 
     @Transactional(readOnly = true)

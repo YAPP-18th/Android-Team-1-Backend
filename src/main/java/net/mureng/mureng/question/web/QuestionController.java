@@ -2,6 +2,7 @@ package net.mureng.mureng.question.web;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import lombok.RequiredArgsConstructor;
 import net.mureng.mureng.core.dto.ApiResult;
 import net.mureng.mureng.question.component.QuestionMapper;
@@ -10,11 +11,9 @@ import net.mureng.mureng.question.entity.Question;
 import net.mureng.mureng.question.service.QuestionService;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+import javax.validation.constraints.NotNull;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -26,13 +25,12 @@ public class QuestionController {
     private final QuestionService questionService;
     private final QuestionMapper questionMapper;
 
-//    @ApiOperation(value = "질문에 대한 답변 목록 가져오기", notes = "질문에 대한 답변 목록을 가져옵니다.")
     @ApiOperation(value = "질문 목록 정렬 페이징 조회", notes = "질문 목록을 정렬 페이징해서 가져옵니다.")
     @GetMapping
     public ResponseEntity<ApiResult<List<QuestionDto>>> getQuestionList(
-            @RequestParam(required = false, defaultValue = "0") int page,
-            @RequestParam(required = false, defaultValue = "10") int size,
-            @RequestParam(required = false, defaultValue = "popular") String sort){
+            @ApiParam(value = "페이지 번호" ,required = false) @RequestParam(required = false, defaultValue = "0") int page,
+            @ApiParam(value = "한 페이지 크기" ,required = false) @RequestParam(required = false, defaultValue = "10") int size,
+            @ApiParam(value = "페이지 정렬 방식(popular, newest)" ,required = false) @RequestParam(required = false, defaultValue = "popular") String sort){
 
         Page<Question> questionList = questionService.getQuestionList(page, size, sort);
 
@@ -42,4 +40,16 @@ public class QuestionController {
                 .collect(Collectors.toList())
         ));
     }
+
+    @ApiOperation(value = "질문 조회", notes = "해당 질문을 가져옵니다.")
+    @GetMapping("/{questionId}")
+    public ResponseEntity<ApiResult<QuestionDto>> getQuestionById(
+            @ApiParam(value = "질문 id" ,required = true) @PathVariable @NotNull Long questionId){
+
+        return ResponseEntity.ok(ApiResult.ok(
+                questionMapper.map(questionService.getQuestionById(questionId))
+        ));
+    }
+
+
 }
