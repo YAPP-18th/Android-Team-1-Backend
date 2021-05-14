@@ -6,9 +6,11 @@ import net.mureng.mureng.question.dto.QuestionDto;
 import net.mureng.mureng.question.dto.WordHintDto;
 import net.mureng.mureng.question.entity.Question;
 import net.mureng.mureng.question.entity.WordHint;
+import net.mureng.mureng.reply.entity.Reply;
 import org.modelmapper.Converter;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -27,9 +29,18 @@ public class QuestionMapper extends EntityMapper {
                     .map(wordHintMapper::map)
                     .collect(Collectors.toSet());
         };
+        final Converter<List<Reply>, Long> repliesCountConverter = context -> {
+            if (context == null)
+                return null;
+
+            return context.getSource().stream().count();
+        };
+
         modelMapper.createTypeMap(Question.class, QuestionDto.class)
                 .addMappings(mapper -> mapper.using(wordHintConverter)
-                        .map(Question::getWordHints, QuestionDto::setWordHints));
+                        .map(Question::getWordHints, QuestionDto::setWordHints))
+                .addMappings(mapper -> mapper.using(repliesCountConverter)
+                        .map(Question::getReplies, QuestionDto::setRepliesCount));
     }
 
     @Override
