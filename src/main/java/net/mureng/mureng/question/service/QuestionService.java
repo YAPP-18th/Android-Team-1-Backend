@@ -10,6 +10,8 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 public class QuestionService {
@@ -36,5 +38,10 @@ public class QuestionService {
             return questionRepository.findAll(PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "regDate")));
         else
             throw new BadRequestException("잘못된 요청입니다.");
+    }
+
+    @Transactional(readOnly = true)
+    public List<Question> getQuestionWrittenByMember(Long memberId){
+        return questionRepository.findAllByMemberMemberIdOrderByRegDateDesc(memberId);
     }
 }

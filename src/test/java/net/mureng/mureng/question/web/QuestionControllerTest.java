@@ -16,8 +16,10 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -38,9 +40,7 @@ public class QuestionControllerTest extends AbstractControllerTest {
         public void 질문_목록_인기순_페이징_조회_테스트() throws Exception {
             int page = 0;
             int size = 2;
-            List<Reply> replies = new ArrayList<>();
-            replies.add(EntityCreator.createReplyEntity());
-            replies.add(EntityCreator.createReplyEntity());
+            List<Reply> replies = Arrays.asList(EntityCreator.createReplyEntity(), EntityCreator.createReplyEntity());
 
             Question popularQuestion = EntityCreator.createQuestionEntity();
             popularQuestion.setQuestionId(2L);
@@ -105,6 +105,33 @@ public class QuestionControllerTest extends AbstractControllerTest {
                 .andExpect(MockMvcResultMatchers.jsonPath("$.data.questionId").value(1))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.data.content").value("This is english content."))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.data.koContent").value("이것은 한글 내용입니다."))
+                .andDo(print());
+    }
+
+    @Test
+    @WithMockMurengUser
+    public void 내가_만든_질문_목록_조회_테스트() throws Exception {
+        List<Reply> replies = Arrays.asList(EntityCreator.createReplyEntity(), EntityCreator.createReplyEntity());
+
+        Question newQuestion = EntityCreator.createQuestionEntity();
+        newQuestion.setContent("new data");
+        newQuestion.setReplies(replies);
+        newQuestion.setRegDate(LocalDateTime.parse("2020-10-11T12:00:00"));
+
+        List<Question> questionList = new ArrayList<>();
+        questionList.add(newQuestion);
+        questionList.add(EntityCreator.createQuestionEntity());
+
+        given(questionService.getQuestionWrittenByMember(any())).willReturn(questionList);
+
+        mockMvc.perform(
+                get("/api/questions/me")
+        ).andExpect(status().isOk())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.message").value("ok"))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.data[0].content").value("new data"))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.data[0].repliesCount").value(2))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.data[1].content").value("This is english content."))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.data[1].repliesCount").value(0))
                 .andDo(print());
     }
 }

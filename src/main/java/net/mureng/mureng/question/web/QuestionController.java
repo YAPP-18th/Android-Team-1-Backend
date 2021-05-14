@@ -4,7 +4,9 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import lombok.RequiredArgsConstructor;
+import net.mureng.mureng.core.annotation.CurrentUser;
 import net.mureng.mureng.core.dto.ApiResult;
+import net.mureng.mureng.member.entity.Member;
 import net.mureng.mureng.question.component.QuestionMapper;
 import net.mureng.mureng.question.dto.QuestionDto;
 import net.mureng.mureng.question.entity.Question;
@@ -48,6 +50,18 @@ public class QuestionController {
 
         return ResponseEntity.ok(ApiResult.ok(
                 questionMapper.map(questionService.getQuestionById(questionId))
+        ));
+    }
+
+    @ApiOperation(value = "내가 만든 질문 목록 조회", notes = "해당 사용자가 만든 질문 목록을 가져옵니다.")
+    @GetMapping("/me")
+    public ResponseEntity<ApiResult<List<QuestionDto>>> getQuestionWrittenByMe(@CurrentUser Member member){
+        List<Question> questionList =  questionService.getQuestionWrittenByMember(member.getMemberId());
+
+        return ResponseEntity.ok(ApiResult.ok(
+                questionList.stream()
+                .map(questionMapper::map)
+                .collect(Collectors.toList())
         ));
     }
 
