@@ -2,23 +2,15 @@ package net.mureng.mureng.question.component;
 
 import lombok.RequiredArgsConstructor;
 import net.mureng.mureng.core.component.EntityMapper;
-import net.mureng.mureng.member.dto.MemberDto;
-import net.mureng.mureng.member.entity.Member;
-import net.mureng.mureng.member.entity.MemberAttendance;
-import net.mureng.mureng.member.entity.MemberSetting;
 import net.mureng.mureng.question.dto.QuestionDto;
 import net.mureng.mureng.question.dto.WordHintDto;
 import net.mureng.mureng.question.entity.Question;
 import net.mureng.mureng.question.entity.WordHint;
+import net.mureng.mureng.reply.entity.Reply;
 import org.modelmapper.Converter;
-import org.modelmapper.ModelMapper;
-import org.modelmapper.convention.MatchingStrategies;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.time.LocalDate;
-import java.time.LocalTime;
-import java.time.format.DateTimeFormatter;
+import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -37,16 +29,26 @@ public class QuestionMapper extends EntityMapper {
                     .map(wordHintMapper::map)
                     .collect(Collectors.toSet());
         };
+        final Converter<List<Reply>, Long> repliesCountConverter = context -> {
+            if (context == null)
+                return null;
+
+            return context.getSource().stream().count();
+        };
+
         modelMapper.createTypeMap(Question.class, QuestionDto.class)
                 .addMappings(mapper -> mapper.using(wordHintConverter)
-                        .map(Question::getWordHints, QuestionDto::setWordHints));
+                        .map(Question::getWordHints, QuestionDto::setWordHints))
+                .addMappings(mapper -> mapper.using(repliesCountConverter)
+                        .map(Question::getReplies, QuestionDto::setRepliesCount));
     }
 
     @Override
     protected void initDtoToEntityMapping() {
         modelMapper.createTypeMap(QuestionDto.class, Question.class)
                 .addMappings(mapper -> mapper.skip(Question::setMember))
-                .addMappings(mapper -> mapper.skip(Question::setRegDate));
+                .addMappings(mapper -> mapper.skip(Question::setRegDate))
+                .addMappings(mapper -> mapper.skip(Question::setReplies));
     }
 
     public Question map(QuestionDto questionDto) {
