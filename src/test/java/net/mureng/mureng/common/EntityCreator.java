@@ -4,8 +4,10 @@ import net.mureng.mureng.member.entity.Member;
 import net.mureng.mureng.question.entity.Question;
 import net.mureng.mureng.question.entity.WordHint;
 import net.mureng.mureng.reply.entity.Reply;
+import net.mureng.mureng.reply.entity.ReplyLikes;
 
 import java.time.LocalDateTime;
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 
@@ -41,6 +43,7 @@ public class EntityCreator {
                 .question(createQuestionEntity())
                 .content("Test Reply")
                 .image("image-path")
+                .replyLikes(new HashSet<>(Arrays.asList(createReplyLikesEntity(), createReplyLikesEntity())))
                 .build();
     }
 
@@ -54,6 +57,14 @@ public class EntityCreator {
                 .regDate(LocalDateTime.of(2020, 10, 14, 17, 11, 9))
                 .modDate(LocalDateTime.of(2020, 10, 14, 17, 11, 10))
                 .murengCount(0)
+                .build();
+    }
+
+    public static ReplyLikes createReplyLikesEntity() {
+        return ReplyLikes.builder()
+                .member(createMemberEntity())
+//                .reply(createReplyEntity())
+                .regDate(LocalDateTime.of(2020, 10, 14, 17, 11, 9))
                 .build();
     }
 }
