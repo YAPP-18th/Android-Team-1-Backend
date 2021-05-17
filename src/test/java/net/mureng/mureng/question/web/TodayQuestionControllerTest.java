@@ -8,6 +8,7 @@ import net.mureng.mureng.member.service.MemberService;
 import net.mureng.mureng.member.service.UserDetailsServiceImpl;
 import net.mureng.mureng.question.entity.Question;
 import net.mureng.mureng.question.entity.WordHint;
+import net.mureng.mureng.question.service.TodayQuestionSelectionService;
 import net.mureng.mureng.question.service.TodayQuestionService;
 import net.mureng.mureng.web.AbstractControllerTest;
 import org.junit.jupiter.api.Test;
@@ -24,6 +25,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -32,6 +34,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 class TodayQuestionControllerTest extends AbstractControllerTest {
     @MockBean
     private TodayQuestionService todayQuestionService;
+
+    @MockBean
+    private TodayQuestionSelectionService todayQuestionSelectionService;
 
     private final Question question = Question.builder()
             .questionId(1L)
@@ -58,6 +63,25 @@ class TodayQuestionControllerTest extends AbstractControllerTest {
 
         mockMvc.perform(
                 get("/api/today-question")
+                        .contentType(MediaType.APPLICATION_JSON)
+        ).andExpect(status().isOk())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.message").value("ok"))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.data.questionId").value(1))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.data.category").value("카테고리"))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.data.content").value("This is english content."))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.data.koContent").value("이것은 한글 내용입니다."))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.data.wordHints[0].hintId").value(1))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.data.wordHints[0].word").value("apple"))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.data.wordHints[0].meaning").value("사과"));
+    }
+
+    @Test
+    @WithMockMurengUser
+    public void 오늘의_질문_새로고침_테스트() throws Exception {
+        given(todayQuestionSelectionService.reselectTodayQuestion(any())).willReturn(question);
+
+        mockMvc.perform(
+                get("/api/today-question/refresh")
                         .contentType(MediaType.APPLICATION_JSON)
         ).andExpect(status().isOk())
                 .andExpect(MockMvcResultMatchers.jsonPath("$.message").value("ok"))

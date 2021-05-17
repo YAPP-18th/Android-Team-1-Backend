@@ -3,6 +3,7 @@ package net.mureng.mureng.question.service;
 import lombok.RequiredArgsConstructor;
 import net.mureng.mureng.member.entity.Member;
 import net.mureng.mureng.question.entity.Question;
+import net.mureng.mureng.question.entity.TodayQuestion;
 import net.mureng.mureng.question.repository.TodayQuestionRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -15,5 +16,12 @@ public class TodayQuestionService {
     @Transactional(readOnly = true)
     public Question getTodayQuestionByMemberId(Long memberId) {
         return todayQuestionRepository.findById(memberId).orElseThrow().getQuestion();
+    }
+
+    @Transactional
+    public void saveTodayQuestion(Long memberId, Question question) {
+        TodayQuestion todayQuestion = todayQuestionRepository.findById(memberId).orElseThrow();
+        todayQuestion.setQuestion(question);
+        todayQuestionRepository.saveAndFlush(todayQuestion);
     }
 }
