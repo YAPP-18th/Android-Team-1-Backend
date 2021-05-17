@@ -1,23 +1,8 @@
 package net.mureng.mureng.core.component;
 
-import net.mureng.mureng.question.dto.QuestionDto;
-import net.mureng.mureng.question.entity.Question;
-import org.modelmapper.ModelMapper;
-import org.modelmapper.convention.MatchingStrategies;
+import org.mapstruct.factory.Mappers;
 
-public abstract class EntityMapper {
-    protected final ModelMapper modelMapper = new ModelMapper();
-
-    protected EntityMapper() {
-        modelMapper.getConfiguration()
-                .setMatchingStrategy(MatchingStrategies.STANDARD);
-
-        initEntityToDtoMapping();
-        initDtoToEntityMapping();
-
-        modelMapper.validate();
-    }
-
-    protected abstract void initEntityToDtoMapping();
-    protected abstract void initDtoToEntityMapping();
+public interface EntityMapper<ENTITY, DTO> {
+    DTO toDto(ENTITY entity);
+    ENTITY toEntity(DTO dto);
 }

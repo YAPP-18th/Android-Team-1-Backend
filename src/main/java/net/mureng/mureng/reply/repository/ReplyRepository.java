@@ -13,7 +13,7 @@ import java.util.List;
 import java.util.Optional;
 
 public interface ReplyRepository extends JpaRepository<Reply, Long> {
-    List<Reply> findAllByMemberMemberId(Long memberId);
+    List<Reply> findAllByAuthorMemberId(Long memberId);
     List<Reply> findAllByQuestionQuestionId(Long questionId);
     Page<Reply> findAllByQuestionQuestionId(Long questionId, Pageable pageable);
 
@@ -23,7 +23,7 @@ public interface ReplyRepository extends JpaRepository<Reply, Long> {
     @Query("Select r from Reply r order by r.replyLikes.size desc")
     Page<Reply> findAllByOrderByReplyLikesSize(Pageable pageable);
 
-    boolean existsByRegDateBetweenAndMemberMemberId(LocalDateTime startDateTime, LocalDateTime endDateTime, Long memberId);
-    Optional<Reply> findByMemberMemberIdAndQuestionQuestionId(Long memberId, Long questionId);
+    boolean existsByRegDateBetweenAndAuthorMemberId(LocalDateTime startDateTime, LocalDateTime endDateTime, Long memberId);
+    Optional<Reply> findByAuthorMemberIdAndQuestionQuestionId(Long memberId, Long questionId);
 
 }

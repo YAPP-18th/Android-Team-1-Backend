@@ -33,12 +33,12 @@ public class MemberController {
 
     @ApiOperation(value = "신규 회원 가입", notes = "신규 회원가입입니다.")
     @PostMapping("/signup")
-    public ResponseEntity<ApiResult<MemberDto>> signup(
+    public ResponseEntity<ApiResult<MemberDto.ReadOnly>> signup(
             @ApiParam(value = "신규 회원 정보", required = true)
             @RequestBody @Valid MemberDto memberDto) {
 
-        Member newMember = memberMapper.map(memberDto);
-        return ResponseEntity.ok(ApiResult.ok(memberMapper.map(
+        Member newMember = memberMapper.toEntity(memberDto);
+        return ResponseEntity.ok(ApiResult.ok(memberMapper.toDto(
                 memberSignupService.signup(newMember)
         )));
     }

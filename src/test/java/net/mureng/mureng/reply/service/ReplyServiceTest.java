@@ -49,7 +49,7 @@ public class ReplyServiceTest {
             Reply newReply = EntityCreator.createReplyEntity();
 
             // mocking
-            given(replyRepository.existsByRegDateBetweenAndMemberMemberId(any(), any(), eq(notRepliedMemberId))).willReturn(false);
+            given(replyRepository.existsByRegDateBetweenAndAuthorMemberId(any(), any(), eq(notRepliedMemberId))).willReturn(false);
             given(questionService.existsById(eq(QUESTION_ID))).willReturn(true);
             given(questionService.isAlreadyReplied(eq(QUESTION_ID), eq(notRepliedMemberId))).willReturn(false);
             given(questionService.getQuestionById(eq(QUESTION_ID))).willReturn(newReply.getQuestion());
@@ -72,7 +72,7 @@ public class ReplyServiceTest {
             Reply newReply = EntityCreator.createReplyEntity();
 
             // mocking
-            given(replyRepository.existsByRegDateBetweenAndMemberMemberId(any(), any(), eq(repliedMemberId))).willReturn(true);
+            given(replyRepository.existsByRegDateBetweenAndAuthorMemberId(any(), any(), eq(repliedMemberId))).willReturn(true);
 
             // when
             BadRequestException exception =  assertThrows(BadRequestException.class, () -> replyService.create(newReply));
@@ -89,7 +89,7 @@ public class ReplyServiceTest {
             Reply newReply = EntityCreator.createReplyEntity();
 
             // mocking
-            given(replyRepository.existsByRegDateBetweenAndMemberMemberId(any(), any(), eq(notRepliedMemberId))).willReturn(false);
+            given(replyRepository.existsByRegDateBetweenAndAuthorMemberId(any(), any(), eq(notRepliedMemberId))).willReturn(false);
             given(questionService.existsById(eq(QUESTION_ID))).willReturn(false);
 
             // when
@@ -107,7 +107,7 @@ public class ReplyServiceTest {
             Reply newReply = EntityCreator.createReplyEntity();
 
             // mocking
-            given(replyRepository.existsByRegDateBetweenAndMemberMemberId(any(), any(), eq(MEMBER_ID))).willReturn(false);
+            given(replyRepository.existsByRegDateBetweenAndAuthorMemberId(any(), any(), eq(MEMBER_ID))).willReturn(false);
             given(questionService.existsById(eq(QUESTION_ID))).willReturn(true);
             given(questionService.isAlreadyReplied(eq(QUESTION_ID), eq(repliedMemberId))).willReturn(true);
 
@@ -128,7 +128,7 @@ public class ReplyServiceTest {
 
             Reply newReply = Reply.builder()
                             .replyId(REPLY_ID)
-                            .member(EntityCreator.createMemberEntity())
+                            .author(EntityCreator.createMemberEntity())
                             .content("New Test Content")
                             .image("New Image Path")
                             .modDate(now)
@@ -156,7 +156,7 @@ public class ReplyServiceTest {
 
             Reply newReply = Reply.builder()
                             .replyId(REPLY_ID)
-                            .member(EntityCreator.createMemberEntity())
+                            .author(EntityCreator.createMemberEntity())
                             .content("New Test Content")
                             .image("New Image Path")
                             .modDate(now)

@@ -53,7 +53,7 @@ public class ReplyControllerTest extends AbstractControllerTest {
 
     private final Reply newReply = Reply.builder()
             .replyId(1L)
-            .member(Member.builder().build())
+            .author(Member.builder().build())
             .question(question)
             .content("Test Reply")
             .image("image-path")
