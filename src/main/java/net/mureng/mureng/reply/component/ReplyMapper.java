@@ -2,6 +2,10 @@ package net.mureng.mureng.reply.component;
 
 import lombok.RequiredArgsConstructor;
 import net.mureng.mureng.core.component.EntityMapper;
+import net.mureng.mureng.member.component.MemberMapper;
+import net.mureng.mureng.member.entity.Member;
+import net.mureng.mureng.question.component.QuestionMapper;
+import net.mureng.mureng.question.entity.Question;
 import net.mureng.mureng.reply.dto.ReplyDto;
 import net.mureng.mureng.reply.entity.Reply;
 import net.mureng.mureng.reply.entity.ReplyLikes;
@@ -14,6 +18,9 @@ import java.util.Set;
 @Component
 @RequiredArgsConstructor
 public class ReplyMapper extends EntityMapper {
+    private final QuestionMapper questionMapper;
+    private final MemberMapper memberMapper;
+
     @Override
     protected void initEntityToDtoMapping() {
         final Converter<Set<ReplyLikes>, Integer> repliesCountConverter = context -> {
@@ -25,8 +32,12 @@ public class ReplyMapper extends EntityMapper {
 
         modelMapper.createTypeMap(Reply.class, ReplyDto.class)
                 .addMappings(mapper -> mapper.skip(ReplyDto::setQuestionId))
+                .addMappings(mapper -> mapper.using(context -> questionMapper.map((Question) context.getSource()))
+                        .map(Reply::getQuestion, ReplyDto::setQuestion))
                 .addMappings(mapper -> mapper.using(repliesCountConverter)
-                        .map(Reply::getReplyLikes, ReplyDto::setReplyLikeCount));
+                        .map(Reply::getReplyLikes, ReplyDto::setReplyLikeCount))
+                .addMappings(mapper -> mapper.using(context -> memberMapper.map((Member) context.getSource()))
+                        .map(Reply::getMember, ReplyDto::setAuthor));
     }
 
     @Override

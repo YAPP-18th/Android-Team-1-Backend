@@ -114,4 +114,16 @@ public class ReplyService {
 
         throw new BadRequestException("잘못된 요청입니다.");
     }
+
+    @Transactional(readOnly = true)
+    public Page<Reply> findReplies(Pageable pageable, String sort) {
+
+        if (sort.equals("popular")) // TODO ENUM 으로 변경하면 더 직관적일 것 같다.
+            return replyRepository.findAllByOrderByReplyLikesSize(pageable);
+        else if (sort.equals("newest"))
+            return replyRepository.findAll(PageRequest.of(pageable.getPageNumber(),
+                    pageable.getPageSize(), Sort.by(Sort.Direction.DESC, "regDate")));
+
+        throw new BadRequestException("잘못된 요청입니다.");
+    }
 }
