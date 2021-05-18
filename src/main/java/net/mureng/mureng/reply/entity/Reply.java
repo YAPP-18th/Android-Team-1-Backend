@@ -24,7 +24,7 @@ public class Reply {
 
     @ManyToOne
     @JoinColumn(name = "member_id")
-    private Member member;
+    private Member author;
 
     @ManyToOne
     @JoinColumn(name = "question_id")
@@ -63,7 +63,7 @@ public class Reply {
     }
 
     public boolean isWriter(Member member){
-        return this.member.getMemberId() == member.getMemberId();
+        return this.author.getMemberId() == member.getMemberId();
     }
 
 }

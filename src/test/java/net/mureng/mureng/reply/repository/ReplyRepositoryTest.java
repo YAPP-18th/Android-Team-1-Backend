@@ -34,15 +34,15 @@ public class ReplyRepositoryTest {
 
     @Test
     public void 멤버_답변_목록_조회(){
-        List<Reply> replyList = replyRepository.findAllByMemberMemberId(MEMBER_ID);
+        List<Reply> replyList = replyRepository.findAllByAuthorMemberId(MEMBER_ID);
 
         assertEquals(2, replyList.size());
 
-        assertEquals(MEMBER_ID, replyList.get(0).getMember().getMemberId());
+        assertEquals(MEMBER_ID, replyList.get(0).getAuthor().getMemberId());
         assertEquals("yellow", replyList.get(0).getContent());
         assertEquals("yellow image", replyList.get(0).getImage());
 
-        assertEquals(MEMBER_ID, replyList.get(1).getMember().getMemberId());
+        assertEquals(MEMBER_ID, replyList.get(1).getAuthor().getMemberId());
         assertEquals("so cute", replyList.get(1).getContent());
         assertEquals("cat image", replyList.get(1).getImage());
     }
@@ -84,8 +84,8 @@ public class ReplyRepositoryTest {
         LocalDateTime startDateTime2 = LocalDateTime.of(date2, LocalTime.of(0,0,0));
         LocalDateTime endDateTime2 = LocalDateTime.of(date2, LocalTime.of(23,59,59));
 
-        boolean isExist = replyRepository.existsByRegDateBetweenAndMemberMemberId(startDateTime, endDateTime, MEMBER_ID);
-        boolean isExist2 = replyRepository.existsByRegDateBetweenAndMemberMemberId(startDateTime2, endDateTime2, MEMBER_ID);
+        boolean isExist = replyRepository.existsByRegDateBetweenAndAuthorMemberId(startDateTime, endDateTime, MEMBER_ID);
+        boolean isExist2 = replyRepository.existsByRegDateBetweenAndAuthorMemberId(startDateTime2, endDateTime2, MEMBER_ID);
 
         assertTrue(isExist);
         assertFalse(isExist2);
@@ -93,10 +93,10 @@ public class ReplyRepositoryTest {
 
     @Test
     public void 멤버와_질문으로_답변_찾기_테스트() {
-        Reply oldReply = replyRepository.findByMemberMemberIdAndQuestionQuestionId(MEMBER_ID, QUESTION_ID).orElseThrow();
+        Reply oldReply = replyRepository.findByAuthorMemberIdAndQuestionQuestionId(MEMBER_ID, QUESTION_ID).orElseThrow();
 
         assertEquals(REPLY_ID, oldReply.getReplyId());
-        assertEquals(MEMBER_ID, oldReply.getMember().getMemberId());
+        assertEquals(MEMBER_ID, oldReply.getAuthor().getMemberId());
         assertEquals(QUESTION_ID, oldReply.getQuestion().getQuestionId());
         assertEquals("yellow", oldReply.getContent());
         assertEquals("yellow image", oldReply.getImage());

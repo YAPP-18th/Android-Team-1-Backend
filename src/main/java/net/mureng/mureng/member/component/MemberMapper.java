@@ -3,41 +3,28 @@ package net.mureng.mureng.member.component;
 import net.mureng.mureng.core.component.EntityMapper;
 import net.mureng.mureng.member.dto.MemberDto;
 import net.mureng.mureng.member.entity.Member;
-import net.mureng.mureng.member.entity.MemberAttendance;
-import net.mureng.mureng.member.entity.MemberSetting;
-import org.modelmapper.Converter;
-import org.modelmapper.ModelMapper;
-import org.modelmapper.convention.MatchingStrategies;
-import org.springframework.stereotype.Component;
+import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
+import org.mapstruct.factory.Mappers;
 
-import java.time.LocalDate;
-import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 
-@Component
-public class MemberMapper extends EntityMapper {
-    protected void initEntityToDtoMapping() {
-        modelMapper.createTypeMap(Member.class, MemberDto.class)
-                .addMapping(src -> src.getMemberAttendance().getAttendanceCount(), MemberDto::setAttendanceCount)
-                .addMapping(src -> src.getMemberAttendance().getLastAttendanceDate(), MemberDto::setLastAttendanceDate)
-                .addMapping(src -> src.getMemberSetting().isPushActive(), MemberDto::setPushActive);
-    }
+@Mapper(componentModel = "spring", imports = DateTimeFormatter.class)
+public interface MemberMapper extends EntityMapper<Member, MemberDto> {
+    @Override
+    @Mapping(target = "attendanceCount", expression = "java(member.getMemberAttendance().getAttendanceCount())")
+    @Mapping(target = "lastAttendanceDate", expression = "java(member.getMemberAttendance().getLastAttendanceDate()" +
+            ".format(DateTimeFormatter.ofPattern(\"yyyy-MM-dd\")) )")
+    @Mapping(target = "pushActive", expression = "java(member.getMemberSetting().isPushActive())")
+    MemberDto.ReadOnly toDto(Member member);
 
-    protected void initDtoToEntityMapping() {
-        modelMapper.createTypeMap(MemberDto.class, Member.class)
-                .addMappings(mapper -> mapper.skip(Member::setMemberAttendance))
-                .addMappings(mapper -> mapper.skip(Member::setMemberSetting))
-                .addMappings(mapper -> mapper.skip(Member::setMurengCount))
-                .addMappings(mapper -> mapper.skip(Member::setRegDate))
-                .addMappings(mapper -> mapper.skip(Member::setModDate))
-                .addMappings(mapper -> mapper.skip(Member::setActive));
-    }
-
-    public Member map(MemberDto memberDto) {
-        return modelMapper.map(memberDto, Member.class);
-    }
-
-    public MemberDto map(Member member) {
-        return modelMapper.map(member, MemberDto.class);
-    }
+    @Override
+    @Mapping(target = "memberId", ignore = true)
+    @Mapping(target = "active", ignore = true)
+    @Mapping(target = "murengCount", ignore = true)
+    @Mapping(target = "memberSetting", ignore = true)
+    @Mapping(target = "memberAttendance", ignore = true)
+    @Mapping(target = "regDate", ignore = true)
+    @Mapping(target = "modDate", ignore = true)
+    Member toEntity(MemberDto memberDto);
 }

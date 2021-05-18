@@ -1,31 +1,26 @@
 package net.mureng.mureng.question.component;
 
 import net.mureng.mureng.core.component.EntityMapper;
+import net.mureng.mureng.member.dto.MemberDto;
+import net.mureng.mureng.member.entity.Member;
 import net.mureng.mureng.question.dto.QuestionDto;
 import net.mureng.mureng.question.dto.WordHintDto;
 import net.mureng.mureng.question.entity.Question;
 import net.mureng.mureng.question.entity.WordHint;
-import org.springframework.stereotype.Component;
+import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
+import org.mapstruct.factory.Mappers;
 
-@Component
-public class WordHintMapper extends EntityMapper {
+import java.time.format.DateTimeFormatter;
+
+@Mapper(componentModel = "spring")
+public interface WordHintMapper extends EntityMapper<WordHint, WordHintDto> {
     @Override
-    protected void initEntityToDtoMapping() {
-        modelMapper.createTypeMap(WordHint.class, WordHintDto.class);
-    }
+    WordHintDto.ReadOnly toDto(WordHint wordHint);
 
     @Override
-    protected void initDtoToEntityMapping() {
-        modelMapper.createTypeMap(WordHintDto.class, WordHint.class)
-                .addMappings(mapper -> mapper.skip(WordHint::setQuestion))
-                .addMappings(mapper -> mapper.skip(WordHint::setRegDate));
-    }
-
-    public WordHint map(WordHintDto questionDto) {
-        return modelMapper.map(questionDto, WordHint.class);
-    }
-
-    public WordHintDto map(WordHint question) {
-        return modelMapper.map(question, WordHintDto.class);
-    }
+    @Mapping(target = "hintId", ignore = true)
+    @Mapping(target = "question", ignore = true)
+    @Mapping(target = "regDate", ignore = true)
+    WordHint toEntity(WordHintDto wordHintDto);
 }

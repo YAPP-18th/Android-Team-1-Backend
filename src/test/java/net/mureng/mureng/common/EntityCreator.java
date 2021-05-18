@@ -39,7 +39,7 @@ public class EntityCreator {
     public static Reply createReplyEntity(){
         return Reply.builder()
                 .replyId(REPLY_ID)
-                .member(createMemberEntity())
+                .author(createMemberEntity())
                 .question(createQuestionEntity())
                 .content("Test Reply")
                 .image("image-path")

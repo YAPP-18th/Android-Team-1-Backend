@@ -10,7 +10,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.LocalTime;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -37,7 +36,7 @@ class MemberMapperTest {
                                                 .build())
                                         .build();
 
-    private final MemberDto memberDto = MemberDto.builder()
+    private final MemberDto.ReadOnly memberDto = MemberDto.ReadOnly.builder()
                                         .memberId(1L)
                                         .identifier("123")
                                         .email("test@gmail.com")
@@ -50,7 +49,7 @@ class MemberMapperTest {
 
     @Test
     void 엔티티에서_DTO변환_테스트() {
-        MemberDto mappedDto = memberMapper.map(member);
+        MemberDto.ReadOnly mappedDto = memberMapper.toDto(member);
         assertEquals(mappedDto.getMemberId(), memberDto.getMemberId());
         assertEquals(mappedDto.getIdentifier(), memberDto.getIdentifier());
         assertEquals(mappedDto.getImage(), memberDto.getImage());
@@ -64,7 +63,7 @@ class MemberMapperTest {
 
     @Test
     void DTO에서_엔티티변환_테스트() {
-        Member mappedMember = memberMapper.map(memberDto);
+        Member mappedMember = memberMapper.toEntity(memberDto);
 //        assertEquals(mappedMember.getMemberId(), member.getMemberId());
         assertEquals(mappedMember.getIdentifier(), member.getIdentifier());
         assertEquals(mappedMember.getEmail(), member.getEmail());

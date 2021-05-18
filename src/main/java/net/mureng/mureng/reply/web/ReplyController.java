@@ -3,8 +3,6 @@ package net.mureng.mureng.reply.web;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import net.mureng.mureng.core.annotation.CurrentUser;
 import net.mureng.mureng.core.dto.ApiPageRequest;
@@ -15,10 +13,8 @@ import net.mureng.mureng.reply.component.ReplyMapper;
 import net.mureng.mureng.reply.dto.ReplyDto;
 import net.mureng.mureng.reply.entity.Reply;
 import net.mureng.mureng.reply.service.ReplyService;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
@@ -41,36 +37,36 @@ public class ReplyController {
 
         return ResponseEntity.ok(ApiResult.ok(
                 replyService.findReplies(pageRequest.convert(), sort).stream()
-                .map(replyMapper::map)
+                .map(replyMapper::toDto)
                 .collect(Collectors.toList())
         ));
     }
 
     @ApiOperation(value = "답변 작성하기", notes = "현재 질문에 대한 답변을 작성합니다.")
     @PostMapping
-    public ResponseEntity<ApiResult<ReplyDto>> create(@CurrentUser Member member,
+    public ResponseEntity<ApiResult<ReplyDto.ReadOnly>> create(@CurrentUser Member member,
                                             @RequestBody @Valid ReplyDto replyDto){
 
-        Reply newReply = replyMapper.map(replyDto);
-        newReply.setMember(member);
+        Reply newReply = replyMapper.toEntity(replyDto);
+        newReply.setAuthor(member);
         newReply.setQuestion(Question.builder().questionId(replyDto.getQuestionId()).build());
 
-        return ResponseEntity.ok(ApiResult.ok(replyMapper.map(
+        return ResponseEntity.ok(ApiResult.ok(replyMapper.toDto(
                 replyService.create(newReply)
         )));
     }
 
     @ApiOperation(value = "답변 수정하기", notes = "답변을 수정합니다.")
     @PutMapping("/{replyId}")
-    public ResponseEntity<ApiResult<ReplyDto>> update(@CurrentUser Member member,
+    public ResponseEntity<ApiResult<ReplyDto.ReadOnly>> update(@CurrentUser Member member,
                                             @RequestBody @Valid ReplyDto replyDto,
                                             @PathVariable @NotNull Long replyId){
 
-        Reply newReply = replyMapper.map(replyDto);
-        newReply.setMember(member);
+        Reply newReply = replyMapper.toEntity(replyDto);
+        newReply.setAuthor(member);
         newReply.setReplyId(replyId);
 
-        return ResponseEntity.ok(ApiResult.ok(replyMapper.map(
+        return ResponseEntity.ok(ApiResult.ok(replyMapper.toDto(
                 replyService.update(newReply)
         )));
     }

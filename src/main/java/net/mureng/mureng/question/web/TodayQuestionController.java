@@ -26,8 +26,8 @@ public class TodayQuestionController {
 
     @ApiOperation(value = "오늘의 질문 가져오기", notes = "현재 로그인한 사용자의 오늘의 질문을 가져옵니다.")
     @GetMapping("")
-    public ResponseEntity<ApiResult<QuestionDto>> get(@CurrentUser Member member) {
-        return ResponseEntity.ok(ApiResult.ok(questionMapper.map(
+    public ResponseEntity<ApiResult<QuestionDto.ReadOnly>> get(@CurrentUser Member member) {
+        return ResponseEntity.ok(ApiResult.ok(questionMapper.toDto(
                 todayQuestionService.getTodayQuestionByMemberId(member.getMemberId())
         )));
     }
@@ -35,7 +35,7 @@ public class TodayQuestionController {
     @ApiOperation(value = "오늘의 질문 새로고침해서 가져오기", notes = "오늘의 질문을 새로고침 해서 가져옵니다.")
     @GetMapping("/refresh")
     public ResponseEntity<ApiResult<QuestionDto>> getRefresh(@CurrentUser Member member) {
-        return ResponseEntity.ok(ApiResult.ok(questionMapper.map(
+        return ResponseEntity.ok(ApiResult.ok(questionMapper.toDto(
                 todayQuestionSelectionService.reselectTodayQuestion(member)
         )));
     }

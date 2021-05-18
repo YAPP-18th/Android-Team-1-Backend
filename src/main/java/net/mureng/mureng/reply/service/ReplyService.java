@@ -40,7 +40,7 @@ public class ReplyService {
 
     @Transactional
     public Reply create(Reply newReply) {
-        Long memberId = newReply.getMember().getMemberId();
+        Long memberId = newReply.getAuthor().getMemberId();
         Long questionId = newReply.getQuestion().getQuestionId();
 
         if (isAlreadyReplied(memberId))
@@ -52,7 +52,7 @@ public class ReplyService {
         if (questionService.isAlreadyReplied(questionId, memberId))
             throw new BadRequestException("이미 답변한 질문입니다.");
 
-        newReply.setMember(newReply.getMember());
+        newReply.setAuthor(newReply.getAuthor());
         newReply.setQuestion(questionService.getQuestionById(questionId));
 
         return replyRepository.saveAndFlush(newReply);
@@ -63,7 +63,7 @@ public class ReplyService {
         LocalDateTime startDateTime = LocalDateTime.of(LocalDate.now(), LocalTime.of(0, 0, 0)); // 오늘 00:00:00
         LocalDateTime endDatetime = LocalDateTime.of(LocalDate.now(), LocalTime.of(23, 59, 59)); //오늘 23:59:59
 
-        return replyRepository.existsByRegDateBetweenAndMemberMemberId(startDateTime, endDatetime, memberId);
+        return replyRepository.existsByRegDateBetweenAndAuthorMemberId(startDateTime, endDatetime, memberId);
     }
 
     @Transactional
@@ -73,7 +73,7 @@ public class ReplyService {
         Reply oldReply = replyRepository.findById(replyId)
                 .orElseThrow(() -> new BadRequestException("존재하지 않는 질문에 대한 요청입니다."));
 
-        if (!oldReply.isWriter(newReply.getMember()))
+        if (!oldReply.isWriter(newReply.getAuthor()))
             throw new AccessNotAllowedException("접근 권한이 없습니다.");
 
         oldReply.modifyReply(newReply);
