@@ -1,9 +1,6 @@
 package net.mureng.mureng.question.entity;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import net.mureng.mureng.member.entity.Member;
 
 import javax.persistence.*;
@@ -25,6 +22,7 @@ public class TodayQuestion {
     @JoinColumn(name = "member_id", nullable = false)
     private Member member;
 
+    @Setter
     @ManyToOne
     @JoinColumn(name = "question_id", nullable = false)
     private Question question;
