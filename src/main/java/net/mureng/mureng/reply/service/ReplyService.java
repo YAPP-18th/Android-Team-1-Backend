@@ -1,8 +1,8 @@
 package net.mureng.mureng.reply.service;
 
 import lombok.RequiredArgsConstructor;
-import net.mureng.mureng.core.exception.AccessNotAllowedException;
 import net.mureng.mureng.core.component.FileUploader;
+import net.mureng.mureng.core.exception.AccessNotAllowedException;
 import net.mureng.mureng.core.exception.BadRequestException;
 import net.mureng.mureng.member.entity.Member;
 import net.mureng.mureng.question.service.QuestionService;
@@ -21,6 +21,7 @@ import javax.annotation.PostConstruct;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -125,5 +126,10 @@ public class ReplyService {
                     pageable.getPageSize(), Sort.by(Sort.Direction.DESC, "regDate")));
 
         throw new BadRequestException("잘못된 요청입니다.");
+    }
+
+    @Transactional(readOnly = true)
+    public List<Reply> findRepliesByMemberId(Long memberId){
+        return replyRepository.findAllByAuthorMemberId(memberId);
     }
 }
