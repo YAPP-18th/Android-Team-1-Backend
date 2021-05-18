@@ -127,7 +127,7 @@ class MemberControllerTest extends AbstractControllerTest {
         given(replyService.isAlreadyReplied(eq(1L))).willReturn(true);
 
         mockMvc.perform(
-                get("/api/member/check-replied")
+                get("/api/member/check-replied-today")
                 .contentType(MediaType.APPLICATION_JSON)
         ).andExpect(status().isOk())
                 .andExpect(MockMvcResultMatchers.jsonPath("$.message").value("ok"))

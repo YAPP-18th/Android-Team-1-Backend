@@ -88,7 +88,7 @@ public class MemberController {
     }
 
     @ApiOperation(value = "오늘 사용자의 답변 유무 조회", notes = "사용자가 오늘 답변을 했는 지 확인합니다.")
-    @GetMapping("/check-replied")
+    @GetMapping("/check-replied-today")
     public ResponseEntity<ApiResult<RepliedCheckDto>> isMemberRepliedToday(@CurrentUser Member member) {
         return ResponseEntity.ok(
                 ApiResult.ok(
