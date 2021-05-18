@@ -33,7 +33,7 @@ public class ReplyController {
     private final ReplyMapper replyMapper;
     private final ReplyService replyService;
 
-    @ApiOperation(value = "답변 가져오기", notes = "전체 답변 목록을 페이징으로 가져옵니다.")
+    @ApiOperation(value = "답변 목록 가져오기", notes = "전체 답변 목록을 페이징으로 가져옵니다.")
     @GetMapping
     public ResponseEntity<ApiResult<List<ReplyDto>>> get(ApiPageRequest pageRequest,
                                                          @ApiParam(value = "페이지 정렬 방식(popular, newest)")
