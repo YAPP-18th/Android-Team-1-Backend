@@ -2,10 +2,12 @@ package net.mureng.mureng.reply.web;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import net.mureng.mureng.core.annotation.CurrentUser;
+import net.mureng.mureng.core.dto.ApiPageRequest;
 import net.mureng.mureng.core.dto.ApiResult;
 import net.mureng.mureng.member.entity.Member;
 import net.mureng.mureng.question.entity.Question;
@@ -20,6 +22,8 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Api(value = "답변 엔드포인트")
 @RestController
@@ -28,6 +32,19 @@ import javax.validation.constraints.NotNull;
 public class ReplyController {
     private final ReplyMapper replyMapper;
     private final ReplyService replyService;
+
+    @ApiOperation(value = "답변 목록 가져오기", notes = "전체 답변 목록을 페이징으로 가져옵니다.")
+    @GetMapping
+    public ResponseEntity<ApiResult<List<ReplyDto>>> get(ApiPageRequest pageRequest,
+                                                         @ApiParam(value = "페이지 정렬 방식(popular, newest)")
+                                                         @RequestParam(required = false, defaultValue = "popular") String sort){
+
+        return ResponseEntity.ok(ApiResult.ok(
+                replyService.findReplies(pageRequest.convert(), sort).stream()
+                .map(replyMapper::map)
+                .collect(Collectors.toList())
+        ));
+    }
 
     @ApiOperation(value = "답변 작성하기", notes = "현재 질문에 대한 답변을 작성합니다.")
     @PostMapping

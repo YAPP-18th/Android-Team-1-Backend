@@ -20,6 +20,9 @@ public interface ReplyRepository extends JpaRepository<Reply, Long> {
     @Query("Select r from Reply r where r.question.questionId = :questionId order by r.replyLikes.size desc")
     Page<Reply> findAllByQuestionQuestionIdOrderByReplyLikesSize(Long questionId, Pageable pageable);
 
+    @Query("Select r from Reply r order by r.replyLikes.size desc")
+    Page<Reply> findAllByOrderByReplyLikesSize(Pageable pageable);
+
     boolean existsByRegDateBetweenAndMemberMemberId(LocalDateTime startDateTime, LocalDateTime endDateTime, Long memberId);
     Optional<Reply> findByMemberMemberIdAndQuestionQuestionId(Long memberId, Long questionId);
 

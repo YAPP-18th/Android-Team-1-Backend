@@ -1,6 +1,7 @@
 package net.mureng.mureng.reply.web;
 
 import net.mureng.mureng.annotation.WithMockMurengUser;
+import net.mureng.mureng.common.EntityCreator;
 import net.mureng.mureng.member.entity.Member;
 import net.mureng.mureng.question.entity.Question;
 import net.mureng.mureng.question.entity.WordHint;
@@ -9,15 +10,19 @@ import net.mureng.mureng.reply.service.ReplyService;
 import net.mureng.mureng.web.AbstractControllerTest;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 import java.time.LocalDateTime;
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -65,6 +70,36 @@ public class ReplyControllerTest extends AbstractControllerTest {
     private static final Long QUESTION_ID = 1L;
     private static final Long REPLY_ID = 1L;
 
+    @Test
+    @WithMockMurengUser
+    public void 답변_조회_테스트() throws Exception {
+        Reply reply1 = EntityCreator.createReplyEntity();
+        reply1.setContent("content1");
+        Reply reply2 = EntityCreator.createReplyEntity();
+        reply2.setContent("content2");
+        reply2.setReplyLikes(new HashSet<>());
+        List<Reply> replies = Arrays.asList(reply1, reply2);
+        int page = 0;
+        int size = 10;
+
+        given(replyService.findReplies(eq(PageRequest.of(page, size)), any()))
+                .willReturn(new PageImpl<>(replies));
+
+        mockMvc.perform(
+                get("/api/reply")
+                        .contentType(MediaType.APPLICATION_JSON)
+        ).andExpect(status().isOk())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.message").value("ok"))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.data[0].content").value("content1"))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.data[0].replyLikeCount").value(2))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.data[0].question.content").value("This is english content."))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.data[0].author.nickname").value("Test"))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.data[1].content").value("content2"))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.data[1].replyLikeCount").value(0))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.data[1].question.content").value("This is english content."))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.data[1].author.nickname").value("Test"))
+                .andDo(print());
+    }
 
     @Test
     @WithMockMurengUser

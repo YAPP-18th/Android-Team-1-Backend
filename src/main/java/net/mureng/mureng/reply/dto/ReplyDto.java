@@ -4,6 +4,8 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.*;
+import net.mureng.mureng.member.dto.MemberDto;
+import net.mureng.mureng.question.dto.QuestionDto;
 
 import javax.validation.constraints.NotEmpty;
 
@@ -16,7 +18,6 @@ public class ReplyDto {
     @ApiModelProperty(value = "답변 기본키")
     private Long replyId;
 
-    @JsonIgnore
     @ApiModelProperty(value = "질문 기본키")
     private Long questionId;
 
@@ -29,4 +30,10 @@ public class ReplyDto {
 
     @ApiModelProperty(value = "좋아요 갯수")
     private int replyLikeCount;
+
+    @ApiModelProperty(hidden = true, accessMode = ApiModelProperty.AccessMode.READ_ONLY)
+    private QuestionDto question;
+
+    @ApiModelProperty(hidden = true, accessMode = ApiModelProperty.AccessMode.READ_ONLY)
+    private MemberDto author;
 }
