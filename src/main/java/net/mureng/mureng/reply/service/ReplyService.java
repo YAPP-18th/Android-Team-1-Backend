@@ -1,6 +1,8 @@
 package net.mureng.mureng.reply.service;
 
 import lombok.RequiredArgsConstructor;
+import net.mureng.mureng.core.dto.ApiPageRequest;
+import net.mureng.mureng.core.exception.AccessNotAllowedException;
 import net.mureng.mureng.core.component.FileUploader;
 import net.mureng.mureng.core.exception.AccessNotAllowedException;
 import net.mureng.mureng.core.exception.BadRequestException;
@@ -111,27 +113,19 @@ public class ReplyService {
     }
 
     @Transactional(readOnly = true)
-    public Page<Reply> findRepliesByQuestionId(Long questionId, Pageable pageable, String sort) {
+    public Page<Reply> findRepliesByQuestionId(Long questionId, ApiPageRequest pageRequest) {
+        if (pageRequest.getSort() == ApiPageRequest.PageSort.POPULAR)
+            return replyRepository.findAllByQuestionQuestionIdOrderByReplyLikesSize(questionId, pageRequest.convert());
 
-        if (sort.equals("popular")) // TODO ENUM 으로 변경하면 더 직관적일 것 같다.
-            return replyRepository.findAllByQuestionQuestionIdOrderByReplyLikesSize(questionId, pageable);
-        else if (sort.equals("newest"))
-            return replyRepository.findAllByQuestionQuestionId(questionId, PageRequest.of(pageable.getPageNumber(),
-                    pageable.getPageSize(), Sort.by(Sort.Direction.DESC, "regDate")));
-
-        throw new BadRequestException("잘못된 요청입니다.");
+        return replyRepository.findAllByQuestionQuestionId(questionId, pageRequest.convertWithNewestSort());
     }
 
     @Transactional(readOnly = true)
-    public Page<Reply> findReplies(Pageable pageable, String sort) {
+    public Page<Reply> findReplies(ApiPageRequest pageRequest) {
+        if (pageRequest.getSort() == ApiPageRequest.PageSort.POPULAR)
+            return replyRepository.findAllByOrderByReplyLikesSize(pageRequest.convert());
 
-        if (sort.equals("popular")) // TODO ENUM 으로 변경하면 더 직관적일 것 같다.
-            return replyRepository.findAllByOrderByReplyLikesSize(pageable);
-        else if (sort.equals("newest"))
-            return replyRepository.findAll(PageRequest.of(pageable.getPageNumber(),
-                    pageable.getPageSize(), Sort.by(Sort.Direction.DESC, "regDate")));
-
-        throw new BadRequestException("잘못된 요청입니다.");
+        return replyRepository.findAll(pageRequest.convertWithNewestSort());
     }
 
     @Transactional(readOnly = true)

@@ -32,13 +32,11 @@ public class QuestionReplyController {
     @ApiOperation(value = "질문 관련 답변 가져오기", notes = "질문 관련 답변 가져오기")
     @GetMapping("/{questionId}/replies")
     public ResponseEntity<ApiPageResult<ReplyDto.ReadOnly>> getQuestionReplies(
-            @ApiParam(value = "질문 id" ,required = true) @PathVariable Long questionId, ApiPageRequest pageRequest,
-            @ApiParam(value = "페이지 정렬 방식(popular, newest)")
-            @RequestParam(required = false, defaultValue = "popular") String sort) {
+            @ApiParam(value = "질문 id" ,required = true) @PathVariable Long questionId, ApiPageRequest pageRequest) {
 
         return ResponseEntity.ok(
                 ApiPageResult.ok(
-                        replyService.findRepliesByQuestionId(questionId, pageRequest.convert(), sort)
+                        replyService.findRepliesByQuestionId(questionId, pageRequest)
                         .map(replyMapper::toDto))
         );
     }
