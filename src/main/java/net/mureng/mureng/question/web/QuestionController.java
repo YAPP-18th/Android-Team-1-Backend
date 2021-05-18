@@ -32,15 +32,13 @@ import java.util.stream.Collectors;
 @RequestMapping("/api/questions")
 public class QuestionController {
     private final QuestionService questionService;
-    private final ReplyService replyService;
     private final QuestionMapper questionMapper;
-    private final ReplyMapper replyMapper;
 
     @ApiOperation(value = "질문 목록 정렬 페이징 조회", notes = "질문 목록을 정렬 페이징해서 가져옵니다.")
     @GetMapping
     public ResponseEntity<ApiPageResult<QuestionDto.ReadOnly>> getQuestionList(ApiPageRequest pageRequest,
-            @ApiParam(value = "페이지 정렬 방식(popular, newest)" ,required = false)
-            @RequestParam(required = false, defaultValue = "popular") String sort) {
+                                                                               @ApiParam(value = "페이지 정렬 방식(popular, newest)", required = false)
+                                                                               @RequestParam(required = false, defaultValue = "popular") String sort) {
 
         return ResponseEntity.ok(ApiPageResult.ok(
                 questionService.getQuestionList(pageRequest.convert(), sort)
@@ -51,7 +49,7 @@ public class QuestionController {
     @ApiOperation(value = "질문 조회", notes = "해당 질문을 가져옵니다.")
     @GetMapping("/{questionId}")
     public ResponseEntity<ApiResult<QuestionDto.ReadOnly>> getQuestionById(
-            @ApiParam(value = "질문 id" ,required = true) @PathVariable @NotNull Long questionId){
+            @ApiParam(value = "질문 id", required = true) @PathVariable @NotNull Long questionId) {
 
         return ResponseEntity.ok(ApiResult.ok(
                 questionMapper.toDto(questionService.getQuestionById(questionId))
@@ -60,27 +58,13 @@ public class QuestionController {
 
     @ApiOperation(value = "내가 만든 질문 목록 조회", notes = "해당 사용자가 만든 질문 목록을 가져옵니다.")
     @GetMapping("/me")
-    public ResponseEntity<ApiResult<List<QuestionDto.ReadOnly>>> getQuestionWrittenByMe(@CurrentUser Member member){
-        List<Question> questionList =  questionService.getQuestionWrittenByMember(member.getMemberId());
+    public ResponseEntity<ApiResult<List<QuestionDto.ReadOnly>>> getQuestionWrittenByMe(@CurrentUser Member member) {
+        List<Question> questionList = questionService.getQuestionWrittenByMember(member.getMemberId());
 
         return ResponseEntity.ok(ApiResult.ok(
                 questionList.stream()
-                .map(questionMapper::toDto)
-                .collect(Collectors.toList())
+                        .map(questionMapper::toDto)
+                        .collect(Collectors.toList())
         ));
-    }
-
-    @ApiOperation(value = "질문 관련 답변 가져오기", notes = "질문 관련 답변 가져오기")
-    @GetMapping("/{questionId}/replies")
-    public ResponseEntity<ApiPageResult<ReplyDto.ReadOnly>> getQuestionReplies(
-            @ApiParam(value = "질문 id" ,required = true) @PathVariable Long questionId, ApiPageRequest pageRequest,
-            @ApiParam(value = "페이지 정렬 방식(popular, newest)")
-            @RequestParam(required = false, defaultValue = "popular") String sort) {
-
-        return ResponseEntity.ok(
-                ApiPageResult.ok(
-                        replyService.findRepliesByQuestionId(questionId, pageRequest.convert(), sort)
-                        .map(replyMapper::toDto))
-        );
     }
 }

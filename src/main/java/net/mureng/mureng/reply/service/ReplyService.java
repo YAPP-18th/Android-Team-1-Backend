@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import net.mureng.mureng.core.exception.AccessNotAllowedException;
 import net.mureng.mureng.core.component.FileUploader;
 import net.mureng.mureng.core.exception.BadRequestException;
+import net.mureng.mureng.core.exception.ResourceNotFoundException;
 import net.mureng.mureng.member.entity.Member;
 import net.mureng.mureng.question.service.QuestionService;
 import net.mureng.mureng.reply.entity.Reply;
@@ -101,6 +102,11 @@ public class ReplyService {
     public String uploadReplyImageFile(MultipartFile imageFile) {
         return fileUploader.saveMultiPartFile(imageFile, replyImageDirName)
                 .replace(mediaBaseDirName, "");
+    }
+
+    public Reply findReplyByQuestionIdAndMember(Long memberId, Long questionId) {
+        return replyRepository.findByAuthorMemberIdAndQuestionQuestionId(memberId, questionId)
+                .orElseThrow(() -> new ResourceNotFoundException("사용자 답변이 존재하지 않습니다."));
     }
 
     @Transactional(readOnly = true)
