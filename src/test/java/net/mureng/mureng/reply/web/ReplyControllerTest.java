@@ -83,7 +83,7 @@ public class ReplyControllerTest extends AbstractControllerTest {
         int size = 10;
 
         given(replyService.findReplies(eq(PageRequest.of(page, size)), any()))
-                .willReturn(new PageImpl<>(replies));
+                .willReturn(new PageImpl<>(replies, PageRequest.of(page, size), 2));
 
         mockMvc.perform(
                 get("/api/reply")

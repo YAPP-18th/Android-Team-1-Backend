@@ -9,13 +9,13 @@ import lombok.Getter;
 @ApiModel(value="API 응답 공통 모델")
 public class ApiResult<T> {
 
-    @ApiModelProperty(value = "결과 메세지")
+    @ApiModelProperty(value = "결과 메세지", position = 0)
     protected final String message;
 
-    @ApiModelProperty(value = "응답 데이터, 실패시 null")
+    @ApiModelProperty(value = "응답 데이터, 실패시 null", position = 1)
     protected final T data;
 
-    @ApiModelProperty(value = "요청 서버 시간")
+    @ApiModelProperty(value = "요청 서버 시간", position = 5)
     protected final long timestamp;
 
     public ApiResult(String message, T data) {

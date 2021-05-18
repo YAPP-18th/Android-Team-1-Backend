@@ -6,6 +6,7 @@ import io.swagger.annotations.ApiParam;
 import lombok.RequiredArgsConstructor;
 import net.mureng.mureng.core.annotation.CurrentUser;
 import net.mureng.mureng.core.dto.ApiPageRequest;
+import net.mureng.mureng.core.dto.ApiPageResult;
 import net.mureng.mureng.core.dto.ApiResult;
 import net.mureng.mureng.member.entity.Member;
 import net.mureng.mureng.question.entity.Question;
@@ -31,14 +32,13 @@ public class ReplyController {
 
     @ApiOperation(value = "답변 목록 가져오기", notes = "전체 답변 목록을 페이징으로 가져옵니다.")
     @GetMapping
-    public ResponseEntity<ApiResult<List<ReplyDto>>> get(ApiPageRequest pageRequest,
-                                                         @ApiParam(value = "페이지 정렬 방식(popular, newest)")
+    public ResponseEntity<ApiPageResult<ReplyDto.ReadOnly>> get(ApiPageRequest pageRequest,
+                                                                      @ApiParam(value = "페이지 정렬 방식(popular, newest)")
                                                          @RequestParam(required = false, defaultValue = "popular") String sort){
 
-        return ResponseEntity.ok(ApiResult.ok(
-                replyService.findReplies(pageRequest.convert(), sort).stream()
+        return ResponseEntity.ok(ApiPageResult.ok(
+                replyService.findReplies(pageRequest.convert(), sort)
                 .map(replyMapper::toDto)
-                .collect(Collectors.toList())
         ));
     }
 
