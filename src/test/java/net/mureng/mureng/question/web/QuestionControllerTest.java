@@ -56,7 +56,7 @@ public class QuestionControllerTest extends AbstractControllerTest {
             questionList.add(popularQuestion);
             questionList.add(EntityCreator.createQuestionEntity());
 
-            Page<Question> questionPage = new PageImpl<>(questionList);
+            Page<Question> questionPage = new PageImpl<>(questionList, PageRequest.of(page, size), 2);
 
             given(questionService.getQuestionList(eq(PageRequest.of(page, size)), eq("popular"))).willReturn(questionPage);
 
@@ -83,7 +83,7 @@ public class QuestionControllerTest extends AbstractControllerTest {
             questionList.add(popularQuestion);
             questionList.add(EntityCreator.createQuestionEntity());
 
-            Page<Question> questionPage = new PageImpl<>(questionList);
+            Page<Question> questionPage = new PageImpl<>(questionList, PageRequest.of(page, size), 2);
 
             given(questionService.getQuestionList(eq(PageRequest.of(page, size)), eq("newest"))).willReturn(questionPage);
 
@@ -154,7 +154,7 @@ public class QuestionControllerTest extends AbstractControllerTest {
         int size = 2;
 
         given(replyService.findRepliesByQuestionId(eq(1L), eq(PageRequest.of(page, size)), any()))
-                .willReturn(new PageImpl<>(replies));
+                .willReturn(new PageImpl<>(replies, PageRequest.of(page, size), 2));
 
         mockMvc.perform(
                 get("/api/questions/1/replies?page=0&size=2")

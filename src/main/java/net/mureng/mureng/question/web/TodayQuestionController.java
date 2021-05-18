@@ -34,7 +34,7 @@ public class TodayQuestionController {
 
     @ApiOperation(value = "오늘의 질문 새로고침해서 가져오기", notes = "오늘의 질문을 새로고침 해서 가져옵니다.")
     @GetMapping("/refresh")
-    public ResponseEntity<ApiResult<QuestionDto>> getRefresh(@CurrentUser Member member) {
+    public ResponseEntity<ApiResult<QuestionDto.ReadOnly>> getRefresh(@CurrentUser Member member) {
         return ResponseEntity.ok(ApiResult.ok(questionMapper.toDto(
                 todayQuestionSelectionService.reselectTodayQuestion(member)
         )));

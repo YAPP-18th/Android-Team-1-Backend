@@ -18,14 +18,14 @@ import javax.validation.constraints.NotEmpty;
 @ApiModel(value="답변 모델", description="질문에 대한 답변을 나타내는 모델")
 public class ReplyDto {
     @Min(1)
-    @ApiModelProperty(value = "답변하려는 질문의 기본키", required = true)
+    @ApiModelProperty(value = "답변하려는 질문의 기본키", required = true, position = 1)
     private Long questionId;
 
     @NotEmpty
-    @ApiModelProperty(value = "답변 내용", required = true)
+    @ApiModelProperty(value = "답변 내용", required = true, position = 2)
     private String content;
 
-    @ApiModelProperty(value = "이미지 경로", required = true)
+    @ApiModelProperty(value = "이미지 경로", required = true, position = 3)
     private String image;
 
     @SuperBuilder
@@ -34,16 +34,16 @@ public class ReplyDto {
     @AllArgsConstructor
     @ApiModel(value="답변 읽기 모델", description="질문에 대한 답변을 나타내는 읽기 전용 모델")
     public static class ReadOnly extends ReplyDto {
-        @ApiModelProperty(value = "답변 기본키", accessMode = ApiModelProperty.AccessMode.READ_ONLY)
+        @ApiModelProperty(value = "답변 기본키", accessMode = ApiModelProperty.AccessMode.READ_ONLY, position = 0)
         private Long replyId;
 
-        @ApiModelProperty(value = "좋아요 갯수", accessMode = ApiModelProperty.AccessMode.READ_ONLY)
+        @ApiModelProperty(value = "좋아요 갯수", accessMode = ApiModelProperty.AccessMode.READ_ONLY, position = 4)
         private int replyLikeCount;
 
-        @ApiModelProperty(value = "질문 모델", accessMode = ApiModelProperty.AccessMode.READ_ONLY)
+        @ApiModelProperty(value = "질문 모델", accessMode = ApiModelProperty.AccessMode.READ_ONLY, position = 5)
         private QuestionDto.ReadOnly question;
 
-        @ApiModelProperty(value = "작성자 회원 모델", accessMode = ApiModelProperty.AccessMode.READ_ONLY)
+        @ApiModelProperty(value = "작성자 회원 모델", accessMode = ApiModelProperty.AccessMode.READ_ONLY, position = 6)
         private MemberDto.ReadOnly author;
     }
 }
