@@ -34,7 +34,7 @@ public class Question {
     @Column(nullable = false, length = 150)
     private String content;
 
-    @Column(name = "ko_content", nullable = false)
+    @Column(name = "ko_content")
     private String koContent;
 
     @Builder.Default
