@@ -32,11 +32,14 @@ public class ReplyController {
 
     @ApiOperation(value = "답변 목록 가져오기", notes = "전체 답변 목록을 페이징으로 가져옵니다.")
     @GetMapping
-    public ResponseEntity<ApiPageResult<ReplyDto.ReadOnly>> get(ApiPageRequest pageRequest){
+    public ResponseEntity<ApiPageResult<ReplyDto.ReadOnly>> get(
+            ApiPageRequest pageRequest,
+            @CurrentUser Member member
+    ){
 
         return ResponseEntity.ok(ApiPageResult.ok(
                 replyService.findReplies(pageRequest)
-                .map(replyMapper::toDto)
+                .map(x -> replyMapper.toDto(x, member))
         ));
     }
 
@@ -50,7 +53,7 @@ public class ReplyController {
         newReply.setQuestion(Question.builder().questionId(replyDto.getQuestionId()).build());
 
         return ResponseEntity.ok(ApiResult.ok(replyMapper.toDto(
-                replyService.create(newReply)
+                replyService.create(newReply), member
         )));
     }
 
@@ -65,7 +68,7 @@ public class ReplyController {
         newReply.setReplyId(replyId);
 
         return ResponseEntity.ok(ApiResult.ok(replyMapper.toDto(
-                replyService.update(newReply)
+                replyService.update(newReply), member
         )));
     }
 

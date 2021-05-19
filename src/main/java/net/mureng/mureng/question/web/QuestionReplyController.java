@@ -32,12 +32,14 @@ public class QuestionReplyController {
     @ApiOperation(value = "질문 관련 답변 가져오기", notes = "질문 관련 답변 가져오기")
     @GetMapping("/{questionId}/replies")
     public ResponseEntity<ApiPageResult<ReplyDto.ReadOnly>> getQuestionReplies(
-            @ApiParam(value = "질문 id" ,required = true) @PathVariable Long questionId, ApiPageRequest pageRequest) {
+            @ApiParam(value = "질문 id" ,required = true) @PathVariable Long questionId,
+            ApiPageRequest pageRequest,
+            @CurrentUser Member member) {
 
         return ResponseEntity.ok(
                 ApiPageResult.ok(
                         replyService.findRepliesByQuestionId(questionId, pageRequest)
-                        .map(replyMapper::toDto))
+                        .map(x -> replyMapper.toDto(x, member)))
         );
     }
 
@@ -47,11 +49,13 @@ public class QuestionReplyController {
             @ApiResponse(code = 404, message = "답변이 존재하지 않습니다.")
     })
     public ResponseEntity<ApiResult<ReplyDto.ReadOnly>> getQuestionRepliesMe(
-            @ApiParam(value = "질문 id" ,required = true) @PathVariable Long questionId, @CurrentUser Member member) {
+            @ApiParam(value = "질문 id" ,required = true) @PathVariable Long questionId,
+            @CurrentUser Member member) {
 
         return ResponseEntity.ok(
                 ApiPageResult.ok(replyMapper.toDto(
-                        replyService.findReplyByQuestionIdAndMember(member.getMemberId(), questionId)
+                        replyService.findReplyByQuestionIdAndMember(member.getMemberId(), questionId),
+                        member
                 ))
         );
     }

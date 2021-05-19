@@ -69,13 +69,15 @@ class QuestionReplyControllerTest extends AbstractControllerTest {
                 .andExpect(MockMvcResultMatchers.jsonPath("$.message").value("ok"))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.data.content").value("content1"))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.data.replyLikeCount").value(2))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.data.requestedByAuthor").value(true))
                 .andDo(print());
     }
 
     @Test
     @WithMockMurengUser
     public void 질문_내답변_가져오기_404_테스트() throws Exception {
-        given(replyService.findReplyByQuestionIdAndMember(eq(1L), eq(1L))).willThrow(ResourceNotFoundException.class);
+        given(replyService.findReplyByQuestionIdAndMember(eq(1L), eq(1L)))
+                .willThrow(ResourceNotFoundException.class);
 
         mockMvc.perform(
                 get("/api/questions/1/replies/me")

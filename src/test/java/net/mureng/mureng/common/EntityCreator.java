@@ -75,7 +75,7 @@ public class EntityCreator {
 
     public static MemberDto.ReadOnly createMemberDto() {
         return MemberDto.ReadOnly.builder()
-                .memberId(1L)
+                .memberId(MEMBER_ID)
                 .identifier("123")
                 .email("test@gmail.com")
                 .nickname("Test")
@@ -86,9 +86,9 @@ public class EntityCreator {
                 .build();
     }
 
-    public static QuestionDto.ReadOnly createQuesetionDto() {
+    public static QuestionDto.ReadOnly createQuestionDto() {
         return QuestionDto.ReadOnly.builder()
-                .questionId(1L)
+                .questionId(QUESTION_ID)
                 .category("카테고리")
                 .content("This is english content.")
                 .koContent("이것은 한글 내용입니다.")
@@ -102,10 +102,11 @@ public class EntityCreator {
                 .questionId(QUESTION_ID)
                 .replyId(REPLY_ID)
                 .author(createMemberDto())
-                .question(createQuesetionDto())
+                .question(createQuestionDto())
                 .content("Test Reply")
                 .image("image-path")
                 .replyLikeCount(2)
+                .requestedByAuthor(true)
                 .build();
     }
 
