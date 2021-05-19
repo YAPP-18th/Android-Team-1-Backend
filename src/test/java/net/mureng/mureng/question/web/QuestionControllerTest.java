@@ -2,6 +2,7 @@ package net.mureng.mureng.question.web;
 
 import net.mureng.mureng.annotation.WithMockMurengUser;
 import net.mureng.mureng.common.EntityCreator;
+import net.mureng.mureng.core.dto.ApiPageRequest;
 import net.mureng.mureng.question.entity.Question;
 import net.mureng.mureng.question.service.QuestionService;
 import net.mureng.mureng.reply.entity.Reply;
@@ -55,7 +56,7 @@ public class QuestionControllerTest extends AbstractControllerTest {
 
             Page<Question> questionPage = new PageImpl<>(questionList, PageRequest.of(page, size), 2);
 
-            given(questionService.getQuestionList(eq(PageRequest.of(page, size)), eq("popular"))).willReturn(questionPage);
+            given(questionService.getQuestionList(eq(new ApiPageRequest(page, size, ApiPageRequest.PageSort.POPULAR)))).willReturn(questionPage);
 
             mockMvc.perform(
                     get("/api/questions?page=0&size=2&sort=popular")
@@ -82,7 +83,7 @@ public class QuestionControllerTest extends AbstractControllerTest {
 
             Page<Question> questionPage = new PageImpl<>(questionList, PageRequest.of(page, size), 2);
 
-            given(questionService.getQuestionList(eq(PageRequest.of(page, size)), eq("newest"))).willReturn(questionPage);
+            given(questionService.getQuestionList(eq(new ApiPageRequest(page, size, ApiPageRequest.PageSort.NEWEST)))).willReturn(questionPage);
 
             mockMvc.perform(
                     get("/api/questions?page=0&size=2&sort=newest")

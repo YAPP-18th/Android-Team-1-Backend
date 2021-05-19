@@ -2,6 +2,7 @@ package net.mureng.mureng.reply.web;
 
 import net.mureng.mureng.annotation.WithMockMurengUser;
 import net.mureng.mureng.common.EntityCreator;
+import net.mureng.mureng.core.dto.ApiPageRequest;
 import net.mureng.mureng.member.entity.Member;
 import net.mureng.mureng.question.entity.Question;
 import net.mureng.mureng.question.entity.WordHint;
@@ -82,7 +83,7 @@ public class ReplyControllerTest extends AbstractControllerTest {
         int page = 0;
         int size = 10;
 
-        given(replyService.findReplies(eq(PageRequest.of(page, size)), any()))
+        given(replyService.findReplies(eq(new ApiPageRequest(page, size, ApiPageRequest.PageSort.POPULAR))))
                 .willReturn(new PageImpl<>(replies, PageRequest.of(page, size), 2));
 
         mockMvc.perform(

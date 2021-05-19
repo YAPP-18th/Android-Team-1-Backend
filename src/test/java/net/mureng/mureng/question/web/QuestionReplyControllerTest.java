@@ -2,6 +2,7 @@ package net.mureng.mureng.question.web;
 
 import net.mureng.mureng.annotation.WithMockMurengUser;
 import net.mureng.mureng.common.EntityCreator;
+import net.mureng.mureng.core.dto.ApiPageRequest;
 import net.mureng.mureng.core.exception.ResourceNotFoundException;
 import net.mureng.mureng.reply.entity.Reply;
 import net.mureng.mureng.reply.service.ReplyService;
@@ -40,7 +41,7 @@ class QuestionReplyControllerTest extends AbstractControllerTest {
         int page = 0;
         int size = 2;
 
-        given(replyService.findRepliesByQuestionId(eq(1L), eq(PageRequest.of(page, size)), any()))
+        given(replyService.findRepliesByQuestionId(eq(1L), eq(new ApiPageRequest(page, size, ApiPageRequest.PageSort.POPULAR))))
                 .willReturn(new PageImpl<>(replies, PageRequest.of(page, size), 2));
 
         mockMvc.perform(

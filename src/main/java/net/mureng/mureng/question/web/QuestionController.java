@@ -36,12 +36,10 @@ public class QuestionController {
 
     @ApiOperation(value = "질문 목록 정렬 페이징 조회", notes = "질문 목록을 정렬 페이징해서 가져옵니다.")
     @GetMapping
-    public ResponseEntity<ApiPageResult<QuestionDto.ReadOnly>> getQuestionList(ApiPageRequest pageRequest,
-                                                                               @ApiParam(value = "페이지 정렬 방식(popular, newest)", required = false)
-                                                                               @RequestParam(required = false, defaultValue = "popular") String sort) {
+    public ResponseEntity<ApiPageResult<QuestionDto.ReadOnly>> getQuestionList(ApiPageRequest pageRequest) {
 
         return ResponseEntity.ok(ApiPageResult.ok(
-                questionService.getQuestionList(pageRequest.convert(), sort)
+                questionService.getQuestionList(pageRequest)
                         .map(questionMapper::toDto)
         ));
     }

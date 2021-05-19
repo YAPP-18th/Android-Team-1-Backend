@@ -32,12 +32,10 @@ public class ReplyController {
 
     @ApiOperation(value = "답변 목록 가져오기", notes = "전체 답변 목록을 페이징으로 가져옵니다.")
     @GetMapping
-    public ResponseEntity<ApiPageResult<ReplyDto.ReadOnly>> get(ApiPageRequest pageRequest,
-                                                                      @ApiParam(value = "페이지 정렬 방식(popular, newest)")
-                                                         @RequestParam(required = false, defaultValue = "popular") String sort){
+    public ResponseEntity<ApiPageResult<ReplyDto.ReadOnly>> get(ApiPageRequest pageRequest){
 
         return ResponseEntity.ok(ApiPageResult.ok(
-                replyService.findReplies(pageRequest.convert(), sort)
+                replyService.findReplies(pageRequest)
                 .map(replyMapper::toDto)
         ));
     }
