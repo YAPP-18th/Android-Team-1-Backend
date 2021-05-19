@@ -36,8 +36,6 @@ public class MemberController {
     private final MemberSignupService memberSignupService;
     private final MemberMapper memberMapper;
     private final OAuth2Service oAuth2Service;
-    private final ReplyService replyService;
-    private final ReplyMapper replyMapper;
 
     @ApiOperation(value = "신규 회원 가입", notes = "신규 회원가입입니다.")
     @PostMapping("/signup")
@@ -74,29 +72,11 @@ public class MemberController {
         ));
     }
 
-    @ApiOperation(value = "사용자가 답변한 질문 목록 조회", notes = "사용자가 답변한 질문 목록을 가져옵니다.")
-    @GetMapping("/replies")
-    public ResponseEntity<ApiResult<List<ReplyDto.ReadOnly>>> getQuestionMemberReplied(
-            @CurrentUser Member member){
-        return ResponseEntity.ok(
-                ApiResult.ok(
-                        replyService.findRepliesByMemberId(member.getMemberId()).stream()
-                        .map(replyMapper::toDto)
-                        .collect(Collectors.toList())
-                )
-        );
+    @ApiOperation(value = "로그인한 사용자 가져오기", notes = "현재 로그인한 사용자를 가져옵니다.")
+    @GetMapping("/me")
+    public ResponseEntity<ApiResult<MemberDto.ReadOnly>> me(@CurrentUser Member member) {
+        return ResponseEntity.ok(ApiResult.ok(memberMapper.toDto(member)));
     }
-
-    @ApiOperation(value = "오늘 사용자의 답변 유무 조회", notes = "사용자가 오늘 답변을 했는 지 확인합니다.")
-    @GetMapping("/check-replied-today")
-    public ResponseEntity<ApiResult<RepliedCheckDto>> isMemberRepliedToday(@CurrentUser Member member) {
-        return ResponseEntity.ok(
-                ApiResult.ok(
-                        new RepliedCheckDto(replyService.isAlreadyReplied(member.getMemberId()))
-                )
-        );
-    }
-
 
     @ApiIgnore
     @AllArgsConstructor
@@ -111,12 +91,5 @@ public class MemberController {
     public static class UserCheckDto {
         private final boolean exist;
         private final String email;
-    }
-
-    @ApiIgnore
-    @AllArgsConstructor
-    @Getter
-    public static class RepliedCheckDto {
-        private final boolean replied;
     }
 }
