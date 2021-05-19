@@ -19,8 +19,6 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
-import java.util.List;
-import java.util.stream.Collectors;
 
 @Api(value = "답변 엔드포인트")
 @RestController
@@ -32,27 +30,34 @@ public class ReplyController {
 
     @ApiOperation(value = "답변 목록 가져오기", notes = "전체 답변 목록을 페이징으로 가져옵니다.")
     @GetMapping
-    public ResponseEntity<ApiPageResult<ReplyDto.ReadOnly>> get(
-            ApiPageRequest pageRequest,
-            @CurrentUser Member member
-    ){
-
+    public ResponseEntity<ApiPageResult<ReplyDto.ReadOnly>> get( ApiPageRequest pageRequest,
+                                                                 @CurrentUser Member member){
         return ResponseEntity.ok(ApiPageResult.ok(
                 replyService.findReplies(pageRequest)
                 .map(x -> replyMapper.toDto(x, member))
         ));
     }
 
-    @ApiOperation(value = "답변 작성하기", notes = "현재 질문에 대한 답변을 작성합니다.")
-    @PostMapping
-    public ResponseEntity<ApiResult<ReplyDto.ReadOnly>> create(@CurrentUser Member member,
-                                            @RequestBody @Valid ReplyDto replyDto){
+    @ApiOperation(value = "답변 상세 조회하기", notes = "답변에 대한 상세 정보를 가져옵니다.")
+    @GetMapping("/{replyId}")
+    public ResponseEntity<ApiResult<ReplyDto.ReadOnly>> getReplyInfo(
+            @ApiParam(value = "답변 id", required = true) @PathVariable Long replyId,
+                                                        @CurrentUser Member member) {
+            return ResponseEntity.ok(ApiResult.ok(
+                    replyMapper.toDto(replyService.findById(replyId), member)
+            ));
+        }
 
-        Reply newReply = replyMapper.toEntity(replyDto);
-        newReply.setAuthor(member);
-        newReply.setQuestion(Question.builder().questionId(replyDto.getQuestionId()).build());
+        @ApiOperation(value = "답변 작성하기", notes = "현재 질문에 대한 답변을 작성합니다.")
+        @PostMapping
+        public ResponseEntity<ApiResult<ReplyDto.ReadOnly>> create(@CurrentUser Member member,
+                @RequestBody @Valid ReplyDto replyDto){
 
-        return ResponseEntity.ok(ApiResult.ok(replyMapper.toDto(
+            Reply newReply = replyMapper.toEntity(replyDto);
+            newReply.setAuthor(member);
+            newReply.setQuestion(Question.builder().questionId(replyDto.getQuestionId()).build());
+
+            return ResponseEntity.ok(ApiResult.ok(replyMapper.toDto(
                 replyService.create(newReply), member
         )));
     }

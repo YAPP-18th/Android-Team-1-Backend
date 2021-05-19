@@ -1,9 +1,8 @@
 package net.mureng.mureng.reply.service;
 
 import lombok.RequiredArgsConstructor;
-import net.mureng.mureng.core.dto.ApiPageRequest;
-import net.mureng.mureng.core.exception.AccessNotAllowedException;
 import net.mureng.mureng.core.component.FileUploader;
+import net.mureng.mureng.core.dto.ApiPageRequest;
 import net.mureng.mureng.core.exception.AccessNotAllowedException;
 import net.mureng.mureng.core.exception.BadRequestException;
 import net.mureng.mureng.core.exception.ResourceNotFoundException;
@@ -13,9 +12,6 @@ import net.mureng.mureng.reply.entity.Reply;
 import net.mureng.mureng.reply.repository.ReplyRepository;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -131,5 +127,10 @@ public class ReplyService {
     @Transactional(readOnly = true)
     public List<Reply> findRepliesByMemberId(Long memberId){
         return replyRepository.findAllByAuthorMemberId(memberId);
+    }
+
+    @Transactional(readOnly = true)
+    public Reply findById(Long replyId){
+        return replyRepository.findById(replyId).orElseThrow(() -> new BadRequestException("존재하지 않는 답변에 대한 요청입니다."));
     }
 }

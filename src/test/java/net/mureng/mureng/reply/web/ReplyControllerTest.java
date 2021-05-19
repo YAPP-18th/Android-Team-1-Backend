@@ -3,9 +3,6 @@ package net.mureng.mureng.reply.web;
 import net.mureng.mureng.annotation.WithMockMurengUser;
 import net.mureng.mureng.common.EntityCreator;
 import net.mureng.mureng.core.dto.ApiPageRequest;
-import net.mureng.mureng.member.entity.Member;
-import net.mureng.mureng.question.entity.Question;
-import net.mureng.mureng.question.entity.WordHint;
 import net.mureng.mureng.reply.entity.Reply;
 import net.mureng.mureng.reply.service.ReplyService;
 import net.mureng.mureng.web.AbstractControllerTest;
@@ -17,7 +14,6 @@ import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
-import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
@@ -73,6 +69,23 @@ public class ReplyControllerTest extends AbstractControllerTest {
                 .andExpect(MockMvcResultMatchers.jsonPath("$.data[1].replyLikeCount").value(0))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.data[1].question.content").value("This is english content."))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.data[1].author.nickname").value("Test"))
+                .andDo(print());
+    }
+
+    @Test
+    @WithMockMurengUser
+    public void 답변_상세_조회_테스트() throws Exception {
+        given(replyService.findById(eq(REPLY_ID))).willReturn(EntityCreator.createReplyEntity());
+
+        mockMvc.perform(
+                get("/api/reply/{replyId}", 1)
+                        .contentType(MediaType.APPLICATION_JSON)
+        ).andExpect(status().isOk())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.message").value("ok"))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.data.content").value("Test Reply"))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.data.replyLikeCount").value(2))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.data.question.content").value("This is english content."))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.data.author.nickname").value("Test"))
                 .andDo(print());
     }
 
