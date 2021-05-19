@@ -1,7 +1,6 @@
 package net.mureng.mureng.question.component;
 
 import net.mureng.mureng.common.EntityCreator;
-import net.mureng.mureng.member.entity.Member;
 import net.mureng.mureng.question.dto.QuestionDto;
 import net.mureng.mureng.question.dto.WordHintDto;
 import net.mureng.mureng.question.entity.Question;
@@ -41,7 +40,7 @@ class QuestionMapperTest {
 
     private final Question question = Question.builder()
             .questionId(1L)
-            .member(Member.builder().build())
+            .member(EntityCreator.createMemberEntity())
             .category("카테고리")
             .content("This is english content.")
             .koContent("이것은 한글 내용입니다.")
@@ -78,5 +77,14 @@ class QuestionMapperTest {
         assertEquals(question.getContent(), mappedEntity.getContent());
         assertEquals(question.getKoContent(), mappedEntity.getKoContent());
 //        assertEquals(question.getWordHints().size(), mappedEntity.getWordHints().size());
+    }
+
+    @Test
+    public void DTO에서_엔티티_사용자추가_변환_테스트() {
+        Question mappedEntity = questionMapper.toEntity(questionDto, EntityCreator.createMemberEntity());
+        assertEquals(question.getCategory(), mappedEntity.getCategory());
+        assertEquals(question.getContent(), mappedEntity.getContent());
+        assertEquals(question.getKoContent(), mappedEntity.getKoContent());
+        assertEquals(question.getMember().getMemberId(), mappedEntity.getMember().getMemberId());
     }
 }

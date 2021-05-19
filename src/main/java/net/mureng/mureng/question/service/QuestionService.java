@@ -41,4 +41,9 @@ public class QuestionService {
     public List<Question> getQuestionWrittenByMember(Long memberId){
         return questionRepository.findAllByMemberMemberIdOrderByRegDateDesc(memberId);
     }
+
+    @Transactional
+    public Question create(Question question){
+        return questionRepository.saveAndFlush(question);
+    }
 }

@@ -3,11 +3,9 @@ package net.mureng.mureng.question.web;
 import net.mureng.mureng.annotation.WithMockMurengUser;
 import net.mureng.mureng.common.EntityCreator;
 import net.mureng.mureng.core.dto.ApiPageRequest;
-import net.mureng.mureng.member.entity.Member;
 import net.mureng.mureng.question.entity.Question;
 import net.mureng.mureng.question.service.QuestionService;
 import net.mureng.mureng.reply.entity.Reply;
-import net.mureng.mureng.reply.service.ReplyService;
 import net.mureng.mureng.web.AbstractControllerTest;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -16,18 +14,19 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashSet;
 import java.util.List;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -36,6 +35,8 @@ public class QuestionControllerTest extends AbstractControllerTest {
     private QuestionService questionService;
 
     private static final Long QUESTION_ID = 1L;
+
+    private final String questionJsonString = "{\"content\": \"This is english content.\" }";
 
     @Nested
     @DisplayName("정렬 페이징 질문 목록 조회")
@@ -137,6 +138,21 @@ public class QuestionControllerTest extends AbstractControllerTest {
                 .andExpect(MockMvcResultMatchers.jsonPath("$.data[0].repliesCount").value(2))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.data[1].content").value("This is english content."))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.data[1].repliesCount").value(0))
+                .andDo(print());
+    }
+
+    @Test
+    @WithMockMurengUser
+    public void 질문_등록_테스트() throws Exception {
+        given(questionService.create(any())).willReturn(EntityCreator.createQuestionEntity());
+
+        mockMvc.perform(
+                post("/api/questions")
+                        .content(questionJsonString)
+                        .contentType(MediaType.APPLICATION_JSON)
+        ).andExpect(status().isOk())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.message").value("ok"))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.data.content").value("This is english content."))
                 .andDo(print());
     }
 }

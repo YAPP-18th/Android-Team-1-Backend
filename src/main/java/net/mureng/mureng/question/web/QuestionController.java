@@ -13,12 +13,6 @@ import net.mureng.mureng.question.component.QuestionMapper;
 import net.mureng.mureng.question.dto.QuestionDto;
 import net.mureng.mureng.question.entity.Question;
 import net.mureng.mureng.question.service.QuestionService;
-import net.mureng.mureng.reply.component.ReplyMapper;
-import net.mureng.mureng.reply.dto.ReplyDto;
-import net.mureng.mureng.reply.entity.Reply;
-import net.mureng.mureng.reply.service.ReplyService;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -65,4 +59,17 @@ public class QuestionController {
                         .collect(Collectors.toList())
         ));
     }
+
+    @ApiOperation(value = "질문 작성하기", notes = "사용자가 질문을 작성합니다.")
+    @PostMapping
+    public ResponseEntity<ApiResult<QuestionDto.ReadOnly>> createQuestion( @CurrentUser Member member,
+            @ApiParam(value = "Question Body", required = true) @RequestBody QuestionDto questionDto) {
+
+            Question question = questionMapper.toEntity(questionDto, member);
+
+        return ResponseEntity.ok(ApiResult.ok(
+                questionMapper.toDto(questionService.create(question))
+        ));
+    }
+
 }
