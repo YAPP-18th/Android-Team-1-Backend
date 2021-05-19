@@ -34,32 +34,6 @@ public class ReplyControllerTest extends AbstractControllerTest {
     @MockBean
     private ReplyService replyService;
 
-    private final Question question = Question.builder()
-            .questionId(1L)
-            .member(Member.builder().build())
-            .category("카테고리")
-            .content("This is english content.")
-            .koContent("이것은 한글 내용입니다.")
-            .regDate(LocalDateTime.parse("2020-10-14T11:00:00"))
-            .wordHints(new HashSet<>(List.of(
-                    WordHint.builder()
-                            .hintId(1L)
-                            .question(Question.builder().build())
-                            .word("apple")
-                            .meaning("사과")
-                            .regDate(LocalDateTime.parse("2020-10-14T11:00:00"))
-                            .build()
-            )))
-            .build();
-
-    private final Reply newReply = Reply.builder()
-            .replyId(1L)
-            .author(Member.builder().build())
-            .question(question)
-            .content("Test Reply")
-            .image("image-path")
-            .build();
-
     private final String newReplyJsonString = "{\"content\": \"Test Reply\",\n" +
             "  \"image\": \"image-path\" ,\n" +
             "  \"questionId\" : 1 }";
@@ -105,7 +79,7 @@ public class ReplyControllerTest extends AbstractControllerTest {
     @Test
     @WithMockMurengUser
     public void 답변_등록_테스트() throws Exception {
-        given(replyService.create(any())).willReturn(newReply);
+        given(replyService.create(any())).willReturn(EntityCreator.createReplyEntity());
 
         mockMvc.perform(
                 post("/api/reply")
@@ -122,7 +96,7 @@ public class ReplyControllerTest extends AbstractControllerTest {
     @Test
     @WithMockMurengUser
     public void 답변_수정_테스트() throws Exception {
-        given(replyService.update(any())).willReturn(newReply);
+        given(replyService.update(any())).willReturn(EntityCreator.createReplyEntity());
 
         mockMvc.perform(
                 put("/api/reply/1")

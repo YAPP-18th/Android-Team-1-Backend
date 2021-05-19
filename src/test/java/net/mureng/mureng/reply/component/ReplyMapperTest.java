@@ -7,7 +7,9 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import javax.swing.text.html.parser.Entity;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 class ReplyMapperTest {
@@ -27,6 +29,19 @@ class ReplyMapperTest {
         assertEquals(replyDto.getAuthor().getMemberId(), mappedDto.getAuthor().getMemberId());
         assertEquals(replyDto.getQuestion().getQuestionId(), mappedDto.getQuestion().getQuestionId());
         assertEquals(replyDto.getReplyLikeCount(), mappedDto.getReplyLikeCount());
+        assertNull(mappedDto.getRequestedByAuthor());
+    }
+
+    @Test
+    public void 엔티티에서_DTO변환_로그인사용자_테스트() {
+        ReplyDto.ReadOnly mappedDto = replyMapper.toDto(reply, EntityCreator.createMemberEntity());
+        assertEquals(replyDto.getReplyId(), mappedDto.getReplyId());
+        assertEquals(replyDto.getContent(), mappedDto.getContent());
+        assertEquals(replyDto.getContent(), mappedDto.getContent());
+        assertEquals(replyDto.getAuthor().getMemberId(), mappedDto.getAuthor().getMemberId());
+        assertEquals(replyDto.getQuestion().getQuestionId(), mappedDto.getQuestion().getQuestionId());
+        assertEquals(replyDto.getReplyLikeCount(), mappedDto.getReplyLikeCount());
+        assertEquals(replyDto.getRequestedByAuthor(), mappedDto.getRequestedByAuthor());
     }
 
     @Test

@@ -31,9 +31,6 @@ public class ReplyDto {
     @ApiModelProperty(value = "이미지 경로", required = true, position = 3)
     private String image;
 
-    @ApiModelProperty(value = "작성 날짜", position = 4)
-    private LocalDate regDate;
-
     @SuperBuilder
     @Getter @Setter
     @NoArgsConstructor
@@ -43,6 +40,9 @@ public class ReplyDto {
         @ApiModelProperty(value = "답변 기본키", accessMode = ApiModelProperty.AccessMode.READ_ONLY, position = 0)
         private Long replyId;
 
+        @ApiModelProperty(value = "작성 날짜", position = 4)
+        private LocalDate regDate;
+
         @ApiModelProperty(value = "좋아요 갯수", accessMode = ApiModelProperty.AccessMode.READ_ONLY, position = 5)
         private int replyLikeCount;
 
@@ -51,5 +51,9 @@ public class ReplyDto {
 
         @ApiModelProperty(value = "작성자 회원 모델", accessMode = ApiModelProperty.AccessMode.READ_ONLY, position = 7)
         private MemberDto.ReadOnly author;
+
+        @ApiModelProperty(value = "이 답변이 요청자 본인의 것인지 여부, null 인 경우 확인 불가",
+                accessMode = ApiModelProperty.AccessMode.READ_ONLY, position = 8)
+        private Boolean requestedByAuthor;
     }
 }
