@@ -58,9 +58,6 @@ class MemberControllerTest extends AbstractControllerTest {
     @MockBean
     MemberSignupService memberSignupService;
 
-    @MockBean
-    ReplyService replyService;
-
     @Test
     public void 사용자_회원가입_테스트() throws Exception {
         given(memberSignupService.signup(any())).willReturn(newMember);
@@ -107,31 +104,14 @@ class MemberControllerTest extends AbstractControllerTest {
 
     @Test
     @WithMockMurengUser
-    public void 사용자_답변_목록_조회_테스트() throws Exception {
-        Member member = EntityCreator.createMemberEntity();
-        List<Reply> replies = Arrays.asList(EntityCreator.createReplyEntity(), EntityCreator.createReplyEntity());
-
-        given(replyService.findRepliesByMemberId(eq(1L))).willReturn(replies);
-
+    public void 로그인한_사용자_가져오기_테스트() throws Exception {
         mockMvc.perform(
-                get("/api/member/replies")
+                get("/api/member/me")
                         .contentType(MediaType.APPLICATION_JSON)
         ).andExpect(status().isOk())
                 .andExpect(MockMvcResultMatchers.jsonPath("$.message").value("ok"))
-                .andDo(print());
-    }
-
-    @Test
-    @WithMockMurengUser
-    public void 사용자_오늘_답변했는지_테스트() throws Exception {
-        given(replyService.isAlreadyReplied(eq(1L))).willReturn(true);
-
-        mockMvc.perform(
-                get("/api/member/check-replied-today")
-                .contentType(MediaType.APPLICATION_JSON)
-        ).andExpect(status().isOk())
-                .andExpect(MockMvcResultMatchers.jsonPath("$.message").value("ok"))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.data.replied").value(true))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.data.memberId").value(1))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.data.nickname").value("Test"))
                 .andDo(print());
     }
 }
