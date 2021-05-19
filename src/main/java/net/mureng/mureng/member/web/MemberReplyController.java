@@ -8,22 +8,17 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import net.mureng.mureng.core.annotation.CurrentUser;
 import net.mureng.mureng.core.dto.ApiResult;
-import net.mureng.mureng.core.jwt.dto.TokenDto;
-import net.mureng.mureng.core.oauth2.dto.OAuth2Profile;
-import net.mureng.mureng.core.oauth2.service.OAuth2Service;
-import net.mureng.mureng.member.component.MemberMapper;
-import net.mureng.mureng.member.dto.MemberDto;
 import net.mureng.mureng.member.entity.Member;
-import net.mureng.mureng.member.service.MemberService;
-import net.mureng.mureng.member.service.MemberSignupService;
 import net.mureng.mureng.reply.component.ReplyMapper;
 import net.mureng.mureng.reply.dto.ReplyDto;
 import net.mureng.mureng.reply.service.ReplyService;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 import springfox.documentation.annotations.ApiIgnore;
 
-import javax.validation.Valid;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -35,13 +30,14 @@ public class MemberReplyController {
     private final ReplyService replyService;
     private final ReplyMapper replyMapper;
 
-    @ApiOperation(value = "사용자가 답변한 질문 목록 조회", notes = "사용자가 답변한 질문 목록을 가져옵니다.")
-    @GetMapping("/replies")
+    @ApiOperation(value = "사용자 답변 목록 조회", notes = "사용자의 답변 목록을 가져옵니다.")
+    @GetMapping("/{memberId}/replies")
     public ResponseEntity<ApiResult<List<ReplyDto.ReadOnly>>> getQuestionMemberReplied(
-            @CurrentUser Member member){
+            @ApiParam(value = "사용자 id", required = true)
+            @PathVariable Long memberId){
         return ResponseEntity.ok(
                 ApiResult.ok(
-                        replyService.findRepliesByMemberId(member.getMemberId()).stream()
+                        replyService.findRepliesByMemberId(memberId).stream()
                         .map(replyMapper::toDto)
                         .collect(Collectors.toList())
                 )
