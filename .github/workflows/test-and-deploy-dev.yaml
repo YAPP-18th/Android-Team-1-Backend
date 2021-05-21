@@ -25,8 +25,24 @@ jobs:
           distribution: 'adopt'
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
-      - name: Build with Gradle
-        run: ./gradlew build test
+      - name: Gradle 빌드 캐싱
+        id: gradle-cache
+        uses: actions/cache@v2
+        with:
+          path: |
+             ~/.gradle/caches
+             ~/.gradle/wrapper
+          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
+          restore-keys: |
+              ${{ runner.os }}-gradle-
+      - name: Gradle 테스트 및 실행파일 생성
+        run: ./gradlew build test bootJar
+
+      - uses: actions/upload-artifact@v2
+        name: 생성한 파일 업로드
+        with:
+          name: mureng-app-dev-artifact
+          path: ${{ github.workspace }}/build/libs/mureng-0.0.1-SNAPSHOT.jar
   deployment:
     name: 빌드, 푸쉬 후 개발에 배포
     needs: test
@@ -35,11 +51,36 @@ jobs:
       - name: 소스코드 체크아웃
         uses: actions/checkout@v2
 
+      - name: 업로드한 파일 다운로드
+        uses: actions/download-artifact@v2
+        with:
+          name: mureng-app-dev-artifact
+
+      - name: 업로드한 파일 빌드 경로로 위치
+        run: |
+          mkdir build
+          mkdir build/libs
+          mv mureng-0.0.1-SNAPSHOT.jar build/libs/
+
       - name: SHA 업데이트
         run: echo $GITHUB_SHA > $GITHUB_WORKSPACE/_meta
 
-      - name: 컨테이너 이미지 빌드
-        run: docker build -t docker.io/hygoogi/mureng:$(echo $GITHUB_SHA | head -c7) .
+      - name: 이미지 태그 준비
+        id: get-tag
+        run: |
+          tag=$(echo $GITHUB_SHA | head -c7)
+          echo "::set-output name=tag::$tag"
+
+      - name: 도커 캐싱 준비
+        uses: docker/setup-buildx-action@v1
+
+      - name: 도커 레이어 캐싱
+        uses: actions/cache@v2
+        with:
+          path: /tmp/.buildx-cache
+          key: ${{ runner.os }}-buildx-${{ github.sha }}
+          restore-keys: |
+            ${{ runner.os }}-buildx-
 
       - name: 도커 로그인
         env:
@@ -47,11 +88,22 @@ jobs:
           DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
         run: docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
 
-      - name: Docker Hub에 이미지 푸쉬
-        run: docker push docker.io/hygoogi/mureng:$(echo $GITHUB_SHA | head -c7)
+      - name: 컨테이너 이미지 빌드 및 이미지 푸쉬
+        uses: docker/build-push-action@v2
+        with:
+          context: .
+          push: true
+          tags: docker.io/hygoogi/mureng:${{ steps.get-tag.outputs.tag }}
+          cache-from: type=local,src=/tmp/.buildx-cache
+          cache-to: type=local,dest=/tmp/.buildx-cache-new
+
+      - name: 캐시 삭제
+        run: |
+          rm -rf /tmp/.buildx-cache
+          mv /tmp/.buildx-cache-new /tmp/.buildx-cache
 
       - name: 배포파일 업데이트
-        run: TAG=$(echo $GITHUB_SHA | head -c7) && sed -i 's|<IMAGE>|docker.io/hygoogi/mureng:'${TAG}'|' $GITHUB_WORKSPACE/deployment/deployment-dev.yml
+        run: TAG=${{ steps.get-tag.outputs.tag }} && sed -i 's|<IMAGE>|docker.io/hygoogi/mureng:'${TAG}'|' $GITHUB_WORKSPACE/deployment/deployment-dev.yml
 
       - name: 환경변수 치환 후 최종 배포 파일 생성
         uses: danielr1996/envsubst-action@1.0.0
@@ -66,17 +118,16 @@ jobs:
           output: deploy.yml
 
       - name: 클러스터에 배포
-        uses: steebchen/kubectl@master
+        uses: NaLDo627/kubectl@master
         env:
           KUBE_CONFIG_DATA: ${{ secrets.KUBE_CONFIG_DATA }}
         with:
           args: apply -f deploy.yml
 
       - name: 배포 확인
-        uses: steebchen/kubectl@master
+        uses: NaLDo627/kubectl@master
         env:
           KUBE_CONFIG_DATA: ${{ secrets.KUBE_CONFIG_DATA }}
-          KUBECTL_VERSION: "1.15"
         with:
           args: '"rollout status deployment/mureng-app-dev-deployment"'
   notification-success:
