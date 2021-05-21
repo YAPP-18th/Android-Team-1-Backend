@@ -2,6 +2,7 @@ package net.mureng.mureng.member.service;
 
 import lombok.RequiredArgsConstructor;
 import net.mureng.mureng.core.exception.BadRequestException;
+import net.mureng.mureng.core.exception.ResourceNotFoundException;
 import net.mureng.mureng.member.entity.Member;
 import net.mureng.mureng.member.repository.MemberRepository;
 import org.springframework.stereotype.Service;
@@ -9,7 +10,6 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
 
 import javax.validation.Valid;
-import java.util.Optional;
 
 @Validated
 @Service
@@ -35,9 +35,10 @@ public class MemberService {
     public boolean isEmailExist(String email) { return memberRepository.existsByEmail(email); }
 
     @Transactional(readOnly = true)
-    public Optional<Member> findByEmail(String email) { return memberRepository.findByEmail(email); }
+    public Member findByEmail(String email) { return memberRepository.findByEmail(email)
+            .orElseThrow(() -> new ResourceNotFoundException("존재하지 않는 사용자에 대한 요청입니다.")); }
 
     @Transactional(readOnly = true)
     public Member findById(Long memberId) { return memberRepository.findById(memberId)
-            .orElseThrow(()->new BadRequestException("존재하지 않는 사용자에 대한 요청입니다.")); }
+            .orElseThrow(()->new ResourceNotFoundException("존재하지 않는 사용자에 대한 요청입니다.")); }
 }
