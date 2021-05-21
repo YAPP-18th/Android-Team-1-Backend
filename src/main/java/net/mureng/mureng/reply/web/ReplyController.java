@@ -53,7 +53,7 @@ public class ReplyController {
         public ResponseEntity<ApiResult<ReplyDto.ReadOnly>> create(@CurrentUser Member member,
                 @RequestBody @Valid ReplyDto replyDto){
 
-            Reply newReply = replyMapper.toEntity(replyDto, member, Question.builder().build());
+            Reply newReply = replyMapper.toEntity(replyDto, member, Question.builder().questionId(replyDto.getQuestionId()).build());
 
             return ResponseEntity.ok(ApiResult.ok(replyMapper.toDto(
                 replyService.create(newReply), member

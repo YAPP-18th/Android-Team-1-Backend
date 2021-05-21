@@ -45,7 +45,7 @@ public interface ReplyMapper extends EntityMapper<Reply, ReplyDto> {
     @Mapping(target = "replyLikes", ignore = true)
     @Mapping(target = "image", expression = "java(replyDto.getImage())")
     @Mapping(target = "content", expression = "java(replyDto.getContent())")
-    @Mapping(source = "replyDto.questionId", target = "question.questionId")
+    @Mapping(source = "question", target = "question")
     Reply toEntity(ReplyDto replyDto, Member author, Question question);
 
     @Mapping(target = "question", ignore = true)

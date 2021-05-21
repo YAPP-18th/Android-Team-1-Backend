@@ -51,7 +51,8 @@ class ReplyMapperTest {
 
     @Test
     public void DTO에서_엔티티변환_답변생성할때_테스트() {
-        Reply mappedEntity = replyMapper.toEntity(replyDto, EntityCreator.createMemberEntity(), Question.builder().build());
+        Reply mappedEntity = replyMapper.toEntity(replyDto, EntityCreator.createMemberEntity(), Question.builder().questionId(replyDto.getQuestionId()).build());
+        assertEquals(replyDto.getQuestionId(), mappedEntity.getQuestion().getQuestionId());
         assertEquals(reply.getContent(), mappedEntity.getContent());
         assertEquals(reply.getAuthor().getEmail(), mappedEntity.getAuthor().getEmail());
     }
