@@ -2,7 +2,6 @@ package net.mureng.mureng.member.service;
 
 import lombok.RequiredArgsConstructor;
 import net.mureng.mureng.core.exception.BadRequestException;
-import net.mureng.mureng.core.exception.MurengException;
 import net.mureng.mureng.member.entity.Member;
 import net.mureng.mureng.member.repository.MemberRepository;
 import org.springframework.stereotype.Service;
@@ -37,4 +36,8 @@ public class MemberService {
 
     @Transactional(readOnly = true)
     public Optional<Member> findByEmail(String email) { return memberRepository.findByEmail(email); }
+
+    @Transactional(readOnly = true)
+    public Member findById(Long memberId) { return memberRepository.findById(memberId)
+            .orElseThrow(()->new BadRequestException("존재하지 않는 사용자에 대한 요청입니다.")); }
 }

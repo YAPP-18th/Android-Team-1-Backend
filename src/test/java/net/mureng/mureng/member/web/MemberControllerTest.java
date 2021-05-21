@@ -7,8 +7,6 @@ import net.mureng.mureng.member.entity.MemberAttendance;
 import net.mureng.mureng.member.entity.MemberSetting;
 import net.mureng.mureng.member.service.MemberService;
 import net.mureng.mureng.member.service.MemberSignupService;
-import net.mureng.mureng.reply.entity.Reply;
-import net.mureng.mureng.reply.service.ReplyService;
 import net.mureng.mureng.web.AbstractControllerTest;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -16,8 +14,6 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 import java.time.LocalDate;
-import java.util.Arrays;
-import java.util.List;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
@@ -113,5 +109,21 @@ class MemberControllerTest extends AbstractControllerTest {
                 .andExpect(MockMvcResultMatchers.jsonPath("$.data.memberId").value(1))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.data.nickname").value("Test"))
                 .andDo(print());
+    }
+
+    @Test
+    @WithMockMurengUser
+    public void 사용자_프로필_가져오기_테스트() throws Exception {
+        given(memberService.findById(eq(1L))).willReturn(EntityCreator.createMemberEntity());
+
+        mockMvc.perform(
+                get("/api/member/{memberId}", 1)
+                        .contentType(MediaType.APPLICATION_JSON)
+        ).andExpect(status().isOk())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.message").value("ok"))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.data.memberId").value(1))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.data.nickname").value("Test"))
+                .andDo(print());
+
     }
 }
