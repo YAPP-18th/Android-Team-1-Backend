@@ -16,16 +16,11 @@ import net.mureng.mureng.member.dto.MemberDto;
 import net.mureng.mureng.member.entity.Member;
 import net.mureng.mureng.member.service.MemberService;
 import net.mureng.mureng.member.service.MemberSignupService;
-import net.mureng.mureng.reply.component.ReplyMapper;
-import net.mureng.mureng.reply.dto.ReplyDto;
-import net.mureng.mureng.reply.service.ReplyService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import springfox.documentation.annotations.ApiIgnore;
 
 import javax.validation.Valid;
-import java.util.List;
-import java.util.stream.Collectors;
 
 @Api(value = "회원 관련 엔드포인트")
 @RestController
@@ -77,6 +72,17 @@ public class MemberController {
     public ResponseEntity<ApiResult<MemberDto.ReadOnly>> me(@CurrentUser Member member) {
         return ResponseEntity.ok(ApiResult.ok(memberMapper.toDto(member)));
     }
+
+    @ApiOperation(value = "특정 사용자의 프로필 가져오기", notes = "특정 사용자의 프로필 정보를 가져옵니다.")
+    @GetMapping("/{memberId}")
+    public ResponseEntity<ApiResult<MemberDto.ReadOnly>> getMemberProfile(
+            @ApiParam(value = "사용자 id", required = true) @PathVariable Long memberId ) {
+        return ResponseEntity.ok(ApiResult.ok(
+                memberMapper.toDto(memberService.findById(memberId))
+        ));
+    }
+
+
 
     @ApiIgnore
     @AllArgsConstructor
