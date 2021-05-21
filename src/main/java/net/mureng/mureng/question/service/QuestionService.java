@@ -27,7 +27,7 @@ public class QuestionService {
     }
 
     @Transactional(readOnly = true)
-    public boolean isAlreadyReplied(Long questionId, Long memberId) { return questionRepository.existsByQuestionIdAndMemberMemberId(questionId, memberId); }
+    public boolean isAlreadyReplied(Long questionId, Long memberId) { return questionRepository.existsByQuestionIdAndAuthorMemberId(questionId, memberId); }
 
     @Transactional(readOnly = true)
     public Page<Question> getQuestionList(ApiPageRequest pageRequest) {
@@ -39,7 +39,7 @@ public class QuestionService {
 
     @Transactional(readOnly = true)
     public List<Question> getQuestionWrittenByMember(Long memberId){
-        return questionRepository.findAllByMemberMemberIdOrderByRegDateDesc(memberId);
+        return questionRepository.findAllByAuthorMemberIdOrderByRegDateDesc(memberId);
     }
 
     @Transactional

@@ -40,7 +40,7 @@ class QuestionMapperTest {
 
     private final Question question = Question.builder()
             .questionId(1L)
-            .member(EntityCreator.createMemberEntity())
+            .author(EntityCreator.createMemberEntity())
             .category("카테고리")
             .content("This is english content.")
             .koContent("이것은 한글 내용입니다.")
@@ -51,6 +51,7 @@ class QuestionMapperTest {
 
     private final QuestionDto.ReadOnly questionDto = QuestionDto.ReadOnly.builder()
             .questionId(1L)
+            .author(EntityCreator.createMemberDto())
             .category("카테고리")
             .content("This is english content.")
             .koContent("이것은 한글 내용입니다.")
@@ -67,6 +68,7 @@ class QuestionMapperTest {
         assertEquals(questionDto.getKoContent(), mappedDto.getKoContent());
         assertEquals(questionDto.getWordHints().size(), mappedDto.getWordHints().size());
         assertEquals(questionDto.getRepliesCount(), mappedDto.getRepliesCount());
+        assertEquals(questionDto.getAuthor().getMemberId(), mappedDto.getAuthor().getMemberId());
     }
 
     @Test
@@ -85,6 +87,6 @@ class QuestionMapperTest {
         assertEquals(question.getCategory(), mappedEntity.getCategory());
         assertEquals(question.getContent(), mappedEntity.getContent());
         assertEquals(question.getKoContent(), mappedEntity.getKoContent());
-        assertEquals(question.getMember().getMemberId(), mappedEntity.getMember().getMemberId());
+        assertEquals(question.getAuthor().getMemberId(), mappedEntity.getAuthor().getMemberId());
     }
 }
