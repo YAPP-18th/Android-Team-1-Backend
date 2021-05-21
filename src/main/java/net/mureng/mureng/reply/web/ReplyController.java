@@ -53,9 +53,7 @@ public class ReplyController {
         public ResponseEntity<ApiResult<ReplyDto.ReadOnly>> create(@CurrentUser Member member,
                 @RequestBody @Valid ReplyDto replyDto){
 
-            Reply newReply = replyMapper.toEntity(replyDto);
-            newReply.setAuthor(member);
-            newReply.setQuestion(Question.builder().questionId(replyDto.getQuestionId()).build());
+            Reply newReply = replyMapper.toEntity(replyDto, member, Question.builder().build());
 
             return ResponseEntity.ok(ApiResult.ok(replyMapper.toDto(
                 replyService.create(newReply), member
@@ -68,9 +66,7 @@ public class ReplyController {
                                             @RequestBody @Valid ReplyDto replyDto,
                                             @PathVariable @NotNull Long replyId){
 
-        Reply newReply = replyMapper.toEntity(replyDto);
-        newReply.setAuthor(member);
-        newReply.setReplyId(replyId);
+        Reply newReply = replyMapper.toEntity(replyDto, member, replyId);
 
         return ResponseEntity.ok(ApiResult.ok(replyMapper.toDto(
                 replyService.update(newReply), member
