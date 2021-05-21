@@ -41,22 +41,22 @@ public class QuestionRepositoryTest {
 
         Question question = questions.get(0);
 
-        assertEquals(MEMBER_ID, question.getMember().getMemberId());
+        assertEquals(MEMBER_ID, question.getAuthor().getMemberId());
         assertEquals("what is your favorite color?", question.getContent());
         assertEquals("당신이 가장 좋아하는 색은 무엇인가요?", question.getKoContent());
     }
 
     @Test
     public void 멤버로_질문_목록_조회(){
-        List<Question> questions = questionRepository.findAllByMemberMemberIdOrderByRegDateDesc(MEMBER_ID);
+        List<Question> questions = questionRepository.findAllByAuthorMemberIdOrderByRegDateDesc(MEMBER_ID);
 
         assertEquals(2, questions.size());
 
-        assertEquals(MEMBER_ID, questions.get(0).getMember().getMemberId());
+        assertEquals(MEMBER_ID, questions.get(0).getAuthor().getMemberId());
         assertEquals("How did you feel when you first heard the mureng?", questions.get(0).getContent());
         assertEquals("머렝을 처음 들었을 때 어떤 느낌이 들었나요?", questions.get(0).getKoContent());
 
-        assertEquals(MEMBER_ID, questions.get(1).getMember().getMemberId());
+        assertEquals(MEMBER_ID, questions.get(1).getAuthor().getMemberId());
         assertEquals("what is your favorite color?", questions.get(1).getContent());
         assertEquals("당신이 가장 좋아하는 색은 무엇인가요?", questions.get(1).getKoContent());
     }
@@ -66,8 +66,8 @@ public class QuestionRepositoryTest {
         long alreadyRepliedMemberId = 1;
         long notRepliedMemberId = 3;
 
-        boolean isExist = questionRepository.existsByQuestionIdAndMemberMemberId(1L, alreadyRepliedMemberId);
-        boolean isExist2 = questionRepository.existsByQuestionIdAndMemberMemberId(1L, notRepliedMemberId);
+        boolean isExist = questionRepository.existsByQuestionIdAndAuthorMemberId(1L, alreadyRepliedMemberId);
+        boolean isExist2 = questionRepository.existsByQuestionIdAndAuthorMemberId(1L, notRepliedMemberId);
 
         assertTrue(isExist);
         assertFalse(isExist2);

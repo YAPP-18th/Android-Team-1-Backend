@@ -1,29 +1,20 @@
 package net.mureng.mureng.question.web;
 
 import net.mureng.mureng.annotation.WithMockMurengUser;
-import net.mureng.mureng.core.dto.UserDetailsImpl;
 import net.mureng.mureng.member.entity.Member;
-import net.mureng.mureng.member.repository.MemberRepository;
-import net.mureng.mureng.member.service.MemberService;
-import net.mureng.mureng.member.service.UserDetailsServiceImpl;
 import net.mureng.mureng.question.entity.Question;
 import net.mureng.mureng.question.entity.WordHint;
 import net.mureng.mureng.question.service.TodayQuestionSelectionService;
 import net.mureng.mureng.question.service.TodayQuestionService;
 import net.mureng.mureng.web.AbstractControllerTest;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
-import org.springframework.security.test.context.support.WithMockUser;
-import org.springframework.security.test.context.support.WithUserDetails;
-import org.springframework.test.web.servlet.request.RequestPostProcessor;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Optional;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
@@ -40,7 +31,7 @@ class TodayQuestionControllerTest extends AbstractControllerTest {
 
     private final Question question = Question.builder()
             .questionId(1L)
-            .member(Member.builder().build())
+            .author(Member.builder().build())
             .category("카테고리")
             .content("This is english content.")
             .koContent("이것은 한글 내용입니다.")

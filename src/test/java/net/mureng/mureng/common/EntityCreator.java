@@ -24,7 +24,7 @@ public class EntityCreator {
     public static Question createQuestionEntity(){
         return Question.builder()
                 .questionId(QUESTION_ID)
-                .member(EntityCreator.createMemberEntity())
+                .author(EntityCreator.createMemberEntity())
                 .category("카테고리")
                 .content("This is english content.")
                 .koContent("이것은 한글 내용입니다.")
@@ -93,6 +93,7 @@ public class EntityCreator {
                 .category("카테고리")
                 .content("This is english content.")
                 .koContent("이것은 한글 내용입니다.")
+                .author(createMemberDto())
                 .wordHints(Set.of(createWordHintDto()))
                 .repliesCount(2)
                 .build();

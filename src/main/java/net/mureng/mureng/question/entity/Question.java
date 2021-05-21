@@ -26,7 +26,7 @@ public class Question {
 
     @ManyToOne
     @JoinColumn(name = "member_id")
-    private Member member;
+    private Member author;
 
     @Column(length = 20)
     private String category;
