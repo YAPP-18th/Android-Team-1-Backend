@@ -57,6 +57,7 @@ public class EntityCreator {
                 .memberId(MEMBER_ID)
                 .identifier("123")
                 .email("test@email.com")
+                .image("test-image")
                 .isActive(true)
                 .nickname("Test")
                 .regDate(LocalDateTime.of(2020, 10, 14, 17, 11, 9))
