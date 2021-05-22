@@ -58,9 +58,9 @@ jobs:
 
       - name: 업로드한 파일 빌드 경로로 위치
         run: |
-          mkdir build
-          mkdir build/libs
-          mv mureng-api-0.0.1-SNAPSHOT.jar build/libs/
+          mkdir mureng-api/build
+          mkdir mureng-api/build/libs
+          mv mureng-api-0.0.1-SNAPSHOT.jar mureng-api/build/libs/
 
       - name: SHA 업데이트
         run: echo $GITHUB_SHA > $GITHUB_WORKSPACE/_meta
