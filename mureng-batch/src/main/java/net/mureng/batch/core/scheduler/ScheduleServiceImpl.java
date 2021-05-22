@@ -1,9 +1,8 @@
-package net.mureng.batch.core.scheduler.service;
+package net.mureng.batch.core.scheduler;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import net.mureng.batch.core.scheduler.JobRequest;
-import net.mureng.batch.core.scheduler.util.JobUtils;
+import net.mureng.batch.core.job.ScheduledJob;
 import org.quartz.*;
 import org.springframework.context.ApplicationContext;
 import org.springframework.scheduling.quartz.SchedulerFactoryBean;
@@ -20,18 +19,14 @@ public class ScheduleServiceImpl implements ScheduleService {
     private final ApplicationContext context;
 
     @Override
-    public boolean addJob(JobRequest jobRequest, Class<? extends Job> jobClass) {
+    public boolean addJob(ScheduledJob scheduledJob) {
         //todo : job history에도 기록하도록 함.
 
-        JobKey jobKey = null;
-        JobDetail jobDetail;
-        Trigger trigger;
+        Trigger trigger = scheduledJob.getTrigger();
+        JobDetail jobDetail = scheduledJob.getJobDetail();
+        JobKey jobKey = JobKey.jobKey(scheduledJob.getJobName(), scheduledJob.getJobGroup());
 
         try {
-            trigger = JobUtils.createTrigger(jobRequest);
-            jobDetail = JobUtils.createJob(jobRequest, jobClass, context);
-            jobKey = JobKey.jobKey(jobRequest.getJobName(), jobRequest.getJobGroup());
-
             Date dt = schedulerFactoryBean.getScheduler().scheduleJob(jobDetail, trigger);
             log.debug("Job with jobKey : {} scheduled successfully at date : {}", jobDetail.getKey(), dt);
             return true;

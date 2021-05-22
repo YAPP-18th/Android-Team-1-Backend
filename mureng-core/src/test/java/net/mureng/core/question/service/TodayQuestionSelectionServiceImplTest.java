@@ -1,4 +1,4 @@
-package net.mureng.api.question.service;
+package net.mureng.core.question.service;
 
 import net.mureng.core.common.EntityCreator;
 import net.mureng.core.core.component.NumberRandomizer;
@@ -7,6 +7,7 @@ import net.mureng.core.member.entity.Member;
 import net.mureng.core.question.entity.Question;
 import net.mureng.core.question.repository.QuestionRepository;
 import net.mureng.core.question.service.QuestionService;
+import net.mureng.core.question.service.TodayQuestionSelectionServiceImpl;
 import net.mureng.core.question.service.TodayQuestionService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

@@ -1,7 +1,7 @@
 package net.mureng.api.question.web;
 
 import net.mureng.api.annotation.WithMockMurengUser;
-import net.mureng.api.question.service.TodayQuestionSelectionService;
+import net.mureng.core.question.service.TodayQuestionSelectionService;
 import net.mureng.core.member.entity.Member;
 import net.mureng.core.question.entity.Question;
 import net.mureng.core.question.entity.WordHint;
