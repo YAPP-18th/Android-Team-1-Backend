@@ -42,7 +42,7 @@ jobs:
         name: 생성한 파일 업로드
         with:
           name: mureng-app-dev-artifact
-          path: ${{ github.workspace }}/build/libs/mureng-0.0.1-SNAPSHOT.jar
+          path: ${{ github.workspace }}/mureng-api/build/libs/mureng-api-0.0.1-SNAPSHOT.jar
   deployment:
     name: 빌드, 푸쉬 후 개발에 배포
     needs: test
@@ -60,7 +60,7 @@ jobs:
         run: |
           mkdir build
           mkdir build/libs
-          mv mureng-0.0.1-SNAPSHOT.jar build/libs/
+          mv mureng-api-0.0.1-SNAPSHOT.jar build/libs/
 
       - name: SHA 업데이트
         run: echo $GITHUB_SHA > $GITHUB_WORKSPACE/_meta

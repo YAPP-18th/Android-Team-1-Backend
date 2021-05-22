@@ -1,0 +1,3 @@
+spring:
+    datasource:
+      data: classpath:local-test-data.sql
