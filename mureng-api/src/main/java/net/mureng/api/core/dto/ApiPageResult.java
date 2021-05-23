@@ -21,14 +21,14 @@ public class ApiPageResult<T> extends ApiResult<List<T>> {
     private final int pageSize;
 
     @ApiModelProperty(value = "전체 답변 개수",  position = 5)
-    private final long totalNum;
+    private final long totalElements;
 
     public ApiPageResult(Page<T> data, String message) {
         super(message, data.getContent());
         this.currentPage = data.getPageable().getPageNumber();
         this.pageSize = data.getPageable().getPageSize();
         this.totalPage = data.getTotalPages();
-        this.totalNum = data.getTotalElements();
+        this.totalElements = data.getTotalElements();
     }
 
     public static <T> ApiPageResult<T> ok(Page<T> data) {
