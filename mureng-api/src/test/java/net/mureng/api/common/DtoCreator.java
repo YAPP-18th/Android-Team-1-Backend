@@ -48,7 +48,7 @@ public class DtoCreator {
                 .image("image-path")
                 .replyLikeCount(2)
                 .requestedByAuthor(true)
-                .LikedByMember(true)
+                .likedByRequester(true)
                 .build();
     }
 

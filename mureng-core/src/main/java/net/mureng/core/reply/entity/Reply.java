@@ -66,7 +66,7 @@ public class Reply {
         return this.author.getMemberId() == member.getMemberId();
     }
 
-    public boolean likedByMember(Member member){
+    public boolean likedByRequester(Member member){
         for(ReplyLikes replyLikes : this.replyLikes){
             if(replyLikes.getId().getMemberId() == member.getMemberId())
                 return true;

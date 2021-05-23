@@ -72,7 +72,7 @@ public class ReplyDto {
         @ApiModelProperty(value = "해당 답변에 대해 요청자가 좋아요를 눌렀는 지",
                 accessMode = ApiModelProperty.AccessMode.READ_ONLY, position = PropertyDisplayOrder.LIKED_BY_MEMBER)
         @JsonProperty(index = PropertyDisplayOrder.LIKED_BY_MEMBER)
-        private Boolean LikedByMember;
+        private Boolean likedByRequester;
     }
 
     private static class PropertyDisplayOrder {
