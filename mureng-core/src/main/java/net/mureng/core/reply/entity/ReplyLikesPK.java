@@ -29,7 +29,6 @@ public class ReplyLikesPK implements Serializable {
     }
 
     @Builder
-
     public ReplyLikesPK(Long replyId, Long memberId) {
         this.replyId = replyId;
         this.memberId = memberId;

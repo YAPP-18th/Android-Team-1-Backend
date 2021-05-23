@@ -64,7 +64,7 @@ public class EntityCreator {
     public static ReplyLikes createReplyLikesEntity() {
         return ReplyLikes.builder()
                 .member(createMemberEntity())
-//                .reply(createReplyEntity())
+                .reply(Reply.builder().replyId(1L).build())
                 .regDate(LocalDateTime.of(2020, 10, 14, 17, 11, 9))
                 .build();
     }

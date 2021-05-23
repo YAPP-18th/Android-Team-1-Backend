@@ -3,6 +3,8 @@ package net.mureng.api.reply.web;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import net.mureng.api.core.annotation.CurrentUser;
 import net.mureng.api.core.dto.ApiPageRequest;
@@ -17,6 +19,7 @@ import net.mureng.core.reply.entity.Reply;
 import net.mureng.core.reply.service.ReplyService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import springfox.documentation.annotations.ApiIgnore;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
@@ -77,9 +80,16 @@ public class ReplyController {
 
     @ApiOperation(value = "답변 삭제하기", notes = "답변을 삭제합니다.")
     @DeleteMapping("/{replyId}")
-    public ResponseEntity<ApiResult<Boolean>> deleteReply(@CurrentUser Member member,
+    public ResponseEntity<ApiResult<DeletedDto>> deleteReply(@CurrentUser Member member,
                                                           @PathVariable @NotNull Long replyId){
         replyService.delete(member, replyId);
-        return ResponseEntity.ok(ApiResult.ok(true));
+        return ResponseEntity.ok(ApiResult.ok(new DeletedDto(true)));
+    }
+
+    @ApiIgnore
+    @AllArgsConstructor
+    @Getter
+    public static class DeletedDto{
+        private final boolean deleted;
     }
 }
