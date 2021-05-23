@@ -4,6 +4,7 @@ import net.mureng.api.member.dto.MemberDto;
 import net.mureng.api.question.dto.QuestionDto;
 import net.mureng.api.question.dto.WordHintDto;
 import net.mureng.api.reply.dto.ReplyDto;
+import net.mureng.api.reply.dto.ReplyLikesDto;
 
 import java.util.Set;
 
@@ -47,6 +48,13 @@ public class DtoCreator {
                 .image("image-path")
                 .replyLikeCount(2)
                 .requestedByAuthor(true)
+                .build();
+    }
+
+    public static ReplyLikesDto createReplyLikesDto(){
+        return ReplyLikesDto.builder()
+                .replyId(1L)
+                .memberId(1L)
                 .build();
     }
 
