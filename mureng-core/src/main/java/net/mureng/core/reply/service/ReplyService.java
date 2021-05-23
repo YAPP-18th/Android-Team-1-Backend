@@ -68,7 +68,7 @@ public class ReplyService {
         Reply oldReply = replyRepository.findById(replyId)
                 .orElseThrow(() -> new BadRequestException("존재하지 않는 질문에 대한 요청입니다."));
 
-        if (!oldReply.isWriter(newReply.getAuthor()))
+        if (!oldReply.isAuthor(newReply.getAuthor()))
             throw new AccessNotAllowedException("접근 권한이 없습니다.");
 
         oldReply.modifyReply(newReply);
@@ -81,12 +81,13 @@ public class ReplyService {
         Reply reply = replyRepository.findById(replyId)
                 .orElseThrow(() -> new BadRequestException("존재하지 않는 답변에 대한 요청입니다."));
 
-        if (!reply.isWriter(member))
+        if (!reply.isAuthor(member))
             throw new AccessNotAllowedException("접근 권한이 없습니다.");
 
         replyRepository.deleteById(replyId);
     }
 
+    @Transactional(readOnly = true)
     public Reply findReplyByQuestionIdAndMember(Long memberId, Long questionId) {
         return replyRepository.findByAuthorMemberIdAndQuestionQuestionId(memberId, questionId)
                 .orElseThrow(() -> new ResourceNotFoundException("사용자 답변이 존재하지 않습니다."));
