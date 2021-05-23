@@ -52,7 +52,7 @@ public class ReplyRepositoryTest {
     public void 질문_답변_목록_조회(){
         List<Reply> replyList = replyRepository.findAllByQuestionQuestionId(QUESTION_ID);
 
-        assertEquals(2, replyList.size());
+        assertEquals(3, replyList.size());
 
         assertEquals(QUESTION_ID, replyList.get(0).getQuestion().getQuestionId());
         assertEquals("yellow", replyList.get(0).getContent());
@@ -116,8 +116,8 @@ public class ReplyRepositoryTest {
                 2, Sort.by(Sort.Direction.DESC, "regDate"))).getContent();
 
         assertEquals(2, replies.size());
-        assertEquals(2L, replies.get(0).getReplyId());
-        assertEquals(1L, replies.get(1).getReplyId());
+        assertEquals(4L, replies.get(0).getReplyId());
+        assertEquals(2L, replies.get(1).getReplyId());
     }
 
     @Test
