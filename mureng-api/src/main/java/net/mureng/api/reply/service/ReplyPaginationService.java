@@ -2,7 +2,6 @@ package net.mureng.api.reply.service;
 
 import lombok.RequiredArgsConstructor;
 import net.mureng.api.core.dto.ApiPageRequest;
-import net.mureng.core.question.service.QuestionService;
 import net.mureng.core.reply.entity.Reply;
 import net.mureng.core.reply.repository.ReplyRepository;
 import org.springframework.data.domain.Page;
@@ -13,7 +12,6 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 public class ReplyPaginationService {
     private final ReplyRepository replyRepository;
-    private final QuestionService questionService;
 
     @Transactional(readOnly = true)
     public Page<Reply> findRepliesByQuestionId(Long questionId, ApiPageRequest pageRequest) {

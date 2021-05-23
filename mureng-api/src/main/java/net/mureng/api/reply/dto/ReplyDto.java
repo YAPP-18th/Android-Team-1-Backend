@@ -41,8 +41,7 @@ public class ReplyDto {
     @AllArgsConstructor
     @ApiModel(value="답변 읽기 모델", description="질문에 대한 답변을 나타내는 읽기 전용 모델")
     public static class ReadOnly extends ReplyDto {
-        @ApiModelProperty(value = "답변 기본키", accessMode = ApiModelProperty.AccessMode.READ_ONLY,
-                position = PropertyDisplayOrder.REPLY_ID)
+        @ApiModelProperty(value = "답변 기본키", accessMode = ApiModelProperty.AccessMode.READ_ONLY)
         @JsonProperty(index = PropertyDisplayOrder.REPLY_ID)
         private Long replyId;
 
@@ -69,6 +68,11 @@ public class ReplyDto {
                 accessMode = ApiModelProperty.AccessMode.READ_ONLY, position = PropertyDisplayOrder.REQUESTED_BY_AUTHOR)
         @JsonProperty(index = PropertyDisplayOrder.REQUESTED_BY_AUTHOR)
         private Boolean requestedByAuthor;
+
+        @ApiModelProperty(value = "해당 답변에 대해 요청자가 좋아요를 눌렀는 지",
+                accessMode = ApiModelProperty.AccessMode.READ_ONLY, position = PropertyDisplayOrder.LIKED_BY_MEMBER)
+        @JsonProperty(index = PropertyDisplayOrder.LIKED_BY_MEMBER)
+        private Boolean LikedByMember;
     }
 
     private static class PropertyDisplayOrder {
@@ -81,6 +85,7 @@ public class ReplyDto {
         private static final int QUESTION               = 6;
         private static final int AUTHOR                 = 7;
         private static final int REQUESTED_BY_AUTHOR    = 8;
+        private static final int LIKED_BY_MEMBER        = 9;
     }
 }
 

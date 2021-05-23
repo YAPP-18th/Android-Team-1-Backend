@@ -62,8 +62,16 @@ public class Reply {
         this.modDate = LocalDateTime.now();
     }
 
-    public boolean isWriter(Member member){
+    public boolean isAuthor(Member member){
         return this.author.getMemberId() == member.getMemberId();
+    }
+
+    public boolean likedByMember(Member member){
+        for(ReplyLikes replyLikes : this.replyLikes){
+            if(replyLikes.getId().getMemberId() == member.getMemberId())
+                return true;
+        }
+        return false;
     }
 
 }

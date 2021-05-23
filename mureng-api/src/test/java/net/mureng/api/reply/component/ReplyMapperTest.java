@@ -30,6 +30,7 @@ class ReplyMapperTest {
         assertEquals(replyDto.getQuestion().getQuestionId(), mappedDto.getQuestion().getQuestionId());
         assertEquals(replyDto.getReplyLikeCount(), mappedDto.getReplyLikeCount());
         assertNull(mappedDto.getRequestedByAuthor());
+        assertNull(mappedDto.getLikedByMember());
     }
 
     @Test
@@ -41,6 +42,7 @@ class ReplyMapperTest {
         assertEquals(replyDto.getQuestion().getQuestionId(), mappedDto.getQuestion().getQuestionId());
         assertEquals(replyDto.getReplyLikeCount(), mappedDto.getReplyLikeCount());
         assertEquals(replyDto.getRequestedByAuthor(), mappedDto.getRequestedByAuthor());
+        assertEquals(replyDto.getLikedByMember(), mappedDto.getLikedByMember());
     }
 
     @Test

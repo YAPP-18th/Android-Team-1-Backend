@@ -5,6 +5,7 @@ import net.mureng.core.question.entity.Question;
 import net.mureng.core.question.entity.WordHint;
 import net.mureng.core.reply.entity.Reply;
 import net.mureng.core.reply.entity.ReplyLikes;
+import net.mureng.core.reply.entity.ReplyLikesPK;
 
 import java.time.LocalDateTime;
 import java.util.Arrays;
@@ -63,6 +64,7 @@ public class EntityCreator {
 
     public static ReplyLikes createReplyLikesEntity() {
         return ReplyLikes.builder()
+                .id(ReplyLikesPK.builder().replyId(1L).memberId(1L).build())
                 .member(createMemberEntity())
                 .reply(Reply.builder().replyId(1L).build())
                 .regDate(LocalDateTime.of(2020, 10, 14, 17, 11, 9))
