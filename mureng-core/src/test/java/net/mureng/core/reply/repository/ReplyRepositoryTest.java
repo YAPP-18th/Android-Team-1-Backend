@@ -5,6 +5,7 @@ import net.mureng.core.annotation.MurengDataTest;
 import net.mureng.core.reply.entity.Reply;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 
@@ -51,7 +52,7 @@ public class ReplyRepositoryTest {
     public void 질문_답변_목록_조회(){
         List<Reply> replyList = replyRepository.findAllByQuestionQuestionId(QUESTION_ID);
 
-        assertEquals(2, replyList.size());
+        assertEquals(3, replyList.size());
 
         assertEquals(QUESTION_ID, replyList.get(0).getQuestion().getQuestionId());
         assertEquals("yellow", replyList.get(0).getContent());
@@ -111,21 +112,24 @@ public class ReplyRepositoryTest {
 
     @Test
     public void 질문_연관_답변_조회_최신순_테스트() {
-        List<Reply> replies = replyRepository.findAllByQuestionQuestionId(REPLY_ID, PageRequest.of(0,
+        List<Reply> replies = replyRepository.findAllByQuestionQuestionId(QUESTION_ID, PageRequest.of(0,
                 2, Sort.by(Sort.Direction.DESC, "regDate"))).getContent();
 
         assertEquals(2, replies.size());
-        assertEquals(2L, replies.get(0).getReplyId());
-        assertEquals(1L, replies.get(1).getReplyId());
+        assertEquals(4L, replies.get(0).getReplyId());
+        assertEquals(2L, replies.get(1).getReplyId());
     }
 
     @Test
     public void 질문_연관_답변_조회_인기순_테스트() {
-        List<Reply> replies = replyRepository.findAllByQuestionQuestionIdOrderByReplyLikesSize(REPLY_ID, PageRequest.of(0,
-                2)).getContent();
+        Page<Reply> replies = replyRepository.findAllByQuestionQuestionIdOrderByReplyLikesSize(QUESTION_ID, PageRequest.of(0,
+                2));
 
-        assertEquals(2, replies.size());
-        assertEquals(2, replies.get(0).getReplyLikes().size());
-        assertEquals(0, replies.get(1).getReplyLikes().size());
+        assertEquals(2, replies.getNumberOfElements());
+        assertEquals(3, replies.getTotalElements());
+        assertEquals(2, replies.getTotalPages());
+        assertEquals(2, replies.getContent().size());
+        assertEquals(2, replies.getContent().get(0).getReplyLikes().size());
+        assertEquals(0, replies.getContent().get(1).getReplyLikes().size());
     }
 }
