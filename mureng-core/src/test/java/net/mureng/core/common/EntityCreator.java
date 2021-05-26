@@ -6,6 +6,7 @@ import net.mureng.core.question.entity.WordHint;
 import net.mureng.core.reply.entity.Reply;
 import net.mureng.core.reply.entity.ReplyLikes;
 import net.mureng.core.reply.entity.ReplyLikesPK;
+import net.mureng.core.todayexpression.entity.TodayExpression;
 
 import java.time.LocalDateTime;
 import java.util.Arrays;
@@ -78,6 +79,16 @@ public class EntityCreator {
                 .word("apple")
                 .meaning("사과")
                 .regDate(LocalDateTime.parse("2020-10-14T11:00:00"))
+                .build();
+    }
+
+    public static TodayExpression createTodayExpressionEntity() {
+        return TodayExpression.builder()
+                .expId(1L)
+                .expression("test")
+                .meaning("테스트")
+                .regDate(LocalDateTime.of(2020, 10, 14, 17, 11, 9))
+                .modDate(LocalDateTime.of(2020, 10, 14, 17, 11, 9))
                 .build();
     }
 }
