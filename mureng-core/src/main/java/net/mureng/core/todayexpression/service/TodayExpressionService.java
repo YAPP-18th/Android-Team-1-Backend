@@ -15,6 +15,10 @@ import java.time.temporal.ChronoUnit;
 @RequiredArgsConstructor
 public class TodayExpressionService {
     private final TodayExpressionRepository todayExpressionRepository;
+    /*
+     * @To do:
+     * 다른 방식으로 차후에 변경 가능성 존재
+     */
     private final LocalDate MurengLaunchingDate = LocalDate.of(2021, 05, 24);
 
     @Transactional(readOnly = true)
