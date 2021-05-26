@@ -26,7 +26,9 @@ public class ReplyLikesService {
         if(replyLikesRepository.existsByMemberMemberIdAndReplyReplyId(member.getMemberId(), reply.getReplyId()))
             throw new BadRequestException("이미 좋아요를 눌렀습니다.");
 
-        ReplyLikes replyLikes = ReplyLikes.builder().member(member).reply(reply).build();
+        ReplyLikesPK replyLikesPK = new ReplyLikesPK(member.getMemberId(), reply.getReplyId());
+
+        ReplyLikes replyLikes = ReplyLikes.builder().id(replyLikesPK).member(member).reply(reply).build();
 
         return replyLikesRepository.saveAndFlush(replyLikes);
     }
