@@ -1,6 +1,8 @@
 package net.mureng.core.common;
 
 import net.mureng.core.member.entity.Member;
+import net.mureng.core.member.entity.MemberScrap;
+import net.mureng.core.member.entity.MemberScrapPK;
 import net.mureng.core.question.entity.Question;
 import net.mureng.core.question.entity.WordHint;
 import net.mureng.core.reply.entity.Reply;
@@ -91,6 +93,15 @@ public class EntityCreator {
                 .expressionExampleMeaning("테스트 주도 개발")
                 .regDate(LocalDateTime.of(2020, 10, 14, 17, 11, 9))
                 .modDate(LocalDateTime.of(2020, 10, 14, 17, 11, 9))
+                .build();
+    }
+
+    public static MemberScrap createMemberScrapEntity() {
+        return MemberScrap.builder()
+                .id(new MemberScrapPK(1L, 1L))
+                .member(EntityCreator.createMemberEntity())
+                .todayExpression(EntityCreator.createTodayExpressionEntity())
+                .regDate(LocalDateTime.of(2020, 10, 14, 17, 11, 9))
                 .build();
     }
 }
