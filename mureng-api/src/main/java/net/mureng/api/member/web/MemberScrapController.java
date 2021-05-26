@@ -24,7 +24,7 @@ public class MemberScrapController {
     private final MemberScrapMapper memberScrapMapper;
 
     @ApiOperation(value = "오늘의 표현 스크랩", notes = "오늘의 표현을 스크랩합니다.")
-    @PostMapping("/today-expression/{expId}")
+    @PostMapping("/scrap/{expId}")
     public ResponseEntity<ApiResult<TodayExpressionDto>> scrap(@CurrentUser Member member, @PathVariable Long expId){
         return ResponseEntity.ok(ApiResult.ok(
                 memberScrapMapper.toDto(
