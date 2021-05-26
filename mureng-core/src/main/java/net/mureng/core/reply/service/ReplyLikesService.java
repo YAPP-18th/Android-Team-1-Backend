@@ -23,10 +23,10 @@ public class ReplyLikesService {
         Reply reply = replyRepository.findById(replyId)
                 .orElseThrow(() -> new ResourceNotFoundException("존재하지 않는 답변에 대한 요청입니다."));
 
-        if(replyLikesRepository.existsByMemberMemberIdAndReplyReplyId(member.getMemberId(), reply.getReplyId()))
-            throw new BadRequestException("이미 좋아요를 눌렀습니다.");
-
         ReplyLikesPK replyLikesPK = new ReplyLikesPK(member.getMemberId(), reply.getReplyId());
+
+        if(replyLikesRepository.existsById(replyLikesPK))
+            throw new BadRequestException("이미 좋아요를 눌렀습니다.");
 
         ReplyLikes replyLikes = ReplyLikes.builder().id(replyLikesPK).member(member).reply(reply).build();
 
@@ -38,10 +38,10 @@ public class ReplyLikesService {
         Reply reply = replyRepository.findById(replyId)
                 .orElseThrow(() -> new ResourceNotFoundException("존재하지 않는 답변에 대한 요청입니다."));
 
-        if(!replyLikesRepository.existsByMemberMemberIdAndReplyReplyId(member.getMemberId(), reply.getReplyId()))
-            throw new BadRequestException("이미 좋아요를 취소했습니다.");
-
         ReplyLikesPK replyLikesPK = new ReplyLikesPK(member.getMemberId(), reply.getReplyId());
+
+        if(!replyLikesRepository.existsById(replyLikesPK))
+            throw new BadRequestException("이미 좋아요를 취소했습니다.");
 
         replyLikesRepository.deleteById(replyLikesPK);
     }
