@@ -2,6 +2,8 @@ package net.mureng.api.member.web;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import net.mureng.api.core.annotation.CurrentUser;
 import net.mureng.api.core.dto.ApiResult;
@@ -10,10 +12,8 @@ import net.mureng.api.member.service.MemberExpressionScrapService;
 import net.mureng.api.todayexpression.dto.TodayExpressionDto;
 import net.mureng.core.member.entity.Member;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import springfox.documentation.annotations.ApiIgnore;
 
 @Api(value = "회원 오늘의 표현 스크랩 엔드포인트")
 @RestController
@@ -33,4 +33,18 @@ public class MemberScrapController {
         ));
     }
 
+    @ApiOperation(value = "오늘의 표현 스크랩 취소", notes = "오늘의 표현 스크랩한 것을 취소합니다.")
+    @DeleteMapping("/scrap/{expId}")
+    public ResponseEntity<ApiResult<DeletedDto>> deleteScrap(@CurrentUser Member member, @PathVariable Long expId){
+        memberExpressionScrapService.deleteScrap(member, expId);
+
+        return ResponseEntity.ok(ApiResult.ok(new DeletedDto(true)));
+    }
+
+    @ApiIgnore
+    @AllArgsConstructor
+    @Getter
+    public static class DeletedDto{
+        private final boolean deleted;
+    }
 }

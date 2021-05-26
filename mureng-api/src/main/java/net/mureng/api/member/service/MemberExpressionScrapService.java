@@ -35,4 +35,17 @@ public class MemberExpressionScrapService {
         return memberScrapRepository.saveAndFlush(memberScrap);
     }
 
+    @Transactional
+    public void deleteScrap(Member member, Long expId) {
+        TodayExpression todayExpression = todayExpressionRepository.findById(expId)
+                .orElseThrow(() -> new ResolutionException("존재하지 않는 오늘의 표현에 대한 요청입니다."));
+
+        MemberScrapPK memberScrapPK = new MemberScrapPK(member.getMemberId(), todayExpression.getExpId());
+
+        if(!memberScrapRepository.existsById(memberScrapPK))
+            throw new BadRequestException("이미 스크랩을 취소했습니다.");
+
+        memberScrapRepository.deleteById(memberScrapPK);
+    }
+
 }
