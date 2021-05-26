@@ -28,11 +28,11 @@ public class ReplyImageController {
         return ResponseEntity.ok(ApiResult.ok(new ImagePathDto(replyService.uploadReplyImageFile(image))));
     }
 
-    @ApiOperation(value = "기본 이미지 목록 조회", notes = "기본 제공되는 이미지 경로 목록을 제공합니다. 현재 더미가 제공됩니다.")
+    @ApiOperation(value = "기본 이미지 목록 조회", notes = "기본 제공되는 이미지 경로 목록을 제공합니다.")
     @GetMapping(value = "/default-images")
     public ResponseEntity<ApiResult<List<String>>> getDefaultImages() {
         return ResponseEntity.ok(ApiResult.ok(
-                List.of("/reply/1.jpg", "/reply/2.jpg", "/reply/3.jpg") // 더미
+                replyService.getReplyDefaultImageList()
         ));
     }
 

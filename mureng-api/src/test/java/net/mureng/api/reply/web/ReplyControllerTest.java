@@ -35,9 +35,6 @@ public class ReplyControllerTest extends AbstractControllerTest {
     @MockBean
     private ReplyPaginationService replyPaginationService;
 
-    @MockBean
-    private ReplyImageService replyImageService;
-
     private final String newReplyJsonString = "{\"content\": \"Test Reply\",\n" +
             "  \"image\": \"image-path\" ,\n" +
             "  \"questionId\" : 1 }";
@@ -128,29 +125,6 @@ public class ReplyControllerTest extends AbstractControllerTest {
                 .andExpect(MockMvcResultMatchers.jsonPath("$.data.replyId").value(1L))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.data.content").value("Test Reply"))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.data.image").value("image-path"))
-                .andDo(print());
-    }
-
-    @Test
-    @WithMockMurengUser
-    public void 이미지_업로드_테스트() throws Exception {
-        MockMultipartFile mockMultipartFile = new MockMultipartFile(
-                "image",
-                "hello.txt",
-                MediaType.TEXT_PLAIN_VALUE,
-                "Hello, World!".getBytes()
-        );
-
-
-        given(replyImageService.uploadReplyImageFile(any())).willReturn("/image/save/path/reply");
-
-        mockMvc.perform(
-                multipart("/api/reply/image")
-                        .file(mockMultipartFile)
-                        .contentType(MediaType.MULTIPART_FORM_DATA)
-        ).andExpect(status().isOk())
-                .andExpect(MockMvcResultMatchers.jsonPath("$.message").value("ok"))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.data.imagePath").value("/image/save/path/reply"))
                 .andDo(print());
     }
 }

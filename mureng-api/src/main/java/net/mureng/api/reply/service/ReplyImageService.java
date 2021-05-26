@@ -3,6 +3,7 @@ package net.mureng.api.reply.service;
 import lombok.RequiredArgsConstructor;
 import net.mureng.api.core.component.FileUploader;
 import net.mureng.api.core.dto.ApiPageRequest;
+import net.mureng.core.core.component.DirectoryScanner;
 import net.mureng.core.core.exception.AccessNotAllowedException;
 import net.mureng.core.core.exception.BadRequestException;
 import net.mureng.core.core.exception.ResourceNotFoundException;
@@ -21,75 +22,23 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
 public class ReplyImageService {
-    private final ReplyRepository replyRepository;
-    private final QuestionService questionService;
     private final FileUploader fileUploader;
+    private final DirectoryScanner directoryScanner;
 
     @Value("${media.base.dir.name}")
     private String mediaBaseDirName;
     private String replyImageDirName = "/reply";
+    private String replyDefaultImageDirName = "/default";
 
     @PostConstruct
     protected void init() {
         replyImageDirName = mediaBaseDirName + replyImageDirName;
-    }
-
-    @Transactional
-    public Reply create(Reply newReply) {
-        Long memberId = newReply.getAuthor().getMemberId();
-        Long questionId = newReply.getQuestion().getQuestionId();
-
-        if (isAlreadyReplied(memberId))
-            throw new BadRequestException("이미 오늘 답변한 사용자입니다.");
-
-        if (!questionService.existsById(questionId))
-            throw new BadRequestException("존재하지 않는 질문에 대한 요청입니다.");
-
-        if (questionService.isAlreadyReplied(questionId, memberId))
-            throw new BadRequestException("이미 답변한 질문입니다.");
-
-        newReply.setAuthor(newReply.getAuthor());
-        newReply.setQuestion(questionService.getQuestionById(questionId));
-
-        return replyRepository.saveAndFlush(newReply);
-    }
-
-    @Transactional(readOnly = true)
-    public boolean isAlreadyReplied(Long memberId) {
-        LocalDateTime startDateTime = LocalDateTime.of(LocalDate.now(), LocalTime.of(0, 0, 0)); // 오늘 00:00:00
-        LocalDateTime endDatetime = LocalDateTime.of(LocalDate.now(), LocalTime.of(23, 59, 59)); //오늘 23:59:59
-
-        return replyRepository.existsByRegDateBetweenAndAuthorMemberId(startDateTime, endDatetime, memberId);
-    }
-
-    @Transactional
-    public Reply update(Reply newReply) {
-        Long replyId = newReply.getReplyId();
-
-        Reply oldReply = replyRepository.findById(replyId)
-                .orElseThrow(() -> new BadRequestException("존재하지 않는 질문에 대한 요청입니다."));
-
-        if (!oldReply.isAuthor(newReply.getAuthor()))
-            throw new AccessNotAllowedException("접근 권한이 없습니다.");
-
-        oldReply.modifyReply(newReply);
-
-        return replyRepository.saveAndFlush(oldReply);
-    }
-
-    @Transactional
-    public void delete(Member member, Long replyId) {
-        Reply reply = replyRepository.findById(replyId)
-                .orElseThrow(() -> new BadRequestException("존재하지 않는 답변에 대한 요청입니다."));
-
-        if (!reply.isAuthor(member))
-            throw new AccessNotAllowedException("접근 권한이 없습니다.");
-
-        replyRepository.deleteById(replyId);
+        replyDefaultImageDirName = replyImageDirName + replyDefaultImageDirName;
     }
 
     /**
@@ -103,34 +52,9 @@ public class ReplyImageService {
                 .replace(mediaBaseDirName, "");
     }
 
-    public Reply findReplyByQuestionIdAndMember(Long memberId, Long questionId) {
-        return replyRepository.findByAuthorMemberIdAndQuestionQuestionId(memberId, questionId)
-                .orElseThrow(() -> new ResourceNotFoundException("사용자 답변이 존재하지 않습니다."));
-    }
-
-    @Transactional(readOnly = true)
-    public Page<Reply> findRepliesByQuestionId(Long questionId, ApiPageRequest pageRequest) {
-        if (pageRequest.getSort() == ApiPageRequest.PageSort.POPULAR)
-            return replyRepository.findAllByQuestionQuestionIdOrderByReplyLikesSize(questionId, pageRequest.convert());
-
-        return replyRepository.findAllByQuestionQuestionId(questionId, pageRequest.convertWithNewestSort());
-    }
-
-    @Transactional(readOnly = true)
-    public Page<Reply> findReplies(ApiPageRequest pageRequest) {
-        if (pageRequest.getSort() == ApiPageRequest.PageSort.POPULAR)
-            return replyRepository.findAllByOrderByReplyLikesSize(pageRequest.convert());
-
-        return replyRepository.findAll(pageRequest.convertWithNewestSort());
-    }
-
-    @Transactional(readOnly = true)
-    public List<Reply> findRepliesByMemberId(Long memberId){
-        return replyRepository.findAllByAuthorMemberId(memberId);
-    }
-
-    @Transactional(readOnly = true)
-    public Reply findById(Long replyId){
-        return replyRepository.findById(replyId).orElseThrow(() -> new BadRequestException("존재하지 않는 답변에 대한 요청입니다."));
+    public List<String> getReplyDefaultImageList() {
+        return directoryScanner.scanFileListInDirectory(replyDefaultImageDirName).stream()
+                .map(x -> x.replace(mediaBaseDirName, ""))
+                .collect(Collectors.toList());
     }
 }
