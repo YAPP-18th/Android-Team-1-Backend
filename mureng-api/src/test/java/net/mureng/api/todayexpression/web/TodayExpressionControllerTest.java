@@ -44,6 +44,8 @@ public class TodayExpressionControllerTest extends AbstractControllerTest {
                 .andExpect(MockMvcResultMatchers.jsonPath("$.message").value("ok"))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.data[0].expression").value("test"))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.data[0].meaning").value("테스트"))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.data[0].expressionExample").value("test driven development"))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.data[0].expressionExampleMeaning").value("테스트 주도 개발"))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.data[1].expression").value("test"))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.data[1].meaning").value("테스트"))
                 .andDo(print());

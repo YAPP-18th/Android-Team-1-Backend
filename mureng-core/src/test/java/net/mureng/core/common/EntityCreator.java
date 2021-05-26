@@ -87,6 +87,8 @@ public class EntityCreator {
                 .expId(1L)
                 .expression("test")
                 .meaning("테스트")
+                .expressionExample("test driven development")
+                .expressionExampleMeaning("테스트 주도 개발")
                 .regDate(LocalDateTime.of(2020, 10, 14, 17, 11, 9))
                 .modDate(LocalDateTime.of(2020, 10, 14, 17, 11, 9))
                 .build();

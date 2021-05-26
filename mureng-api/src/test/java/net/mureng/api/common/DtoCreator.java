@@ -72,6 +72,8 @@ public class DtoCreator {
         return TodayExpressionDto.builder()
                 .expression("test")
                 .meaning("테스트")
+                .expressionExample("test driven development")
+                .expressionExampleMeaning("테스트 주도 개발")
                 .scrappedByRequester(false)
                 .build();
     }

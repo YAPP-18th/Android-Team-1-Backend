@@ -28,6 +28,8 @@ public class TodayExpressionMapperTest {
         TodayExpressionDto mappedDto = todayExpressionMapper.toDto(todayExpression, member);
         assertEquals(todayExpressionDto.getExpression(), mappedDto.getExpression());
         assertEquals(todayExpressionDto.getMeaning(), mappedDto.getMeaning());
+        assertEquals(todayExpressionDto.getExpressionExample(), mappedDto.getExpressionExample());
+        assertEquals(todayExpressionDto.getExpressionExampleMeaning(), mappedDto.getExpressionExampleMeaning());
         assertFalse(mappedDto.isScrappedByRequester());
     }
 }
