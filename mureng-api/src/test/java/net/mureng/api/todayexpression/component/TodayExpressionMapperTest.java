@@ -26,6 +26,7 @@ public class TodayExpressionMapperTest {
     @Test
     public void 엔티티에서_DTO변환_테스트() {
         TodayExpressionDto mappedDto = todayExpressionMapper.toDto(todayExpression, member);
+        assertEquals(todayExpressionDto.getExpId(), mappedDto.getExpId());
         assertEquals(todayExpressionDto.getExpression(), mappedDto.getExpression());
         assertEquals(todayExpressionDto.getMeaning(), mappedDto.getMeaning());
         assertEquals(todayExpressionDto.getExpressionExample(), mappedDto.getExpressionExample());

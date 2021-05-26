@@ -70,6 +70,7 @@ public class DtoCreator {
 
     public static TodayExpressionDto createTodayExpressionDto() {
         return TodayExpressionDto.builder()
+                .expId(1L)
                 .expression("test")
                 .meaning("테스트")
                 .expressionExample("test driven development")
