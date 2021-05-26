@@ -5,6 +5,7 @@ import net.mureng.api.question.dto.QuestionDto;
 import net.mureng.api.question.dto.WordHintDto;
 import net.mureng.api.reply.dto.ReplyDto;
 import net.mureng.api.reply.dto.ReplyLikesDto;
+import net.mureng.api.todayexpression.dto.TodayExpressionDto;
 
 import java.util.Set;
 
@@ -64,6 +65,14 @@ public class DtoCreator {
                 .hintId(1L)
                 .word("apple")
                 .meaning("사과")
+                .build();
+    }
+
+    public static TodayExpressionDto createTodayExpressionDto() {
+        return TodayExpressionDto.builder()
+                .expression("test")
+                .meaning("테스트")
+                .scrappedByRequester(false)
                 .build();
     }
 }
