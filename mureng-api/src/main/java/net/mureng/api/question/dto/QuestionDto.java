@@ -11,6 +11,7 @@ import lombok.experimental.SuperBuilder;
 import net.mureng.api.member.dto.MemberDto;
 
 import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.Size;
 import java.util.Set;
 
 @SuperBuilder
@@ -23,11 +24,12 @@ public class QuestionDto {
     @JsonProperty(index = PropertyDisplayOrder.CATEGORY)
     private String category;
 
-    @NotEmpty
+    @NotEmpty @Size(max = 73)
     @ApiModelProperty(value = "영문 내용", required = true, position = PropertyDisplayOrder.CONTENT)
     @JsonProperty(index = PropertyDisplayOrder.CONTENT)
     private String content;
 
+    @Size(max = 45)
     @ApiModelProperty(value = "한글 내용", position = PropertyDisplayOrder.KO_CONTENT)
     @JsonProperty(index = PropertyDisplayOrder.KO_CONTENT)
     private String koContent;
