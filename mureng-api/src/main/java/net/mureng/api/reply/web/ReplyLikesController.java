@@ -1,6 +1,7 @@
 package net.mureng.api.reply.web;
 
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -22,6 +23,7 @@ public class ReplyLikesController {
     private final ReplyLikesService replyLikesService;
     private final ReplyLikesMapper replyLikesMapper;
 
+    @ApiOperation(value = "답변 좋아요", notes = "해당 답변에 좋아요를 추가합니다.")
     @PostMapping("/{replyId}/reply-likes")
     public ResponseEntity<ApiResult> postReplyLikes(@CurrentUser Member member, @PathVariable Long replyId){
         return ResponseEntity.ok(ApiResult.ok(
@@ -31,6 +33,7 @@ public class ReplyLikesController {
         ));
     }
 
+    @ApiOperation(value = "답변 좋아요 취소", notes = "해당 답변에 좋아요를 취소합니다.")
     @DeleteMapping("/{replyId}/reply-likes")
     public ResponseEntity<ApiResult<DeletedDto>> deleteReplyLikes(@CurrentUser Member member, @PathVariable Long replyId){
         replyLikesService.deleteReplyLikes(member, replyId);

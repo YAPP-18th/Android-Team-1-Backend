@@ -28,10 +28,10 @@ public class TodayExpression {
     @Column(nullable = false)
     private String meaning;
 
-    @Column(name = "expression_example")
+    @Column(name = "expression_example", nullable = false)
     private String expressionExample;
 
-    @Column(name = "expression_example_meaning")
+    @Column(name = "expression_example_meaning", nullable = false)
     private String expressionExampleMeaning;
 
     @Builder.Default

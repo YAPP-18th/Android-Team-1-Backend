@@ -53,11 +53,10 @@ public class ReplyController {
             ));
         }
 
-        @ApiOperation(value = "답변 작성하기", notes = "현재 질문에 대한 답변을 작성합니다.")
-        @PostMapping
-        public ResponseEntity<ApiResult<ReplyDto.ReadOnly>> create(@CurrentUser Member member,
-                                                                   @RequestBody @Valid ReplyDto replyDto){
-
+    @ApiOperation(value = "답변 작성하기", notes = "현재 질문에 대한 답변을 작성합니다.")
+    @PostMapping
+    public ResponseEntity<ApiResult<ReplyDto.ReadOnly>> create(@CurrentUser Member member,
+                                                               @RequestBody @Valid ReplyDto replyDto){
             Reply newReply = replyMapper.toEntity(replyDto, member, Question.builder().questionId(replyDto.getQuestionId()).build());
 
             return ResponseEntity.ok(ApiResult.ok(replyMapper.toDto(

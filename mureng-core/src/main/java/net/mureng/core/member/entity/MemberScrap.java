@@ -1,17 +1,15 @@
 package net.mureng.core.member.entity;
 
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import net.mureng.core.todayexpression.entity.TodayExpression;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
 
-@Getter
-@Setter
+@Builder
+@Getter @Setter
 @NoArgsConstructor
+@AllArgsConstructor
 @Entity
 @Table(name = "member_scrap")
 public class MemberScrap {
@@ -28,12 +26,7 @@ public class MemberScrap {
     @JoinColumn(name = "exp_id")
     private TodayExpression todayExpression;
 
+    @Builder.Default
     @Column(name = "reg_date", nullable = false)
     private LocalDateTime regDate = LocalDateTime.now();
-
-    @Builder
-    public MemberScrap(MemberScrapPK id, LocalDateTime regDate) {
-        this.id = id;
-        this.regDate = regDate;
-    }
 }

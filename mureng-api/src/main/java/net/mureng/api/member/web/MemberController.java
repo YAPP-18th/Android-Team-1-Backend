@@ -75,7 +75,7 @@ public class MemberController {
 
     @ApiOperation(value = "특정 사용자의 프로필 가져오기", notes = "특정 사용자의 프로필 정보를 가져옵니다.")
     @GetMapping("/{memberId}")
-    public ResponseEntity<ApiResult<MemberDto.ReadOnly>> getMemberProfile(
+    public ResponseEntity<ApiResult<MemberDto.ReadOnly>> getMemberProfile(@CurrentUser Member member,
             @ApiParam(value = "사용자 id", required = true) @PathVariable Long memberId ) {
         return ResponseEntity.ok(ApiResult.ok(
                 memberMapper.toDto(memberService.findById(memberId))
