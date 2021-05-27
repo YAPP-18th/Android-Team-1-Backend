@@ -22,3 +22,5 @@ Spring Boot + JPA + MySql
 | RENAME | 파일의 이름 변경 |
 | TEST | TEST 코드 관련   |
 
+## 3. Architecture
+![Mureng-arch](https://user-images.githubusercontent.com/36787678/119779854-1bac8e80-bf04-11eb-8816-9d9899c05d47.png)
