@@ -19,20 +19,20 @@ import java.util.List;
 @RequiredArgsConstructor
 @RequestMapping("/api/reply")
 public class ReplyImageController {
-    private final ReplyImageService replyService;
+    private final ReplyImageService replyImageService;
 
     @ApiOperation(value = "답변 이미지 업로드", notes = "답변에 적용될 이미지를 업로드합니다.")
     @PostMapping(value = "/image", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
     public ResponseEntity<ApiResult<ImagePathDto>> postImage(
             @RequestParam("image") MultipartFile image) {
-        return ResponseEntity.ok(ApiResult.ok(new ImagePathDto(replyService.uploadReplyImageFile(image))));
+        return ResponseEntity.ok(ApiResult.ok(new ImagePathDto(replyImageService.uploadReplyImageFile(image))));
     }
 
     @ApiOperation(value = "기본 이미지 목록 조회", notes = "기본 제공되는 이미지 경로 목록을 제공합니다.")
     @GetMapping(value = "/default-images")
     public ResponseEntity<ApiResult<List<String>>> getDefaultImages() {
         return ResponseEntity.ok(ApiResult.ok(
-                replyService.getReplyDefaultImageList()
+                replyImageService.getReplyDefaultImageList()
         ));
     }
 
