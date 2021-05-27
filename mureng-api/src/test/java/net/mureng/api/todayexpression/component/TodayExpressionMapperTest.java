@@ -9,8 +9,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 public class TodayExpressionMapperTest {
@@ -31,6 +30,6 @@ public class TodayExpressionMapperTest {
         assertEquals(todayExpressionDto.getMeaning(), mappedDto.getMeaning());
         assertEquals(todayExpressionDto.getExpressionExample(), mappedDto.getExpressionExample());
         assertEquals(todayExpressionDto.getExpressionExampleMeaning(), mappedDto.getExpressionExampleMeaning());
-        assertFalse(mappedDto.isScrappedByRequester());
+        assertTrue(mappedDto.isScrappedByRequester());
     }
 }

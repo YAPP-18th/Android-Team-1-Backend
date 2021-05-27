@@ -55,7 +55,7 @@ public class EntityCreator {
         return Member.builder()
                 .memberId(MEMBER_ID)
                 .identifier("123")
-                .email("test@email.com")
+                .email("test@gmail.com")
                 .image("test-image")
                 .isActive(true)
                 .nickname("Test")
@@ -91,6 +91,7 @@ public class EntityCreator {
                 .meaning("테스트")
                 .expressionExample("test driven development")
                 .expressionExampleMeaning("테스트 주도 개발")
+                .memberScraps(new HashSet<>(Arrays.asList(EntityCreator.createMemberScrapEntity(), EntityCreator.createMemberScrapEntity())))
                 .regDate(LocalDateTime.of(2020, 10, 14, 17, 11, 9))
                 .modDate(LocalDateTime.of(2020, 10, 14, 17, 11, 9))
                 .build();
@@ -100,7 +101,18 @@ public class EntityCreator {
         return MemberScrap.builder()
                 .id(new MemberScrapPK(1L, 1L))
                 .member(EntityCreator.createMemberEntity())
-                .todayExpression(EntityCreator.createTodayExpressionEntity())
+                .todayExpression(TodayExpression.builder()
+                        .expId(1L)
+                        .expression("test")
+                        .meaning("테스트")
+                        .expressionExample("test driven development")
+                        .expressionExampleMeaning("테스트 주도 개발")
+                        .memberScraps(new HashSet<>(
+                                Arrays.asList(
+                                        MemberScrap.builder()
+                                                .id(new MemberScrapPK(1L, 1L))
+                                                .member(EntityCreator.createMemberEntity()).build())))
+                        .build())
                 .regDate(LocalDateTime.of(2020, 10, 14, 17, 11, 9))
                 .build();
     }

@@ -8,7 +8,6 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import net.mureng.api.core.annotation.CurrentUser;
 import net.mureng.api.core.dto.ApiResult;
-import net.mureng.api.core.dto.ProfileApiResult;
 import net.mureng.api.core.jwt.dto.TokenDto;
 import net.mureng.api.core.oauth2.dto.OAuth2Profile;
 import net.mureng.api.core.oauth2.service.OAuth2Service;
@@ -70,16 +69,16 @@ public class MemberController {
 
     @ApiOperation(value = "로그인한 사용자 가져오기", notes = "현재 로그인한 사용자를 가져옵니다.")
     @GetMapping("/me")
-    public ResponseEntity<ProfileApiResult<MemberDto.ReadOnly>> me(@CurrentUser Member member) {
-        return ResponseEntity.ok(ProfileApiResult.ok(memberMapper.toDto(member), member.isRequesterProfile(member.getMemberId())));
+    public ResponseEntity<ApiResult<MemberDto.ReadOnly>> me(@CurrentUser Member member) {
+        return ResponseEntity.ok(ApiResult.ok(memberMapper.toDto(member)));
     }
 
     @ApiOperation(value = "특정 사용자의 프로필 가져오기", notes = "특정 사용자의 프로필 정보를 가져옵니다.")
     @GetMapping("/{memberId}")
-    public ResponseEntity<ProfileApiResult<MemberDto.ReadOnly>> getMemberProfile(@CurrentUser Member member,
+    public ResponseEntity<ApiResult<MemberDto.ReadOnly>> getMemberProfile(@CurrentUser Member member,
             @ApiParam(value = "사용자 id", required = true) @PathVariable Long memberId ) {
-        return ResponseEntity.ok(ProfileApiResult.ok(
-                memberMapper.toDto(memberService.findById(memberId)), member.isRequesterProfile(memberId)
+        return ResponseEntity.ok(ApiResult.ok(
+                memberMapper.toDto(memberService.findById(memberId))
         ));
     }
 

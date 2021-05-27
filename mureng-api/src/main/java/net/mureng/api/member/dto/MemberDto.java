@@ -43,8 +43,7 @@ public class MemberDto {
     @AllArgsConstructor
     @ApiModel(value="회원 읽기 모델", description="읽기 전용 회원 모델")
     public static class ReadOnly extends MemberDto {
-        @ApiModelProperty(value = "회원 고유 아이디", accessMode = ApiModelProperty.AccessMode.READ_ONLY,
-                position = PropertyDisplayOrder.MEMBER_ID)
+        @ApiModelProperty(value = "회원 고유 아이디", accessMode = ApiModelProperty.AccessMode.READ_ONLY)
         @JsonProperty(index = PropertyDisplayOrder.MEMBER_ID)
         private Long memberId;
 
