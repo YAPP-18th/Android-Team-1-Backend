@@ -7,13 +7,18 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import net.mureng.api.core.annotation.CurrentUser;
 import net.mureng.api.core.dto.ApiResult;
+import net.mureng.api.core.dto.ProfileApiResult;
 import net.mureng.api.member.component.MemberScrapMapper;
 import net.mureng.api.member.service.MemberExpressionScrapService;
 import net.mureng.api.todayexpression.dto.TodayExpressionDto;
 import net.mureng.core.member.entity.Member;
+import net.mureng.core.member.entity.MemberScrap;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import springfox.documentation.annotations.ApiIgnore;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Api(value = "회원 오늘의 표현 스크랩 엔드포인트")
 @RestController
@@ -39,6 +44,30 @@ public class MemberScrapController {
         memberExpressionScrapService.deleteScrap(member, expId);
 
         return ResponseEntity.ok(ApiResult.ok(new DeletedDto(true)));
+    }
+
+    @ApiOperation(value = "사용자의 스크랩 목록 가져오기", notes = "사용자의 스크랩 목록을 가져옵니다.")
+    @GetMapping("/{memberId}/scrap")
+    public ResponseEntity<ProfileApiResult<List<TodayExpressionDto>>> getMemberScrap(@CurrentUser Member member, @PathVariable Long memberId){
+
+        List<MemberScrap> memberScrapList = memberExpressionScrapService.getMemberScrap(memberId);
+
+        return ResponseEntity.ok(ProfileApiResult.ok(memberScrapList.stream()
+            .map(memberScrapMapper::toDto)
+            .collect(Collectors.toList()), member.isRequesterProfile(memberId)
+        ));
+    }
+
+    @ApiOperation(value = "내 스크랩 목록 가져오기", notes ="나의 스크랩 목록을 가져옵니다.")
+    @GetMapping("/me/scrap")
+    public ResponseEntity<ProfileApiResult<List<TodayExpressionDto>>> getMyScrap(@CurrentUser Member member){
+
+        List<MemberScrap> memberScrapList = memberExpressionScrapService.getMemberScrap(member.getMemberId());
+
+        return ResponseEntity.ok(ProfileApiResult.ok(memberScrapList.stream()
+                .map(memberScrapMapper::toDto)
+                .collect(Collectors.toList()), member.isRequesterProfile(member.getMemberId())
+        ));
     }
 
     @ApiIgnore

@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.lang.module.ResolutionException;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -46,6 +47,11 @@ public class MemberExpressionScrapService {
             throw new BadRequestException("이미 스크랩을 취소했습니다.");
 
         memberScrapRepository.deleteById(memberScrapPK);
+    }
+
+    @Transactional(readOnly = true)
+    public List<MemberScrap> getMemberScrap(Long memberId){
+        return memberScrapRepository.findAllByIdMemberId(memberId);
     }
 
 }

@@ -55,4 +55,8 @@ public class Member {
     @Embedded
     @Builder.Default
     private MemberSetting memberSetting = new MemberSetting();
+
+    public boolean isRequesterProfile(Long memberId){
+        return this.memberId == memberId;
+    }
 }
