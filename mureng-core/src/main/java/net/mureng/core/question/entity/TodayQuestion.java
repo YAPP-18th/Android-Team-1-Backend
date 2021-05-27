@@ -22,7 +22,6 @@ public class TodayQuestion {
     @JoinColumn(name = "member_id", nullable = false)
     private Member member;
 
-    @Setter
     @ManyToOne
     @JoinColumn(name = "question_id", nullable = false)
     private Question question;
@@ -34,4 +33,9 @@ public class TodayQuestion {
     @Builder.Default
     @Column(name = "mod_date", nullable = false)
     private LocalDateTime modDate = LocalDateTime.now();
+
+    public void setQuestion(Question question) {
+        this.question = question;
+        this.modDate = LocalDateTime.now();
+    }
 }

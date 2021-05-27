@@ -1,20 +1,20 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: mureng-app-dev-deployment
+  name: mureng-batch-dev-deployment
 spec:
   replicas: 2
   minReadySeconds: 20
   selector:
     matchLabels:
-      app: mureng-app-dev
+      app: mureng-batch-dev
   template:
     metadata:
       labels:
-        app: mureng-app-dev
+        app: mureng-batch-dev
     spec:
       containers:
-        - name: mureng-app-dev
+        - name: mureng-batch-dev
           image: <IMAGE>
           resources:
             requests:

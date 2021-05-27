@@ -8,7 +8,7 @@ import net.mureng.api.core.dto.ApiResult;
 import net.mureng.core.member.entity.Member;
 import net.mureng.api.question.component.QuestionMapper;
 import net.mureng.api.question.dto.QuestionDto;
-import net.mureng.api.question.service.TodayQuestionSelectionService;
+import net.mureng.core.question.service.TodayQuestionSelectionService;
 import net.mureng.core.question.service.TodayQuestionService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;

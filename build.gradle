@@ -52,7 +52,6 @@ subprojects {
 		implementation 'org.mapstruct:mapstruct:1.4.2.Final'
 		annotationProcessor 'org.mapstruct:mapstruct-processor:1.4.2.Final'
 		implementation 'org.liquibase:liquibase-core:4.3.5'
-		implementation 'org.springframework.boot:spring-boot-starter-web'
 	}
 }
 
@@ -61,6 +60,7 @@ project(':mureng-api') {
 		compile project(":mureng-core")
 		testCompile project(':mureng-core').sourceSets.test.output
 
+		implementation 'org.springframework.boot:spring-boot-starter-web'
 		implementation 'io.springfox:springfox-swagger2:2.9.2'
 		implementation 'io.springfox:springfox-swagger-ui:2.9.2'
 		implementation 'org.springframework.boot:spring-boot-starter-security'
@@ -75,5 +75,7 @@ project(':mureng-batch') {
 		testCompile project(':mureng-core').sourceSets.test.output
 
 		implementation 'org.springframework.boot:spring-boot-starter-quartz'
+		implementation 'org.springframework.boot:spring-boot-starter-batch'
+		testImplementation 'org.springframework.batch:spring-batch-test'
 	}
 }

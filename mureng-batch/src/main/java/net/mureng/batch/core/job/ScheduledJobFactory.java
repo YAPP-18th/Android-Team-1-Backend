@@ -1,8 +1,10 @@
-package net.mureng.batch.core.scheduler.util;
+package net.mureng.batch.core.job;
 
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import net.mureng.batch.core.scheduler.JobRequest;
-import org.quartz.Job;
+import net.mureng.batch.core.job.CronJobRequest;
+import net.mureng.batch.core.job.JobRequest;
+import net.mureng.batch.core.job.ScheduledJob;
 import org.quartz.JobDetail;
 import org.quartz.SimpleTrigger;
 import org.quartz.Trigger;
@@ -10,24 +12,33 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.scheduling.quartz.CronTriggerFactoryBean;
 import org.springframework.scheduling.quartz.JobDetailFactoryBean;
 import org.springframework.scheduling.quartz.SimpleTriggerFactoryBean;
-import org.springframework.util.StringUtils;
+import org.springframework.stereotype.Service;
 
 import java.text.ParseException;
-import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.Date;
 
 import static org.quartz.CronExpression.isValidExpression;
 
 @Slf4j
-public final class JobUtils {
+@Service
+@RequiredArgsConstructor
+public class ScheduledJobFactory {
+    private final ApplicationContext context;
 
-    private JobUtils() {
+    public ScheduledJob buildScheduledJob(JobRequest jobRequest) {
+        return ScheduledJob.builder()
+                .jobName(jobRequest.getJobName())
+                .jobGroup(jobRequest.getJobGroup())
+                .jobClass(jobRequest.getJobClass())
+                .jobDetail(createJobDetail(jobRequest))
+                .trigger(createTrigger(jobRequest))
+                .build();
     }
 
-    public static JobDetail createJob(JobRequest jobRequest, Class<? extends Job> jobClass, ApplicationContext context) {
+    private JobDetail createJobDetail(JobRequest jobRequest) {
         JobDetailFactoryBean factoryBean = new JobDetailFactoryBean();
-        factoryBean.setJobClass(jobClass);
+        factoryBean.setJobClass(jobRequest.getJobClass());
         factoryBean.setDurability(false);
         factoryBean.setApplicationContext(context);
         factoryBean.setName(jobRequest.getJobName());
@@ -41,22 +52,20 @@ public final class JobUtils {
         return factoryBean.getObject();
     }
 
-    public static Trigger createTrigger(JobRequest jobRequest) {
-        String cronExpression = jobRequest.getCronExpression();
-        LocalDateTime startDateAt = jobRequest.getStartDateAt();
-
-        if (!StringUtils.isEmpty(cronExpression)) {
-            if (!isValidExpression(cronExpression)) {
-                throw new IllegalArgumentException("Provided expression " + cronExpression + " is not a valid cron expression");
+    private Trigger createTrigger(JobRequest jobRequest) {
+        if (jobRequest instanceof CronJobRequest) {
+            CronJobRequest cronJobRequest = (CronJobRequest)jobRequest;
+            if (! isValidExpression(cronJobRequest.getCronExpression())) {
+                throw new IllegalArgumentException("Provided expression " + cronJobRequest.getCronExpression() +
+                        " is not a valid cron expression");
             }
-            return createCronTrigger(jobRequest);
-        } else if (startDateAt != null) {
-            return createSimpleTrigger(jobRequest);
+            return createCronTrigger(cronJobRequest);
         }
-        throw new IllegalStateException("unsupported trigger descriptor");
+
+        return createSimpleTrigger(jobRequest);
     }
 
-    private static Trigger createCronTrigger(JobRequest jobRequest) {
+    private Trigger createCronTrigger(CronJobRequest jobRequest) {
         CronTriggerFactoryBean factoryBean = new CronTriggerFactoryBean();
         factoryBean.setName(jobRequest.getJobName());
         factoryBean.setGroup(jobRequest.getJobGroup());
@@ -65,12 +74,12 @@ public final class JobUtils {
         try {
             factoryBean.afterPropertiesSet();
         } catch (ParseException e) {
-            e.printStackTrace();
+            log.warn("ParseException: ", e);
         }
         return factoryBean.getObject();
     }
 
-    private static Trigger createSimpleTrigger(JobRequest jobRequest) {
+    private Trigger createSimpleTrigger(JobRequest jobRequest) {
         SimpleTriggerFactoryBean factoryBean = new SimpleTriggerFactoryBean();
         factoryBean.setName(jobRequest.getJobName());
         factoryBean.setGroup(jobRequest.getJobGroup());

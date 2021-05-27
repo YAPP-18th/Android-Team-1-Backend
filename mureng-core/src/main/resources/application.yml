@@ -7,8 +7,12 @@ spring:
       properties:
           hibernate:
             format_sql: true
+    # Batch
+    batch:
+      job:
+        enabled: false
 
-    # JWT
+  # JWT
     jwt:
       secret: 12345678901234567890123456789012
 

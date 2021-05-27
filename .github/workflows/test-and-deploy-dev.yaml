@@ -42,9 +42,11 @@ jobs:
         name: 생성한 파일 업로드
         with:
           name: mureng-app-dev-artifact
-          path: ${{ github.workspace }}/mureng-api/build/libs/mureng-api-0.0.1-SNAPSHOT.jar
-  deployment:
-    name: 빌드, 푸쉬 후 개발에 배포
+          path: |
+            ${{ github.workspace }}/mureng-api/build/libs/mureng-api-0.0.1-SNAPSHOT.jar
+            ${{ github.workspace }}/mureng-batch/build/libs/mureng-batch-0.0.1-SNAPSHOT.jar
+  deployment-api:
+    name: API 빌드, 푸쉬 후 개발에 배포
     needs: test
     runs-on: ubuntu-latest
     steps:
@@ -55,12 +57,6 @@ jobs:
         uses: actions/download-artifact@v2
         with:
           name: mureng-app-dev-artifact
-
-      - name: 업로드한 파일 빌드 경로로 위치
-        run: |
-          mkdir mureng-api/build
-          mkdir mureng-api/build/libs
-          mv mureng-api-0.0.1-SNAPSHOT.jar mureng-api/build/libs/
 
       - name: SHA 업데이트
         run: echo $GITHUB_SHA > $GITHUB_WORKSPACE/_meta
@@ -91,7 +87,7 @@ jobs:
       - name: 컨테이너 이미지 빌드 및 이미지 푸쉬
         uses: docker/build-push-action@v2
         with:
-          context: .
+          context: ./mureng-api/
           push: true
           tags: docker.io/hygoogi/mureng:${{ steps.get-tag.outputs.tag }}
           cache-from: type=local,src=/tmp/.buildx-cache
@@ -130,10 +126,92 @@ jobs:
           KUBE_CONFIG_DATA: ${{ secrets.KUBE_CONFIG_DATA }}
         with:
           args: '"rollout status deployment/mureng-app-dev-deployment"'
+
+  deployment-batch:
+    name: BATCH 빌드, 푸쉬 후 개발에 배포
+    needs: test
+    runs-on: ubuntu-latest
+    steps:
+      - name: 소스코드 체크아웃
+        uses: actions/checkout@v2
+
+      - name: 업로드한 파일 다운로드
+        uses: actions/download-artifact@v2
+        with:
+          name: mureng-app-dev-artifact
+
+      - name: SHA 업데이트
+        run: echo $GITHUB_SHA > $GITHUB_WORKSPACE/_meta
+
+      - name: 이미지 태그 준비
+        id: get-tag
+        run: |
+          tag=$(echo $GITHUB_SHA | head -c7)
+          echo "::set-output name=tag::$tag"
+
+      - name: 도커 캐싱 준비
+        uses: docker/setup-buildx-action@v1
+
+      - name: 도커 레이어 캐싱
+        uses: actions/cache@v2
+        with:
+          path: /tmp/.buildx-cache
+          key: ${{ runner.os }}-buildx-${{ github.sha }}
+          restore-keys: |
+            ${{ runner.os }}-buildx-
+
+      - name: 도커 로그인
+        env:
+          DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+          DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+        run: docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
+
+      - name: 컨테이너 이미지 빌드 및 이미지 푸쉬
+        uses: docker/build-push-action@v2
+        with:
+          context: ./mureng-batch/
+          push: true
+          tags: docker.io/hygoogi/mureng-batch:${{ steps.get-tag.outputs.tag }}
+          cache-from: type=local,src=/tmp/.buildx-cache
+          cache-to: type=local,dest=/tmp/.buildx-cache-new
+
+      - name: 캐시 삭제
+        run: |
+          rm -rf /tmp/.buildx-cache
+          mv /tmp/.buildx-cache-new /tmp/.buildx-cache
+
+      - name: 배포파일 업데이트
+        run: TAG=${{ steps.get-tag.outputs.tag }} && sed -i 's|<IMAGE>|docker.io/hygoogi/mureng-batch:'${TAG}'|' $GITHUB_WORKSPACE/deployment/deployment-batch-dev.yml
+
+      - name: 환경변수 치환 후 최종 배포 파일 생성
+        uses: danielr1996/envsubst-action@1.0.0
+        env:
+          DEV_DB_DRIVER: ${{ secrets.DEV_DB_DRIVER }}
+          DEV_DB_URL: ${{ secrets.DEV_DB_URL }}
+          DEV_DB_USERNAME: ${{ secrets.DEV_DB_USERNAME }}
+          DEV_DB_PASSWORD: ${{ secrets.DEV_DB_PASSWORD }}
+          DEV_STATIC_DATA_PATH: ${{ secrets.DEV_STATIC_DATA_PATH }}
+        with:
+          input: deployment/deployment-batch-dev.yml
+          output: deploy.yml
+
+      - name: 클러스터에 배포
+        uses: NaLDo627/kubectl@master
+        env:
+          KUBE_CONFIG_DATA: ${{ secrets.KUBE_CONFIG_DATA }}
+        with:
+          args: apply -f deploy.yml
+
+      - name: 배포 확인
+        uses: NaLDo627/kubectl@master
+        env:
+          KUBE_CONFIG_DATA: ${{ secrets.KUBE_CONFIG_DATA }}
+        with:
+          args: '"rollout status deployment/mureng-batch-dev-deployment"'
   notification-success:
     name: 슬랙에 성공 알림
     if: success()
-    needs: [test, deployment]
+    needs: [test, deployment-api, deployment-batch]
     runs-on: ubuntu-latest
     steps:
     - name: 슬랙 성공 알림
@@ -148,7 +226,7 @@ jobs:
   notification-failure:
     name: 슬랙에 실패 알림
     if: failure()
-    needs: [ test, deployment ]
+    needs: [ test, deployment-api, deployment-batch ]
     runs-on: ubuntu-latest
     steps:
     - name: 슬랙 실패 알림
