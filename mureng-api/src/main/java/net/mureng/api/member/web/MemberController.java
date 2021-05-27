@@ -82,8 +82,6 @@ public class MemberController {
         ));
     }
 
-
-
     @ApiIgnore
     @AllArgsConstructor
     @Getter
