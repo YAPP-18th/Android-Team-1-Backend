@@ -71,7 +71,7 @@ public class MemberScrapControllerTest extends AbstractControllerTest {
         ).andExpect(status().isOk())
                 .andExpect(MockMvcResultMatchers.jsonPath("$.message").value("ok"))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.data.member.memberId").value(1))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.data.member.email").value("test@email.com"))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.data.member.email").value("test@gmail.com"))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.data.scrapList[0].expression").value("test"))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.data.requesterProfile").value(true))
                 .andDo(print());
@@ -89,7 +89,7 @@ public class MemberScrapControllerTest extends AbstractControllerTest {
         ).andExpect(status().isOk())
                 .andExpect(MockMvcResultMatchers.jsonPath("$.message").value("ok"))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.data.member.memberId").value(1))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.data.member.email").value("test@email.com"))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.data.member.email").value("test@gmail.com"))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.data.scrapList[0].expression").value("test"))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.data.requesterProfile").value(true))
                 .andDo(print());

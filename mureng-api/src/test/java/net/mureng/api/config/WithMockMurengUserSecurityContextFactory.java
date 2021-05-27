@@ -20,7 +20,7 @@ public class WithMockMurengUserSecurityContextFactory implements WithSecurityCon
                 new UserDetailsImpl(Member.builder()
                         .memberId(1L)
                         .identifier("123")
-                        .email("test@email.com")
+                        .email("test@gmail.com")
                         .isActive(true)
                         .nickname("Test")
                         .regDate(LocalDateTime.of(2020, 10, 14, 17, 11, 9))
