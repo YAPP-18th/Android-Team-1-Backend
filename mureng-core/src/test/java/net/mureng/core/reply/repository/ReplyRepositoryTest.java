@@ -2,20 +2,24 @@ package net.mureng.core.reply.repository;
 
 import com.github.springtestdbunit.annotation.DatabaseSetup;
 import net.mureng.core.annotation.MurengDataTest;
+import net.mureng.core.common.EntityCreator;
 import net.mureng.core.reply.entity.Reply;
+import org.hibernate.exception.ConstraintViolationException;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
+import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.EntityManager;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.List;
 
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @MurengDataTest
@@ -131,5 +135,14 @@ public class ReplyRepositoryTest {
         assertEquals(2, replies.getContent().size());
         assertEquals(2, replies.getContent().get(0).getReplyLikes().size());
         assertEquals(0, replies.getContent().get(1).getReplyLikes().size());
+    }
+
+    @Test
+    public void 질문_회원_중복_답변_예외_테스트() {
+        // MEMBER_ID = 1, QUESTION_ID = 1이고, 이는 이미 테이블에 들어가 있다.
+        Reply reply = EntityCreator.createReplyEntity();
+        reply.setReplyId(null);
+
+        assertThrows(DataIntegrityViolationException.class, () -> replyRepository.saveAndFlush(reply));
     }
 }
