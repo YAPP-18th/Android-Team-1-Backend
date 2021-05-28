@@ -23,6 +23,7 @@ import java.util.List;
 public class ReplyService {
     private final ReplyRepository replyRepository;
     private final QuestionService questionService;
+    private final ReplyPostProcessService replyPostProcessService;
 
     @Value("${media.base.dir.name}")
     private String mediaBaseDirName;
@@ -38,23 +39,30 @@ public class ReplyService {
         Long memberId = newReply.getAuthor().getMemberId();
         Long questionId = newReply.getQuestion().getQuestionId();
 
-        if (isAlreadyReplied(memberId))
+        if (isAlreadyRepliedToday(memberId))
             throw new BadRequestException("이미 오늘 답변한 사용자입니다.");
 
         if (!questionService.existsById(questionId))
             throw new BadRequestException("존재하지 않는 질문에 대한 요청입니다.");
 
-        if (questionService.isAlreadyReplied(questionId, memberId))
+        if (isQuestionAlreadyReplied(questionId, memberId))
             throw new BadRequestException("이미 답변한 질문입니다.");
 
         newReply.setAuthor(newReply.getAuthor());
         newReply.setQuestion(questionService.getQuestionById(questionId));
 
-        return replyRepository.saveAndFlush(newReply);
+        Reply savedReply = replyRepository.saveAndFlush(newReply);
+        replyPostProcessService.postProcess(savedReply);
+        return savedReply;
     }
 
     @Transactional(readOnly = true)
-    public boolean isAlreadyReplied(Long memberId) {
+    public boolean isQuestionAlreadyReplied(Long questionId, Long authorId) {
+        return replyRepository.existsByQuestionQuestionIdAndAuthorMemberId(questionId, authorId);
+    }
+
+    @Transactional(readOnly = true)
+    public boolean isAlreadyRepliedToday(Long memberId) {
         LocalDateTime startDateTime = LocalDateTime.of(LocalDate.now(), LocalTime.of(0, 0, 0)); // 오늘 00:00:00
         LocalDateTime endDatetime = LocalDateTime.of(LocalDate.now(), LocalTime.of(23, 59, 59)); //오늘 23:59:59
 

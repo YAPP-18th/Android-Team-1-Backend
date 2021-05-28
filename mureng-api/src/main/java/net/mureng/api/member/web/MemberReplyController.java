@@ -49,7 +49,7 @@ public class MemberReplyController {
     public ResponseEntity<ApiResult<RepliedCheckDto>> isMemberRepliedToday(@CurrentUser Member member) {
         return ResponseEntity.ok(
                 ApiResult.ok(
-                        new RepliedCheckDto(replyService.isAlreadyReplied(member.getMemberId()))
+                        new RepliedCheckDto(replyService.isAlreadyRepliedToday(member.getMemberId()))
                 )
         );
     }

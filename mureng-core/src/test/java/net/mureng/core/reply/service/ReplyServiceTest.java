@@ -21,6 +21,8 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 public class ReplyServiceTest {
@@ -33,6 +35,9 @@ public class ReplyServiceTest {
 
     @Mock
     private QuestionService questionService;
+
+    @Mock
+    private ReplyPostProcessService replyPostProcessService;
 
     private static final Long MEMBER_ID = 1L;
     private static final Long QUESTION_ID = 1L;
@@ -51,9 +56,10 @@ public class ReplyServiceTest {
             // mocking
             given(replyRepository.existsByRegDateBetweenAndAuthorMemberId(any(), any(), eq(notRepliedMemberId))).willReturn(false);
             given(questionService.existsById(eq(QUESTION_ID))).willReturn(true);
-            given(questionService.isAlreadyReplied(eq(QUESTION_ID), eq(notRepliedMemberId))).willReturn(false);
+            given(replyService.isQuestionAlreadyReplied(eq(QUESTION_ID), eq(notRepliedMemberId))).willReturn(false);
             given(questionService.getQuestionById(eq(QUESTION_ID))).willReturn(newReply.getQuestion());
             given(replyRepository.saveAndFlush(any())).willReturn(newReply);
+            doNothing().when(replyPostProcessService).postProcess(any());
 
             // when
             Reply createdReply = replyService.create(newReply);
@@ -109,7 +115,7 @@ public class ReplyServiceTest {
             // mocking
             given(replyRepository.existsByRegDateBetweenAndAuthorMemberId(any(), any(), eq(MEMBER_ID))).willReturn(false);
             given(questionService.existsById(eq(QUESTION_ID))).willReturn(true);
-            given(questionService.isAlreadyReplied(eq(QUESTION_ID), eq(repliedMemberId))).willReturn(true);
+            given(replyService.isQuestionAlreadyReplied(eq(QUESTION_ID), eq(repliedMemberId))).willReturn(true);
 
             // when
             BadRequestException exception =  assertThrows(BadRequestException.class, () -> replyService.create(newReply));

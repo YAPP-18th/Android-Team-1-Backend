@@ -1,9 +1,0 @@
-spring:
-    datasource:
-      url: jdbc:mysql://parkkiho.asuscomm.com:3306/mureng?serverTimezone=Asia/Seoul
-      username: mureng
-      password: 0ajfpd!@
-      driver-class-name: com.mysql.jdbc.Driver
-
-
-
