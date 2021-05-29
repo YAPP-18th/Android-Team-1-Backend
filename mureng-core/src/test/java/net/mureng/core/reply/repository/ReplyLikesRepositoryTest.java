@@ -2,10 +2,11 @@ package net.mureng.core.reply.repository;
 
 import com.github.springtestdbunit.annotation.DatabaseSetup;
 import net.mureng.core.annotation.MurengDataTest;
+import net.mureng.core.reply.entity.ReplyLikesPK;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
 
 @MurengDataTest
 @DatabaseSetup({
@@ -25,5 +26,14 @@ public class ReplyLikesRepositoryTest {
         int replyCount = replyLikesRepository.countByIdReplyId(REPLY_ID);
 
         assertEquals(2, replyCount);
+    }
+
+    @Test
+    public void 좋아요_존재_확인(){
+        ReplyLikesPK existReplyLikesPK = new ReplyLikesPK(1L, 1L);
+        ReplyLikesPK notExistReplyLikesPK = new ReplyLikesPK(3L, 3L);
+
+        assertTrue(replyLikesRepository.existsById(existReplyLikesPK));
+        assertFalse(replyLikesRepository.existsById(notExistReplyLikesPK));
     }
 }
