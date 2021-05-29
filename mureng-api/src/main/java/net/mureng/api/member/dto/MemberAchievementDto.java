@@ -22,8 +22,13 @@ public class MemberAchievementDto {
     @JsonProperty(index = PropertyDisplayOrder.BADGES)
     private List<BadgeDto> badges;
 
+    @ApiModelProperty(value = "요청자의 프로필인지")
+    @JsonProperty(index = PropertyDisplayOrder.REQUESTER_PROFILE)
+    private boolean requesterProfile;
+
     private static class PropertyDisplayOrder {
         private static final int MEMBER                = 0;
-        private static final int BADGES = 1;
+        private static final int BADGES                = 1;
+        private static final int REQUESTER_PROFILE     = 2;
     }
 }
