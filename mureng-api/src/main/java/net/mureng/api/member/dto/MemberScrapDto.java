@@ -13,7 +13,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @ApiModel(value="회원 프로필 모델", description="회원 프로필을 나타내는 모델")
-public class MemberProfileDto {
+public class MemberScrapDto {
     @ApiModelProperty(value = "사용자 정보")
     @JsonProperty(index = PropertyDisplayOrder.MEMBER)
     private MemberDto member;
