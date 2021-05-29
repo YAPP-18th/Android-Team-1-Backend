@@ -1,12 +1,12 @@
 package net.mureng.api.member.web;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiModelProperty;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
+import lombok.*;
 import net.mureng.api.core.annotation.CurrentUser;
 import net.mureng.api.core.dto.ApiResult;
 import net.mureng.api.core.jwt.dto.TokenDto;
@@ -42,6 +42,24 @@ public class MemberController {
         Member newMember = memberMapper.toEntity(memberDto);
         return ResponseEntity.ok(ApiResult.ok(memberMapper.toDto(
                 memberSignupService.signup(newMember)
+        )));
+    }
+
+    @ApiOperation(value = "회원 정보 수정", notes = "회원 정보 수정입니다.")
+    @PatchMapping("/modify")
+    public ResponseEntity<ApiResult<MemberDto.ReadOnly>> modify(
+            @CurrentUser Member member,
+            @ApiParam(value = "변경할 회원 정보", required = true)
+            @RequestBody MemberModifyDto memberModifyDto) {
+
+        member.updateMember(
+                Member.builder()
+                        .nickname(memberModifyDto.getNickname())
+                        .image(memberModifyDto.getImage())
+                        .build()
+        );
+        return ResponseEntity.ok(ApiResult.ok(memberMapper.toDto(
+                memberService.saveMember(member)
         )));
     }
 
@@ -96,5 +114,15 @@ public class MemberController {
     public static class UserCheckDto {
         private final boolean exist;
         private final String email;
+    }
+
+    @NoArgsConstructor
+    @Getter @Setter // TODO : 외부 파일로 분리
+    public static class MemberModifyDto {
+        @ApiModelProperty(value = "닉네임")
+        private String nickname;
+
+        @ApiModelProperty(value = "프로필 이미지 경로")
+        private String image;
     }
 }

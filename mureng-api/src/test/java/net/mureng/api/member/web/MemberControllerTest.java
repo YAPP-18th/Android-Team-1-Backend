@@ -9,17 +9,18 @@ import net.mureng.core.member.entity.MemberSetting;
 import net.mureng.api.web.AbstractControllerTest;
 import net.mureng.core.member.service.MemberService;
 import org.junit.jupiter.api.Test;
+import org.mockito.ArgumentCaptor;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 import java.time.LocalDate;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -96,6 +97,57 @@ class MemberControllerTest extends AbstractControllerTest {
         ).andExpect(status().isOk())
                 .andExpect(MockMvcResultMatchers.jsonPath("$.message").value("ok"))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.data.duplicated").value(true));
+    }
+
+    @Test
+    @WithMockMurengUser
+    public void 사용자_정보수정_테스트() throws Exception {
+        ArgumentCaptor<Member> memberArgumentCaptor = ArgumentCaptor.forClass(Member.class);
+        newMember.setNickname("변경된닉네임");
+        newMember.setImage("modified-image-path");
+        given(memberService.saveMember(memberArgumentCaptor.capture())).willReturn(newMember);
+
+        mockMvc.perform(
+                patch("/api/member/modify")
+                        .content("{\"nickname\": \"변경된닉네임\", \"image\": \"modified-image-path\"}")
+                        .contentType(MediaType.APPLICATION_JSON)
+        ).andExpect(status().isOk())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.message").value("ok"))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.data.memberId").value(1L))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.data.email").value("example@email.com"))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.data.identifier").value("user-identifier"))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.data.image").value("modified-image-path"))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.data.lastAttendanceDate").value("2020-10-14"))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.data.murengCount").value(0))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.data.nickname").value("변경된닉네임"))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.data.pushActive").value(true));
+        assertEquals("변경된닉네임", memberArgumentCaptor.getValue().getNickname());
+        assertEquals("modified-image-path", memberArgumentCaptor.getValue().getImage());
+    }
+
+    @Test
+    @WithMockMurengUser
+    public void 사용자_정보_닉네임수정_테스트() throws Exception {
+        ArgumentCaptor<Member> memberArgumentCaptor = ArgumentCaptor.forClass(Member.class);
+        newMember.setNickname("변경된닉네임");
+        given(memberService.saveMember(memberArgumentCaptor.capture())).willReturn(newMember);
+
+        mockMvc.perform(
+                patch("/api/member/modify")
+                        .content("{\"nickname\": \"변경된닉네임\"}")
+                        .contentType(MediaType.APPLICATION_JSON)
+        ).andExpect(status().isOk())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.message").value("ok"))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.data.memberId").value(1L))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.data.email").value("example@email.com"))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.data.identifier").value("user-identifier"))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.data.image").value("image-path"))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.data.lastAttendanceDate").value("2020-10-14"))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.data.murengCount").value(0))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.data.nickname").value("변경된닉네임"))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.data.pushActive").value(true));
+        assertEquals("변경된닉네임", memberArgumentCaptor.getValue().getNickname());
+        assertEquals("tester-image-path", memberArgumentCaptor.getValue().getImage());
     }
 
     @Test
