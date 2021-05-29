@@ -27,12 +27,12 @@ public class OAuth2Service {
     public OAuth2Profile getProfile(String provider, String accessToken) throws JsonProcessingException {
         JsonNode json = getJsonResponse(provider, accessToken);
 
-        if(provider == "kakao")
+        if(provider.equals("kakao"))
             return setKakaoProfile(json);
-        else if(provider == "google")
+        else if(provider.equals("google"))
             return setGoogleProfile(json);
         else
-            throw new BadRequestException("잘못된 provider입니다.");
+            throw new BadRequestException("잘못된 provider 입니다.");
     }
 
     public JsonNode getJsonResponse(String provider, String accessToken) throws JsonProcessingException, HttpClientErrorException {
