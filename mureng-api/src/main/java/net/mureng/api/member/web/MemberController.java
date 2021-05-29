@@ -1,5 +1,6 @@
 package net.mureng.api.member.web;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
@@ -58,8 +59,8 @@ public class MemberController {
     @ApiOperation(value = "사용자 존재 체크", notes = "기존에 있던 사용자인지 체크합니다.")
     @PostMapping("/user-exists/{provider}")
     public ResponseEntity<ApiResult<UserCheckDto>> userExists(
-            @ApiParam(value = "서비스 제공자 provider", required = true, defaultValue = "google") @PathVariable String provider,
-            @ApiParam(value = "액세스 토큰", required = true) @RequestBody @Valid TokenDto token) {
+            @ApiParam(value = "서비스 제공자 provider", required = true, defaultValue = "kakao") @PathVariable String provider,
+            @ApiParam(value = "액세스 토큰", required = true) @RequestBody @Valid TokenDto token) throws JsonProcessingException {
 
         OAuth2Profile profile = oAuth2Service.getProfile(provider, token.getAccessToken());
         return ResponseEntity.ok(ApiResult.ok(
