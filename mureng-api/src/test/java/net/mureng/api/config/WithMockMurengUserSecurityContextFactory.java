@@ -23,6 +23,7 @@ public class WithMockMurengUserSecurityContextFactory implements WithSecurityCon
                         .email("test@gmail.com")
                         .isActive(true)
                         .nickname("Test")
+                        .image("tester-image-path")
                         .regDate(LocalDateTime.of(2020, 10, 14, 17, 11, 9))
                         .modDate(LocalDateTime.of(2020, 10, 14, 17, 11, 10))
                         .murengCount(0)

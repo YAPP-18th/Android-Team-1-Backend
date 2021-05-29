@@ -25,11 +25,11 @@ public class OAuth2Service {
     private final ObjectMapper objectMapper;
 
     public OAuth2Profile getProfile(String provider, String accessToken) throws JsonProcessingException {
-        JsonNode json = getJsonResponse(provider, accessToken);
+        JsonNode json = getJsonResponse(provider.toLowerCase(), accessToken);
 
-        if(provider.equals("kakao"))
+        if("kakao".equals(provider.toLowerCase()))
             return setKakaoProfile(json);
-        else if(provider.equals("google"))
+        else if("google".equals(provider.toLowerCase()))
             return setGoogleProfile(json);
         else
             throw new BadRequestException("잘못된 provider 입니다.");

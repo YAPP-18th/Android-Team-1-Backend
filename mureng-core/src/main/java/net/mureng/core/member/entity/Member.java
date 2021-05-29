@@ -1,6 +1,7 @@
 package net.mureng.core.member.entity;
 
 import lombok.*;
+import org.springframework.util.StringUtils;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -62,5 +63,18 @@ public class Member {
 
     public void increaseMurengCount() {
         this.murengCount++;
+        this.modDate = LocalDateTime.now();
+    }
+
+    public void updateMember(Member member) {
+        if (StringUtils.hasText(member.getNickname())) {
+            this.nickname = member.getNickname();
+            this.modDate = LocalDateTime.now();
+        }
+
+        if (StringUtils.hasText(member.getImage())) {
+            this.image = member.getImage();
+            this.modDate = LocalDateTime.now();
+        }
     }
 }

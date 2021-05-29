@@ -9,7 +9,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
-import java.time.temporal.ChronoUnit;
 
 @Service
 @RequiredArgsConstructor
@@ -26,7 +25,7 @@ public class TodayExpressionService {
 
         LocalDate today = LocalDate.now();
         long totalElements = todayExpressionRepository.count();
-        long page = ChronoUnit.DAYS.between(MurengLaunchingDate, today) % (totalElements * 2);
+        long page = 0;
 
         return todayExpressionRepository.findAll(PageRequest.of((int) page,2));
     }
