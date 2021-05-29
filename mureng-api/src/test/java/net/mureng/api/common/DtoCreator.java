@@ -1,5 +1,6 @@
 package net.mureng.api.common;
 
+import net.mureng.api.badge.dto.BadgeDto;
 import net.mureng.api.member.dto.MemberDto;
 import net.mureng.api.question.dto.QuestionDto;
 import net.mureng.api.question.dto.WordHintDto;
@@ -78,4 +79,12 @@ public class DtoCreator {
                 .scrappedByRequester(false)
                 .build();
     }
+
+    public static BadgeDto createBadgeDto() {
+        return BadgeDto.builder()
+                .name("Badge Test")
+                .content("Badge Test Content")
+                .build();
+    }
+
 }
