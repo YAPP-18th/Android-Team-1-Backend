@@ -10,7 +10,7 @@ import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 
 import javax.validation.constraints.Email;
-import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotBlank;
 
 @SuperBuilder
 @Getter @Setter
@@ -18,17 +18,18 @@ import javax.validation.constraints.NotEmpty;
 @AllArgsConstructor
 @ApiModel(value="회원 모델", description="회원을 나타내는 모델")
 public class MemberDto {
-    @NotEmpty
+    @NotBlank
     @ApiModelProperty(value = "회원 식별값", required = true, position = PropertyDisplayOrder.IDENTIFIER)
     @JsonProperty(index = PropertyDisplayOrder.IDENTIFIER)
     private String identifier;
 
     @Email
+    @NotBlank
     @ApiModelProperty(value = "이메일 주소", required = true, position = PropertyDisplayOrder.EMAIL)
     @JsonProperty(index = PropertyDisplayOrder.EMAIL)
     private String email;
 
-    @NotEmpty
+    @NotBlank
     @ApiModelProperty(value = "닉네임", required = true, position = PropertyDisplayOrder.NICKNAME)
     @JsonProperty(index = PropertyDisplayOrder.NICKNAME)
     private String nickname;
