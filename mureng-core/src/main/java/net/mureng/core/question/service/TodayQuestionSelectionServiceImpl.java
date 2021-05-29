@@ -6,6 +6,7 @@ import net.mureng.core.core.exception.MurengException;
 import net.mureng.core.member.entity.Member;
 import net.mureng.core.question.entity.Question;
 import net.mureng.core.question.repository.QuestionRepository;
+import net.mureng.core.reply.service.ReplyService;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
@@ -21,6 +22,7 @@ public class TodayQuestionSelectionServiceImpl implements TodayQuestionSelection
 
     private final QuestionRepository questionRepository;
     private final QuestionService questionService;
+    private final ReplyService replyService;
     private final TodayQuestionService todayQuestionService;
     private final NumberRandomizer numberRandomizer;
 
@@ -45,7 +47,7 @@ public class TodayQuestionSelectionServiceImpl implements TodayQuestionSelection
             }
 
             if (! questionService.existsById(randomId) ||
-                    questionService.isAlreadyReplied(randomId, member.getMemberId())) {
+                    replyService.isQuestionAlreadyReplied(randomId, member.getMemberId())) {
                 checked.add(randomId);
                 continue;
             }

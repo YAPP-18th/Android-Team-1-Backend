@@ -43,7 +43,7 @@ class MemberReplyControllerTest extends AbstractControllerTest {
     @Test
     @WithMockMurengUser
     public void 사용자_오늘_답변했는지_테스트() throws Exception {
-        given(replyService.isAlreadyReplied(eq(1L))).willReturn(true);
+        given(replyService.isAlreadyRepliedToday(eq(1L))).willReturn(true);
 
         mockMvc.perform(
                 get("/api/member/check-replied-today")

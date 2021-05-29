@@ -59,4 +59,8 @@ public class Member {
     public boolean isRequesterProfile(Long memberId){
         return this.memberId == memberId;
     }
+
+    public void increaseMurengCount() {
+        this.murengCount++;
+    }
 }

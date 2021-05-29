@@ -9,7 +9,10 @@ import net.mureng.core.member.entity.MemberAttendance;
 import net.mureng.core.member.entity.MemberSetting;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.EntityManager;
 import java.time.LocalDateTime;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -20,6 +23,9 @@ public class MemberRepositoryTest {
     
     @Autowired
     MemberRepository memberRepository;
+
+    @Autowired
+    EntityManager entityManager;
 
     @Test
     @ExpectedDatabase(value = "classpath:dbunit/expected/멤버_회원가입.xml",
@@ -37,6 +43,17 @@ public class MemberRepositoryTest {
                 .build();
 
         memberRepository.save(member);
+    }
+
+    @Test
+    @DatabaseSetup({
+            "classpath:dbunit/entity/member.xml"
+    })
+    @ExpectedDatabase(value = "classpath:dbunit/expected/멤버_머렝_카운트_증가.xml",
+            assertionMode = DatabaseAssertionMode.NON_STRICT)
+    public void 멤버_머렝_카운트_증가_테스트() {
+        memberRepository.findById(1L).orElseThrow().increaseMurengCount(); // 0 -> 1
+        entityManager.flush(); // flush 연산을 통해 데이터베이스에 강제 반영
     }
 
     @Test

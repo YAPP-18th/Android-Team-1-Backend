@@ -25,9 +25,6 @@ public class QuestionService {
     }
 
     @Transactional(readOnly = true)
-    public boolean isAlreadyReplied(Long questionId, Long memberId) { return questionRepository.existsByQuestionIdAndAuthorMemberId(questionId, memberId); }
-
-    @Transactional(readOnly = true)
     public List<Question> getQuestionWrittenByMember(Long memberId){
         return questionRepository.findAllByAuthorMemberIdOrderByRegDateDesc(memberId);
     }

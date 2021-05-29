@@ -22,6 +22,7 @@ public interface ReplyRepository extends JpaRepository<Reply, Long> {
     Page<Reply> findAllByOrderByReplyLikesSize(Pageable pageable);
 
     boolean existsByRegDateBetweenAndAuthorMemberId(LocalDateTime startDateTime, LocalDateTime endDateTime, Long memberId);
+    boolean existsByQuestionQuestionIdAndAuthorMemberId(Long questionId, Long memberId);
     Optional<Reply> findByAuthorMemberIdAndQuestionQuestionId(Long memberId, Long questionId);
 
 }

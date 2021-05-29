@@ -9,6 +9,7 @@ import net.mureng.core.question.repository.QuestionRepository;
 import net.mureng.core.question.service.QuestionService;
 import net.mureng.core.question.service.TodayQuestionSelectionServiceImpl;
 import net.mureng.core.question.service.TodayQuestionService;
+import net.mureng.core.reply.service.ReplyService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -43,6 +44,9 @@ class TodayQuestionSelectionServiceImplTest {
     private QuestionService questionService;
 
     @Mock
+    private ReplyService replyService;
+
+    @Mock
     private QuestionRepository questionRepository;
 
     @Mock
@@ -60,10 +64,10 @@ class TodayQuestionSelectionServiceImplTest {
         given(todayQuestionService.getTodayQuestionByMemberId(eq(member.getMemberId()))).willReturn(question1);
         given(questionRepository.findAll(eq(PageRequest.of(0, 1, Sort.by(Sort.Direction.DESC, "regDate")))))
                 .willReturn(new PageImpl<>(List.of(question5)));
-        given(questionService.isAlreadyReplied(eq(question1.getQuestionId()), eq(member.getMemberId()))).willReturn(false);
-        given(questionService.isAlreadyReplied(eq(question2.getQuestionId()), eq(member.getMemberId()))).willReturn(true);
-        given(questionService.isAlreadyReplied(eq(question3.getQuestionId()), eq(member.getMemberId()))).willReturn(false);
-        given(questionService.isAlreadyReplied(eq(question5.getQuestionId()), eq(member.getMemberId()))).willReturn(true);
+        given(replyService.isQuestionAlreadyReplied(eq(question1.getQuestionId()), eq(member.getMemberId()))).willReturn(false);
+        given(replyService.isQuestionAlreadyReplied(eq(question2.getQuestionId()), eq(member.getMemberId()))).willReturn(true);
+        given(replyService.isQuestionAlreadyReplied(eq(question3.getQuestionId()), eq(member.getMemberId()))).willReturn(false);
+        given(replyService.isQuestionAlreadyReplied(eq(question5.getQuestionId()), eq(member.getMemberId()))).willReturn(true);
         given(numberRandomizer.getRandomInt(anyInt())).willReturn(2, 1, 4, 5, 3);
         given(questionService.existsById(eq(1L))).willReturn(true);
         given(questionService.existsById(eq(2L))).willReturn(true);
@@ -85,7 +89,7 @@ class TodayQuestionSelectionServiceImplTest {
 
     @Test
     public void 오늘의_질문_새로고침_모두답변_테스트() {
-        given(questionService.isAlreadyReplied(eq(question3.getQuestionId()), eq(member.getMemberId()))).willReturn(true);
+        given(replyService.isQuestionAlreadyReplied(eq(question3.getQuestionId()), eq(member.getMemberId()))).willReturn(true);
 
         Question reselectedQuestion = todayQuestionSelectionService.reselectTodayQuestion(member);
         assertEquals(1L, reselectedQuestion.getQuestionId()); // 처음 설정 그대로 가져간다.
