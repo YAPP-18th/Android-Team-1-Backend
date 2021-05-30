@@ -4,13 +4,13 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import net.mureng.api.core.jwt.dto.TokenDto;
 import net.mureng.api.core.oauth2.dto.OAuth2Profile;
 import net.mureng.api.core.oauth2.service.OAuth2Service;
-import org.junit.Ignore;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-@Ignore("개발용 임시 테스트")
+@Disabled("개발용 임시 테스트")
 public class OAuthServiceTest {
 
     @Autowired
