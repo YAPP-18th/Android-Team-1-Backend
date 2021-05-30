@@ -10,7 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-@Ignore("개발 임시 테스트")
+@Ignore("개발용 임시 테스트")
 public class OAuthServiceTest {
 
     @Autowired

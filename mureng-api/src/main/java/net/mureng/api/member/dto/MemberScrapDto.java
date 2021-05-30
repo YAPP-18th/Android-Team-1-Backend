@@ -12,8 +12,8 @@ import java.util.List;
 @Getter @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@ApiModel(value="회원 프로필 모델", description="회원 프로필을 나타내는 모델")
-public class MemberProfileDto {
+@ApiModel(value="사용자 스크랩 모델", description="사용자 프로필 스크랩 모델")
+public class MemberScrapDto {
     @ApiModelProperty(value = "사용자 정보")
     @JsonProperty(index = PropertyDisplayOrder.MEMBER)
     private MemberDto member;

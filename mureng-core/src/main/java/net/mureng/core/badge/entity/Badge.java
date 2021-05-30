@@ -1,13 +1,13 @@
 package net.mureng.core.badge.entity;
 
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 
-@Getter
+@Builder
+@Getter @Setter
 @NoArgsConstructor
+@AllArgsConstructor
 @Entity
 @Table(name = "badge")
 public class Badge {
@@ -23,10 +23,4 @@ public class Badge {
     @Column(nullable = false)
     private String content;
 
-    @Builder
-    public Badge(Long badgeId, String name, String content) {
-        this.badgeId = badgeId;
-        this.name = name;
-        this.content = content;
-    }
 }

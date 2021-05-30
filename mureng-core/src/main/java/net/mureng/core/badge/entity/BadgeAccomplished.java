@@ -1,15 +1,15 @@
 package net.mureng.core.badge.entity;
 
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import net.mureng.core.member.entity.Member;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
 
-@Getter
+@Builder
+@Getter @Setter
 @NoArgsConstructor
+@AllArgsConstructor
 @Entity
 @Table(name = "badge_accomplished")
 public class BadgeAccomplished {
@@ -27,13 +27,9 @@ public class BadgeAccomplished {
     @JoinColumn(name = "badge_id")
     private Badge badge;
 
+    @Builder.Default
     @Column(name = "reg_date", nullable = false)
     private LocalDateTime regDate = LocalDateTime.now();
 
-    @Builder
-    public BadgeAccomplished(BadgeAccomplishedPK id, LocalDateTime regDate) {
-        this.id = id;
-        this.regDate = regDate;
-    }
 }
 

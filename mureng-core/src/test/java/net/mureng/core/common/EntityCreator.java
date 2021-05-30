@@ -1,5 +1,8 @@
 package net.mureng.core.common;
 
+import net.mureng.core.badge.entity.Badge;
+import net.mureng.core.badge.entity.BadgeAccomplished;
+import net.mureng.core.badge.entity.BadgeAccomplishedPK;
 import net.mureng.core.member.entity.Member;
 import net.mureng.core.member.entity.MemberScrap;
 import net.mureng.core.member.entity.MemberScrapPK;
@@ -114,6 +117,22 @@ public class EntityCreator {
                                                 .member(EntityCreator.createMemberEntity()).build())))
                         .build())
                 .regDate(LocalDateTime.of(2020, 10, 14, 17, 11, 9))
+                .build();
+    }
+
+    public static Badge createBadgeEntity(){
+        return Badge.builder()
+                .badgeId(1L)
+                .name("Badge Test")
+                .content("Badge Test Content")
+                .build();
+    }
+
+    public static BadgeAccomplished createBadgeAccomplishedEntity() {
+        return BadgeAccomplished.builder()
+                .id(new BadgeAccomplishedPK(1L, 1L))
+                .member(EntityCreator.createMemberEntity())
+                .badge(EntityCreator.createBadgeEntity())
                 .build();
     }
 }
