@@ -24,7 +24,6 @@ public class MemberDto {
     private String identifier;
 
     @Email
-    @NotBlank
     @ApiModelProperty(value = "이메일 주소", required = true, position = PropertyDisplayOrder.EMAIL)
     @JsonProperty(index = PropertyDisplayOrder.EMAIL)
     private String email;

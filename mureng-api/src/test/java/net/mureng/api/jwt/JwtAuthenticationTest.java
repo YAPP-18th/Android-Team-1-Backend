@@ -34,24 +34,24 @@ public class JwtAuthenticationTest extends AbstractControllerTest {
     @MockBean
     private MemberRepository memberRepository;
 
-    private final String emailJsonString = "{\"email\": \"test@gmail.com\"}";
+    private final String identifierJsonString = "{\"identifier\": \"test\"}";
 
     @Test
     public void Jwt_생성(){
-        String email = "test@gmail.com";
+        String identifier = "test";
         String nickname = "Test";
-        String token = jwtCreator.createToken(email, nickname);
+        String token = jwtCreator.createToken(identifier, nickname);
 
         assertTrue(jwtValidator.validateToken(token));
     }
 
     @Test
     public void JWT_발급() throws Exception {
-        given(jwtService.issue(eq("test@gmail.com"))).willReturn(new TokenDto("testToken", null));
+        given(jwtService.issue(eq("test"))).willReturn(new TokenDto("testToken", null));
 
         mockMvc.perform(
                 post("/api/jwt")
-                        .content(emailJsonString)
+                        .content(identifierJsonString)
                         .contentType(MediaType.APPLICATION_JSON)
         ).andExpect(status().isOk())
                 .andExpect(MockMvcResultMatchers.jsonPath("$.message").value("ok"))

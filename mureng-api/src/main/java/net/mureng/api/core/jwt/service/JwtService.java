@@ -16,11 +16,11 @@ public class JwtService {
     private final MemberRepository memberRepository;
 
     @Transactional
-    public TokenDto issue(String email){
-        Member member = memberRepository.findByEmail(email).orElseThrow(() -> new BadRequestException("해당 유저 정보가 없습니다."));
+    public TokenDto issue(String identifier){
+        Member member = memberRepository.findByIdentifier(identifier).orElseThrow(() -> new BadRequestException("해당 유저 정보가 없습니다."));
 
         TokenDto token = new TokenDto();
-        token.setAccessToken(jwtCreator.createToken(member.getEmail(), member.getNickname()));
+        token.setAccessToken(jwtCreator.createToken(member.getIdentifier(), member.getNickname()));
 
         return token;
     }

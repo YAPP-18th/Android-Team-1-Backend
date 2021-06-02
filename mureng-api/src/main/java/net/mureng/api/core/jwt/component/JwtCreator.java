@@ -24,8 +24,8 @@ public class JwtCreator {
         secretKey = Base64.getEncoder().encodeToString(secretKey.getBytes());
     }
 
-    public String createToken(String email, String nickname) {
-        Claims claims = Jwts.claims().setSubject(email); // claim 임의로 설정
+    public String createToken(String identifier, String nickname) {
+        Claims claims = Jwts.claims().setSubject(identifier); // claim 임의로 설정
         claims.put("nickname", nickname);
         Date now = new Date();
         return Jwts.builder()
