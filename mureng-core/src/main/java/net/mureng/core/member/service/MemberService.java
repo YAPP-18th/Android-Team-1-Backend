@@ -32,7 +32,7 @@ public class MemberService {
     }
 
     @Transactional(readOnly = true)
-    public boolean isEmailExist(String email) { return memberRepository.existsByEmail(email); }
+    public boolean isMemberExist(String identifier) { return memberRepository.existsByIdentifier(identifier); }
 
     @Transactional(readOnly = true)
     public Member findByEmail(String email) { return memberRepository.findByEmail(email)

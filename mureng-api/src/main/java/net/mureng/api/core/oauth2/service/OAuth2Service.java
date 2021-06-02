@@ -27,9 +27,9 @@ public class OAuth2Service {
     public OAuth2Profile getProfile(String provider, String accessToken) throws JsonProcessingException {
         JsonNode json = getJsonResponse(provider.toLowerCase(), accessToken);
 
-        if("kakao".equals(provider.toLowerCase()))
+        if("kakao".equalsIgnoreCase(provider))
             return setKakaoProfile(json);
-        else if("google".equals(provider.toLowerCase()))
+        else if("google".equalsIgnoreCase(provider))
             return setGoogleProfile(json);
         else
             throw new BadRequestException("잘못된 provider 입니다.");
@@ -52,14 +52,14 @@ public class OAuth2Service {
     }
 
     public OAuth2Profile setKakaoProfile(JsonNode jsonNode) {
-        String email = jsonNode.get("kakao_account").get("email").textValue();
+        String identifier = jsonNode.get("id").textValue();
 
-        return new OAuth2Profile(email);
+        return new OAuth2Profile("kakao_" + identifier);
     }
 
     public OAuth2Profile setGoogleProfile(JsonNode jsonNode){
-        String email = jsonNode.get("email").textValue();
+        String identifier = jsonNode.get("localId").textValue();
 
-        return new OAuth2Profile(email);
+        return new OAuth2Profile("google_" + identifier);
     }
 }

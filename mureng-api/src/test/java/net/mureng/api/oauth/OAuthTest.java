@@ -28,8 +28,8 @@ public class OAuthTest extends AbstractControllerTest {
     @Test
     public void 액세스토큰과_일치하는_사용자체크() throws Exception {
 
-        given(oAuth2Service.getProfile(eq("google"), eq("testToken"))).willReturn(new OAuth2Profile("test@gmail.com"));
-        given(memberService.isEmailExist(eq("test@gmail.com"))).willReturn(true);
+        given(oAuth2Service.getProfile(eq("google"), eq("testToken"))).willReturn(new OAuth2Profile("test"));
+        given(memberService.isMemberExist(eq("test"))).willReturn(true);
 
         mockMvc.perform(
                 post("/api/member/user-exists/google")
@@ -38,7 +38,7 @@ public class OAuthTest extends AbstractControllerTest {
         ).andExpect(status().isOk())
                 .andExpect(MockMvcResultMatchers.jsonPath("$.message").value("ok"))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.data.exist").value(true))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.data.email").value("test@gmail.com"))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.data.identifier").value("test"))
                 .andDo(print());
     }
 }

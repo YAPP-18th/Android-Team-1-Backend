@@ -1,6 +1,5 @@
 package net.mureng.api.member.web;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiModelProperty;
@@ -14,9 +13,9 @@ import net.mureng.api.core.oauth2.dto.OAuth2Profile;
 import net.mureng.api.core.oauth2.service.OAuth2Service;
 import net.mureng.api.member.component.MemberMapper;
 import net.mureng.api.member.dto.MemberDto;
+import net.mureng.api.member.service.MemberSignupService;
 import net.mureng.core.member.entity.Member;
 import net.mureng.core.member.service.MemberService;
-import net.mureng.api.member.service.MemberSignupService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import springfox.documentation.annotations.ApiIgnore;
@@ -82,7 +81,7 @@ public class MemberController {
 
         OAuth2Profile profile = oAuth2Service.getProfile(provider, token.getAccessToken());
         return ResponseEntity.ok(ApiResult.ok(
-                new UserCheckDto(memberService.isEmailExist(profile.getEmail()), profile.getEmail())
+                new UserCheckDto(memberService.isMemberExist(profile.getIdentifier()), profile.getIdentifier())
         ));
     }
 
@@ -113,7 +112,7 @@ public class MemberController {
     @Getter
     public static class UserCheckDto {
         private final boolean exist;
-        private final String email;
+        private final String identifier;
     }
 
     @NoArgsConstructor

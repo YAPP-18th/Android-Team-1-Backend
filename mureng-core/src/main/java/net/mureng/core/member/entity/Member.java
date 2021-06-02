@@ -23,7 +23,6 @@ public class Member {
     @Column(nullable = false, unique = true)
     private String identifier;
 
-    @NotNull
     @Column(nullable = false, unique = true)
     private String email;
 
