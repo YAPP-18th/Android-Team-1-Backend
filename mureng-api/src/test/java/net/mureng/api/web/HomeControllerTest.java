@@ -36,12 +36,12 @@ class HomeControllerTest extends AbstractControllerTest {
 
     @Test
     public void 테스트_GET_인가사용자() throws Exception {
-        String email = "test@gmail.com";
+        String identifier = "test";
 
         Member member = Member.builder()
                             .memberId(1L)
-                            .identifier("123")
-                            .email(email)
+                            .identifier(identifier)
+                            .email("test@gmail.com")
                             .isActive(true)
                             .nickname("Test")
                             .regDate(LocalDateTime.of(2020, 10, 14, 17, 11, 9))
@@ -49,9 +49,9 @@ class HomeControllerTest extends AbstractControllerTest {
                             .murengCount(0)
                             .build();
 
-        String token = jwtCreator.createToken(member.getEmail(), member.getNickname());
+        String token = jwtCreator.createAccessToken(member);
 
-        given(userDetailsService.loadUserByUsername(eq(email))).willReturn(new UserDetailsImpl(member));
+        given(userDetailsService.loadUserByUsername(eq(identifier))).willReturn(new UserDetailsImpl(member));
 
         mockMvc.perform(
                     get("/api/authenticated-test")

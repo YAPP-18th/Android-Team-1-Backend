@@ -32,7 +32,7 @@ public class JwtResolver {
         return new UsernamePasswordAuthenticationToken(userDetails, "", userDetails.getAuthorities());
     }
 
-    private String getUserIdentifier(String token){
+    public String getUserIdentifier(String token){
         return Jwts.parser().setSigningKey(secretKey)
                 .parseClaimsJws(token).getBody().getSubject();
     }

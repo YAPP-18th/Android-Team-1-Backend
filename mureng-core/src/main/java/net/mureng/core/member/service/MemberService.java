@@ -35,7 +35,7 @@ public class MemberService {
     public boolean isMemberExist(String identifier) { return memberRepository.existsByIdentifier(identifier); }
 
     @Transactional(readOnly = true)
-    public Member findByEmail(String email) { return memberRepository.findByEmail(email)
+    public Member findByIdentifier(String identifier) { return memberRepository.findByIdentifier(identifier)
             .orElseThrow(() -> new ResourceNotFoundException("존재하지 않는 사용자에 대한 요청입니다.")); }
 
     @Transactional(readOnly = true)
