@@ -62,6 +62,12 @@ public class BadgeAccomplishedServiceImpl implements BadgeAccomplishedService {
 
     @Transactional
     public boolean createMurengSet(Long memberId){
+        if ( replyService.findRepliesByMemberId(memberId).size() == MurengSet.conditionOfCount &&
+                !badgeAccomplishedRepository.existsBadgeAccomplishedByMemberMemberIdAndBadgeBadgeId(memberId, MurengSet.id) ){
+
+            badgeAccomplishedRepository.saveAndFlush(makeBadgeAccomplished(memberId, MurengSet.id));
+            return true;
+        }
 
         return false;
     }
@@ -94,5 +100,10 @@ public class BadgeAccomplishedServiceImpl implements BadgeAccomplishedService {
     private static class AcademicMureng {
         private final static Long id = 3L;
         private final static int conditionOfCount = 3;
+    }
+
+    private static class MurengSet{
+        private final static Long id = 4L;
+        private final static int conditionOfCount = 30;
     }
 }
