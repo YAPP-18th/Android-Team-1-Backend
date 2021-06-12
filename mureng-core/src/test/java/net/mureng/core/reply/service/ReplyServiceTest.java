@@ -63,9 +63,9 @@ public class ReplyServiceTest {
             given(questionService.getQuestionById(eq(QUESTION_ID))).willReturn(newReply.getQuestion());
             given(replyRepository.saveAndFlush(any())).willReturn(newReply);
             doNothing().when(replyPostProcessService).postProcess(any());
-            doNothing().when(badgeAccomplishedService).createMureng3Days(any());
-            doNothing().when(badgeAccomplishedService).createMurengSet(any());
 
+            given(badgeAccomplishedService.createMureng3Days(any())).willReturn(false);
+            given(badgeAccomplishedService.createMurengSet(any())).willReturn(false);
 
             // when
             Reply createdReply = replyService.create(newReply);

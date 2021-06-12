@@ -4,17 +4,18 @@ import lombok.RequiredArgsConstructor;
 import net.mureng.core.badge.entity.BadgeAccomplished;
 import net.mureng.core.badge.entity.BadgeAccomplishedPK;
 import net.mureng.core.badge.repository.BadgeAccomplishedRepository;
+import net.mureng.core.core.exception.BadRequestException;
 import net.mureng.core.member.repository.MemberScrapRepository;
 import net.mureng.core.member.service.MemberService;
 import net.mureng.core.reply.entity.Reply;
-import net.mureng.core.reply.service.ReplyService;
+import net.mureng.core.reply.repository.ReplyRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @RequiredArgsConstructor
 @Service
 public class BadgeAccomplishedServiceImpl implements BadgeAccomplishedService {
-    private final ReplyService replyService;
+    private final ReplyRepository replyRepository;
     private final MemberService memberService;
     private final BadgeService badgeService;
     private final BadgeAccomplishedRepository badgeAccomplishedRepository;
@@ -23,7 +24,7 @@ public class BadgeAccomplishedServiceImpl implements BadgeAccomplishedService {
 
     @Transactional
     public boolean createMureng3Days(Long memberId) {
-        if ( replyService.findRepliesByMemberId(memberId).size() == Mureng3Days.conditionOfCount &&
+        if ( replyRepository.findAllByAuthorMemberId(memberId).size() == Mureng3Days.conditionOfCount &&
                 !badgeAccomplishedRepository.existsBadgeAccomplishedByMemberMemberIdAndBadgeBadgeId(memberId, Mureng3Days.id) ){
 
             badgeAccomplishedRepository.saveAndFlush(makeBadgeAccomplished(memberId, Mureng3Days.id));
@@ -35,7 +36,7 @@ public class BadgeAccomplishedServiceImpl implements BadgeAccomplishedService {
 
     @Transactional
     public boolean createCelebrityMureng(Long replyId) {
-        Reply reply = replyService.findById(replyId);
+        Reply reply = replyRepository.findById(replyId).orElseThrow(() -> new BadRequestException("존재하지 않는 답변에 대한 요청입니다."));
         Long memberId = reply.getAuthor().getMemberId();
 
         if(reply.getReplyLikes().size() == CelebrityMureng.conditionOfCount &&
@@ -62,7 +63,7 @@ public class BadgeAccomplishedServiceImpl implements BadgeAccomplishedService {
 
     @Transactional
     public boolean createMurengSet(Long memberId){
-        if ( replyService.findRepliesByMemberId(memberId).size() == MurengSet.conditionOfCount &&
+        if ( replyRepository.findAllByAuthorMemberId(memberId).size() == MurengSet.conditionOfCount &&
                 !badgeAccomplishedRepository.existsBadgeAccomplishedByMemberMemberIdAndBadgeBadgeId(memberId, MurengSet.id) ){
 
             badgeAccomplishedRepository.saveAndFlush(makeBadgeAccomplished(memberId, MurengSet.id));
