@@ -1,6 +1,7 @@
 package net.mureng.core.reply.service;
 
 import lombok.RequiredArgsConstructor;
+import net.mureng.core.badge.service.BadgeAccomplishedService;
 import net.mureng.core.core.exception.BadRequestException;
 import net.mureng.core.member.entity.Member;
 import net.mureng.core.reply.entity.Reply;
@@ -15,6 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class ReplyLikesService {
     private final ReplyLikesRepository replyLikesRepository;
     private final ReplyService replyService;
+    private final BadgeAccomplishedService badgeAccomplishedService;
 
     @Transactional
     public ReplyLikes postReplyLikes(Member member, Long replyId){
@@ -27,7 +29,11 @@ public class ReplyLikesService {
 
         ReplyLikes replyLikes = ReplyLikes.builder().id(replyLikesPK).member(member).reply(reply).build();
 
-        return replyLikesRepository.saveAndFlush(replyLikes);
+        replyLikesRepository.saveAndFlush(replyLikes);
+
+        badgeAccomplishedService.createCelebrityMureng(replyId);
+
+        return replyLikes;
     }
 
     @Transactional
