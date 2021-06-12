@@ -8,5 +8,5 @@ import java.util.List;
 
 public interface BadgeAccomplishedRepository extends JpaRepository<BadgeAccomplished, BadgeAccomplishedPK> {
     List<BadgeAccomplished> findBadgeAccomplishedsByIdMemberId(Long memberId);
-    boolean existsBadgeAccomplishedByBadgeBadgeIdAndMemberMemberId(Long badgeId, Long memberId);
+    boolean existsBadgeAccomplishedByMemberMemberIdAndBadgeBadgeId(Long memberId, Long badgeId);
 }

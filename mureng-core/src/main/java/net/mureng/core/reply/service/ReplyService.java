@@ -1,6 +1,7 @@
 package net.mureng.core.reply.service;
 
 import lombok.RequiredArgsConstructor;
+import net.mureng.core.badge.service.BadgeAccomplishedService;
 import net.mureng.core.core.exception.AccessNotAllowedException;
 import net.mureng.core.core.exception.BadRequestException;
 import net.mureng.core.core.exception.ResourceNotFoundException;
@@ -24,6 +25,7 @@ public class ReplyService {
     private final ReplyRepository replyRepository;
     private final QuestionService questionService;
     private final ReplyPostProcessService replyPostProcessService;
+    private final BadgeAccomplishedService badgeAccomplishedService;
 
     @Value("${media.base.dir.name}")
     private String mediaBaseDirName;
@@ -53,6 +55,8 @@ public class ReplyService {
 
         Reply savedReply = replyRepository.saveAndFlush(newReply);
         replyPostProcessService.postProcess(savedReply);
+        badgeAccomplishedService.createMureng3Days(memberId);
+
         return savedReply;
     }
 
