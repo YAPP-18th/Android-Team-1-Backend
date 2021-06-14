@@ -2,6 +2,7 @@ package net.mureng.api.member.service;
 
 import lombok.RequiredArgsConstructor;
 import net.mureng.api.core.exception.BadRequestException;
+import net.mureng.core.badge.service.BadgeAccomplishedService;
 import net.mureng.core.member.entity.Member;
 import net.mureng.core.member.entity.MemberScrap;
 import net.mureng.core.member.entity.MemberScrapPK;
@@ -20,6 +21,7 @@ public class MemberExpressionScrapService {
 
     private final TodayExpressionRepository todayExpressionRepository;
     private final MemberScrapRepository memberScrapRepository;
+    private final BadgeAccomplishedService badgeAccomplishedService;
 
     @Transactional
     public MemberScrap scrapTodayExpression(Member member, Long expId){
@@ -33,7 +35,11 @@ public class MemberExpressionScrapService {
 
         MemberScrap memberScrap = MemberScrap.builder().id(memberScrapPK).member(member).todayExpression(todayExpression).build();
 
-        return memberScrapRepository.saveAndFlush(memberScrap);
+        memberScrapRepository.saveAndFlush(memberScrap);
+
+        badgeAccomplishedService.createAcademicMureng(member.getMemberId());
+
+        return memberScrap;
     }
 
     @Transactional
