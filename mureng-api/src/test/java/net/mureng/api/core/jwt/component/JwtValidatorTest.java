@@ -11,6 +11,8 @@ import org.springframework.test.util.ReflectionTestUtils;
 
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Locale;
+import java.util.TimeZone;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.when;
@@ -29,7 +31,7 @@ class JwtValidatorTest extends JwtTest {
 
     @Test
     public void 액세스_토큰_유효_테스트() {
-        Calendar calendar = Calendar.getInstance();
+        Calendar calendar = Calendar.getInstance(TimeZone.getTimeZone("Asia/Seoul"), Locale.KOREA);
         calendar.set(2080, Calendar.OCTOBER, 22, 11, 58, 29); // 생성일은 21일
         when(dateFactory.now()).thenReturn(calendar.getTime());
 
@@ -38,7 +40,7 @@ class JwtValidatorTest extends JwtTest {
 
     @Test
     public void 액세스_토큰_만료_테스트() {
-        Calendar calendar = Calendar.getInstance();
+        Calendar calendar = Calendar.getInstance(TimeZone.getTimeZone("Asia/Seoul"), Locale.KOREA);
         calendar.set(2080, Calendar.OCTOBER, 22, 11, 58, 30);
         when(dateFactory.now()).thenReturn(calendar.getTime());
 
@@ -47,7 +49,7 @@ class JwtValidatorTest extends JwtTest {
 
     @Test
     public void 리프레시_토큰_유효_테스트() {
-        Calendar calendar = Calendar.getInstance();
+        Calendar calendar = Calendar.getInstance(TimeZone.getTimeZone("Asia/Seoul"), Locale.KOREA);
         calendar.set(2080, Calendar.DECEMBER, 20, 11, 58, 29); // 생성일은 10월 21일
         when(dateFactory.now()).thenReturn(calendar.getTime());
 
@@ -56,7 +58,7 @@ class JwtValidatorTest extends JwtTest {
 
     @Test
     public void 리프레시_토큰_만료_테스트() {
-        Calendar calendar = Calendar.getInstance();
+        Calendar calendar = Calendar.getInstance(TimeZone.getTimeZone("Asia/Seoul"), Locale.KOREA);
         calendar.set(2080, Calendar.DECEMBER, 20, 11, 58, 30);
         when(dateFactory.now()).thenReturn(calendar.getTime());
 

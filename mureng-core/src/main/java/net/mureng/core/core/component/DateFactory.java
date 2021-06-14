@@ -4,6 +4,8 @@ import org.springframework.stereotype.Component;
 
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Locale;
+import java.util.TimeZone;
 
 @Component
 public class DateFactory {
@@ -19,9 +21,9 @@ public class DateFactory {
      * @see Calendar
      */
     public Date addFromNow(int field, int amount) {
-        Calendar cal = Calendar.getInstance();
-        cal.setTime(new Date());
-        cal.add(field, amount);
-        return cal.getTime();
+        Calendar calendar = Calendar.getInstance(TimeZone.getTimeZone("Asia/Seoul"), Locale.KOREA);
+        calendar.setTime(new Date());
+        calendar.add(field, amount);
+        return calendar.getTime();
     }
 }

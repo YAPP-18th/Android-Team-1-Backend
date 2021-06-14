@@ -11,6 +11,8 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.test.util.ReflectionTestUtils;
 
 import java.util.Calendar;
+import java.util.Locale;
+import java.util.TimeZone;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.when;
@@ -25,7 +27,7 @@ class JwtCreatorTest extends JwtTest {
     @BeforeEach
     void setUp() {
         ReflectionTestUtils.setField(jwtCreator, "secretKey", TEST_SECRET_KEY);
-        Calendar calendar = Calendar.getInstance();
+        Calendar calendar = Calendar.getInstance(TimeZone.getTimeZone("Asia/Seoul"), Locale.KOREA);
         calendar.set(2080, Calendar.OCTOBER, 21, 11, 58, 30);
         when(dateFactory.now()).thenReturn(calendar.getTime());
     }
