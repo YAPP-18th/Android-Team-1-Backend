@@ -4,8 +4,11 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
-import net.mureng.api.core.exception.BadRequestException;
+import net.mureng.api.core.jwt.dto.TokenDto;
+import net.mureng.api.core.jwt.dto.TokenProvider;
 import net.mureng.api.core.oauth2.dto.OAuth2Profile;
+import net.mureng.core.core.exception.BadRequestException;
+import net.mureng.core.core.exception.MurengException;
 import org.springframework.core.env.Environment;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -24,31 +27,36 @@ public class OAuth2Service {
     private final Environment env;
     private final ObjectMapper objectMapper;
 
-    public OAuth2Profile getProfile(String provider, String accessToken) throws JsonProcessingException {
-        JsonNode json = getJsonResponse(provider.toLowerCase(), accessToken);
+    public OAuth2Profile getProfile(TokenDto.Provider token) {
+        JsonNode json = getJsonResponse(token);
 
-        if("kakao".equalsIgnoreCase(provider))
+        if(TokenProvider.KAKAO == token.getProviderName())
             return setKakaoProfile(json);
-        else if("google".equalsIgnoreCase(provider))
+        else if(TokenProvider.GOOGLE == token.getProviderName())
             return setGoogleProfile(json);
         else
             throw new BadRequestException("잘못된 provider 입니다.");
     }
 
-    public JsonNode getJsonResponse(String provider, String accessToken) throws JsonProcessingException, HttpClientErrorException {
+    public JsonNode getJsonResponse(TokenDto.Provider token) throws HttpClientErrorException {
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
-        headers.setBearerAuth(accessToken);
+        headers.setBearerAuth(token.getProviderAccessToken());
 
         HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<>(null, headers);
 
         ResponseEntity<String> response = restTemplate.postForEntity(
-                env.getProperty(String.format("spring.social.%s.url.profile", provider)),
+                env.getProperty(String.format("spring.social.%s.url.profile", token.getProviderName())),
                 request,
                 String.class
         );
 
-        return objectMapper.readTree(response.getBody());
+        try {
+            return objectMapper.readTree(response.getBody());
+        } catch (JsonProcessingException e) {
+            throw new MurengException("Provider 응답 호출 중 예외 발생", e);
+        }
+
     }
 
     public OAuth2Profile setKakaoProfile(JsonNode jsonNode) {

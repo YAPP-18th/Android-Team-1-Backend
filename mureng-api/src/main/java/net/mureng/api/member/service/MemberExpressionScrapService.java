@@ -1,7 +1,7 @@
 package net.mureng.api.member.service;
 
 import lombok.RequiredArgsConstructor;
-import net.mureng.api.core.exception.BadRequestException;
+import net.mureng.core.core.exception.BadRequestException;
 import net.mureng.core.badge.service.BadgeAccomplishedService;
 import net.mureng.core.member.entity.Member;
 import net.mureng.core.member.entity.MemberScrap;

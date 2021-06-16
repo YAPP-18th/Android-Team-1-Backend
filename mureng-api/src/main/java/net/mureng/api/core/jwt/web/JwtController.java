@@ -3,7 +3,7 @@ package net.mureng.api.core.jwt.web;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
-import lombok.RequiredArgsConstructor;
+import lombok.*;
 import lombok.extern.slf4j.Slf4j;
 import net.mureng.api.core.dto.ApiResult;
 import net.mureng.api.core.jwt.dto.TokenDto;
@@ -25,16 +25,25 @@ import javax.validation.Valid;
 public class JwtController {
     private final JwtService jwtService;
 
-    @ApiOperation(value = "JWT 발급", notes = "JWT를 발급합니다.")
+    @Deprecated
+    @ApiOperation(value = "JWT 발급(Deprecated)", notes = "JWT를 발급합니다.(Deprecated)")
     @PostMapping
-    public ResponseEntity<ApiResult<TokenDto>> issue(
+    public ResponseEntity<ApiResult<DeprecatedTokenDto>> issue(
             @ApiParam(value = "사용자 id", required = true) @RequestBody @Valid OAuth2Profile profile
             ) {
 
-        TokenDto token = jwtService.issue(profile.getIdentifier());
+        TokenDto.Mureng token = jwtService.issue(profile.getIdentifier());
 
-        return ResponseEntity.ok(ApiResult.ok(token));
+        return ResponseEntity.ok(ApiResult.ok(
+                new DeprecatedTokenDto(token.getMurengAccessToken(), token.getMurengRefreshToken())
+        ));
     }
 
-
+    @AllArgsConstructor
+    @NoArgsConstructor
+    @Getter @Setter
+    public static class DeprecatedTokenDto {
+        private String accessToken;
+        private String refreshToken;
+    }
 }

@@ -30,7 +30,6 @@ public class MemberController {
     private final MemberService memberService;
     private final MemberSignupService memberSignupService;
     private final MemberMapper memberMapper;
-    private final OAuth2Service oAuth2Service;
 
     @ApiOperation(value = "신규 회원 가입", notes = "신규 회원가입입니다.")
     @PostMapping("/signup")
@@ -73,18 +72,6 @@ public class MemberController {
         ));
     }
 
-    @ApiOperation(value = "사용자 존재 체크", notes = "기존에 있던 사용자인지 체크합니다.")
-    @PostMapping("/user-exists/{provider}")
-    public ResponseEntity<ApiResult<UserCheckDto>> userExists(
-            @ApiParam(value = "서비스 제공자 provider", required = true, defaultValue = "kakao") @PathVariable String provider,
-            @ApiParam(value = "액세스 토큰", required = true) @RequestBody @Valid TokenDto token) throws JsonProcessingException {
-
-        OAuth2Profile profile = oAuth2Service.getProfile(provider, token.getAccessToken());
-        return ResponseEntity.ok(ApiResult.ok(
-                new UserCheckDto(memberService.isMemberExist(profile.getIdentifier()), profile.getIdentifier())
-        ));
-    }
-
     @ApiOperation(value = "로그인한 사용자 가져오기", notes = "현재 로그인한 사용자를 가져옵니다.")
     @GetMapping("/me")
     public ResponseEntity<ApiResult<MemberDto.ReadOnly>> me(@CurrentUser Member member) {
@@ -105,14 +92,6 @@ public class MemberController {
     @Getter
     public static class DuplicatedCheckDto {
         private final boolean duplicated;
-    }
-
-    @ApiIgnore
-    @AllArgsConstructor
-    @Getter
-    public static class UserCheckDto {
-        private final boolean exist;
-        private final String identifier;
     }
 
     @NoArgsConstructor

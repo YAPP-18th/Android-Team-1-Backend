@@ -4,6 +4,7 @@ import net.mureng.api.core.jwt.component.JwtCreator;
 import net.mureng.api.core.jwt.component.JwtValidator;
 import net.mureng.api.core.jwt.dto.TokenDto;
 import net.mureng.api.core.jwt.service.JwtService;
+import net.mureng.core.member.entity.Member;
 import net.mureng.core.member.repository.MemberRepository;
 import net.mureng.api.web.AbstractControllerTest;
 import org.junit.jupiter.api.Test;
@@ -40,14 +41,16 @@ public class JwtAuthenticationTest extends AbstractControllerTest {
     public void Jwt_생성(){
         String identifier = "test";
         String nickname = "Test";
-        String token = jwtCreator.createToken(identifier, nickname);
+        String token = jwtCreator.createAccessToken(
+                Member.builder().identifier(identifier).nickname(nickname).build()
+        );
 
         assertTrue(jwtValidator.validateToken(token));
     }
 
     @Test
     public void JWT_발급() throws Exception {
-        given(jwtService.issue(eq("test"))).willReturn(new TokenDto("testToken", null));
+        given(jwtService.issue(eq("test"))).willReturn(new TokenDto.Mureng("testToken", null));
 
         mockMvc.perform(
                 post("/api/jwt")
