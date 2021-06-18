@@ -53,6 +53,7 @@ subprojects {
 		implementation 'org.mapstruct:mapstruct:1.4.2.Final'
 		annotationProcessor 'org.mapstruct:mapstruct-processor:1.4.2.Final'
 		implementation 'org.liquibase:liquibase-core:4.3.5'
+		implementation 'com.google.firebase:firebase-admin:6.8.1'
 	}
 }
 

@@ -53,3 +53,9 @@ media:
   base:
     dir:
       name: /home/gradle/mount
+
+
+# firebase
+firebase:
+  service:
+    key: 
