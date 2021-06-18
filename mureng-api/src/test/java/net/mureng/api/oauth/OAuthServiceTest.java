@@ -1,6 +1,5 @@
 package net.mureng.api.oauth;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import net.mureng.api.core.jwt.dto.TokenDto;
 import net.mureng.api.core.jwt.dto.TokenProvider;
 import net.mureng.api.core.oauth2.dto.OAuth2Profile;
@@ -19,7 +18,7 @@ public class OAuthServiceTest {
 
     @Test
     public void 액세스토큰으로_사용자정보_얻어오기_테스트() {
-        String accessToken = "4pZgt2Sclf59PiM0COteqs50nMlO7EpsLKhf2go9dZoAAAF5tsxLNQ";
+        String accessToken = "Y2ijVCkF3GycaYp2ok2q3UQd0eaLsF270rCgLwo9c-sAAAF6HhFdVQ";
         TokenDto.Provider token = new TokenDto.Provider(TokenProvider.KAKAO, accessToken);
 
         OAuth2Profile profile = oAuth2Service.getProfile(token);

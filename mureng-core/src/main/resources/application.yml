@@ -21,10 +21,10 @@ spring:
       change-log: classpath:config/liquibase/master.xml
 #        enabled: false
     social:
-      kakao:
+      KAKAO:
         url:
           profile: https://kapi.kakao.com/v2/user/me
-      google:
+      GOOGLE:
         url:
           profile: https://www.googleapis.com/oauth2/v3/userinfo
 

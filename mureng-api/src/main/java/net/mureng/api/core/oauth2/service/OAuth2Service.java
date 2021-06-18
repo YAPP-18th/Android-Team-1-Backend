@@ -45,8 +45,10 @@ public class OAuth2Service {
 
         HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<>(null, headers);
 
+        String url = env.getProperty(String.format("spring.social.%s.url.profile",token.getProviderName()));
+
         ResponseEntity<String> response = restTemplate.postForEntity(
-                env.getProperty(String.format("spring.social.%s.url.profile", token.getProviderName())),
+                url,
                 request,
                 String.class
         );
@@ -60,13 +62,13 @@ public class OAuth2Service {
     }
 
     public OAuth2Profile setKakaoProfile(JsonNode jsonNode) {
-        String identifier = jsonNode.get("id").textValue();
+        long identifier = jsonNode.get("id").asLong();
 
         return new OAuth2Profile("kakao_" + identifier);
     }
 
     public OAuth2Profile setGoogleProfile(JsonNode jsonNode){
-        String identifier = jsonNode.get("localId").textValue();
+        long identifier = jsonNode.get("localId").asLong();
 
         return new OAuth2Profile("google_" + identifier);
     }
