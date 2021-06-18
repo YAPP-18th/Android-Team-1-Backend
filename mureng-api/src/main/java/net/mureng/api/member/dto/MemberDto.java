@@ -65,9 +65,14 @@ public class MemberDto {
         private String lastAttendanceDate;
 
         @ApiModelProperty(value = "회원 설정 정보", accessMode = ApiModelProperty.AccessMode.READ_ONLY,
-                position = PropertyDisplayOrder.IS_PUSH_ACTIVE)
-        @JsonProperty(index = PropertyDisplayOrder.IS_PUSH_ACTIVE)
+                position = PropertyDisplayOrder.MEMBER_SETTING)
+        @JsonProperty(index = PropertyDisplayOrder.MEMBER_SETTING)
         private MemberSetting memberSetting;
+
+        @ApiModelProperty(value = "회원 설정 정보", accessMode = ApiModelProperty.AccessMode.READ_ONLY,
+                position = PropertyDisplayOrder.FCM_TOKEN)
+        @JsonProperty(index = PropertyDisplayOrder.FCM_TOKEN)
+        private String fcmToken;
     }
 
     private static class PropertyDisplayOrder {
@@ -79,6 +84,7 @@ public class MemberDto {
         private static final int MURENG_COUNT           = 5;
         private static final int ATTENDANCE_COUNT       = 6;
         private static final int LAST_ATTENDANCE_DATE   = 7;
-        private static final int IS_PUSH_ACTIVE         = 8;
+        private static final int MEMBER_SETTING         = 8;
+        private static final int FCM_TOKEN              = 9;
     }
 }
