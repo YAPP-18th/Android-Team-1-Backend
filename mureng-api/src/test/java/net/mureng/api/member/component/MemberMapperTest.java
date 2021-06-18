@@ -32,7 +32,8 @@ class MemberMapperTest {
                                                 .lastAttendanceDate(LocalDate.of(2020, 10, 14))
                                                 .build())
                                         .memberSetting(MemberSetting.builder()
-                                                .isPushActive(true)
+                                                .isLikePushActive(true)
+                                                .isDailyPushActive(false)
                                                 .build())
                                         .build();
 
@@ -44,7 +45,10 @@ class MemberMapperTest {
                                         .murengCount(0)
                                         .attendanceCount(10)
                                         .lastAttendanceDate("2020-10-14")
-                                        .isPushActive(true)
+                                        .memberSetting(MemberSetting.builder()
+                                                .isLikePushActive(true)
+                                                .isDailyPushActive(false)
+                                                .build())
                                         .build();
 
     @Test
@@ -58,7 +62,8 @@ class MemberMapperTest {
         assertEquals(mappedDto.getMurengCount(), memberDto.getMurengCount());
         assertEquals(mappedDto.getAttendanceCount(), memberDto.getAttendanceCount());
         assertEquals(mappedDto.getLastAttendanceDate(), memberDto.getLastAttendanceDate());
-        assertEquals(mappedDto.isPushActive(), memberDto.isPushActive());
+        assertEquals(mappedDto.getMemberSetting().isLikePushActive(), memberDto.getMemberSetting().isLikePushActive());
+        assertEquals(mappedDto.getMemberSetting().isDailyPushActive(), memberDto.getMemberSetting().isDailyPushActive());
     }
 
     @Test

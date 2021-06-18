@@ -7,6 +7,7 @@ import net.mureng.api.question.dto.WordHintDto;
 import net.mureng.api.reply.dto.ReplyDto;
 import net.mureng.api.reply.dto.ReplyLikesDto;
 import net.mureng.api.todayexpression.dto.TodayExpressionDto;
+import net.mureng.core.member.entity.MemberSetting;
 
 import java.util.Set;
 
@@ -24,7 +25,10 @@ public class DtoCreator {
                 .murengCount(0)
                 .attendanceCount(10)
                 .lastAttendanceDate("2020-10-14")
-                .isPushActive(true)
+                .memberSetting(MemberSetting.builder()
+                        .isLikePushActive(true)
+                        .isDailyPushActive(false)
+                        .build())
                 .build();
     }
 

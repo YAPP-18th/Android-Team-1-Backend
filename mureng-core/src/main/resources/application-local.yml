@@ -1,3 +1,9 @@
 spring:
-    datasource:
-      data: classpath:local-test-data.sql
+  liquibase:
+      enabled: false
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+  sql:
+    init:
+      data-locations: local-test-data.sql

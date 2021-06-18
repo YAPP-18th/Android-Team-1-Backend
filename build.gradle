@@ -1,7 +1,8 @@
 plugins {
-	id 'org.springframework.boot' version '2.4.4'
+	id 'org.springframework.boot' version '2.5.0'
 	id 'io.spring.dependency-management' version '1.0.11.RELEASE'
 	id 'java'
+	id 'org.liquibase.gradle' version '2.0.4'
 }
 
 bootJar {
@@ -77,5 +78,32 @@ project(':mureng-batch') {
 		implementation 'org.springframework.boot:spring-boot-starter-quartz'
 		implementation 'org.springframework.boot:spring-boot-starter-batch'
 		testImplementation 'org.springframework.batch:spring-batch-test'
+	}
+}
+
+dependencies {
+	liquibaseRuntime 'org.liquibase:liquibase-core:3.8.1'
+	liquibaseRuntime 'org.liquibase:liquibase-groovy-dsl:2.1.1'
+	liquibaseRuntime 'mysql:mysql-connector-java:8.0.22'
+	liquibaseRuntime 'com.h2database:h2'
+	liquibaseRuntime group: 'javax.xml.bind', name: 'jaxb-api', version: '2.3.1'
+}
+
+task dbMigration {
+	def props = project.getProperties()
+
+	liquibase {
+		activities {
+			main {
+				changeLogFile "mureng-core/src/main/resources/config/liquibase/master.xml"
+				classpath "$projectDir/mureng-core/src/main/resources/"
+//					url "jdbc:h2:mem:testdb"
+//					username "sa"
+//					password ""
+				url props.url
+				username props.username
+				password props.password
+			}
+		}
 	}
 }

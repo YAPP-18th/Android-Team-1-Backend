@@ -14,7 +14,6 @@ public interface MemberMapper extends EntityMapper<Member, MemberDto> {
     @Mapping(target = "attendanceCount", expression = "java(member.getMemberAttendance().getAttendanceCount())")
     @Mapping(target = "lastAttendanceDate", expression = "java(member.getMemberAttendance().getLastAttendanceDate()" +
             ".format(DateTimeFormatter.ofPattern(\"yyyy-MM-dd\")) )")
-    @Mapping(target = "pushActive", expression = "java(member.getMemberSetting().isPushActive())")
     MemberDto.ReadOnly toDto(Member member);
 
     @Override
@@ -25,5 +24,6 @@ public interface MemberMapper extends EntityMapper<Member, MemberDto> {
     @Mapping(target = "memberAttendance", ignore = true)
     @Mapping(target = "regDate", ignore = true)
     @Mapping(target = "modDate", ignore = true)
+    @Mapping(target = "fcmToken", ignore = true)
     Member toEntity(MemberDto memberDto);
 }

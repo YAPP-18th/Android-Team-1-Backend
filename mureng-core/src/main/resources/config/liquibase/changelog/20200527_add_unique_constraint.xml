@@ -12,6 +12,6 @@
                 columnNames="member_id, question_id"
                 constraintName="unique_member_id_question_id"
                 tableName="reply"/>
-</changeSet>
+    </changeSet>
 
 </databaseChangeLog>

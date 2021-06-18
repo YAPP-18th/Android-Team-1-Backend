@@ -8,6 +8,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.SuperBuilder;
+import net.mureng.core.member.entity.MemberSetting;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
@@ -63,10 +64,10 @@ public class MemberDto {
         @JsonProperty(index = PropertyDisplayOrder.LAST_ATTENDANCE_DATE)
         private String lastAttendanceDate;
 
-        @ApiModelProperty(value = "푸쉬 알림 여부", accessMode = ApiModelProperty.AccessMode.READ_ONLY,
+        @ApiModelProperty(value = "회원 설정 정보", accessMode = ApiModelProperty.AccessMode.READ_ONLY,
                 position = PropertyDisplayOrder.IS_PUSH_ACTIVE)
         @JsonProperty(index = PropertyDisplayOrder.IS_PUSH_ACTIVE)
-        private boolean isPushActive;
+        private MemberSetting memberSetting;
     }
 
     private static class PropertyDisplayOrder {

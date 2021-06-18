@@ -23,7 +23,7 @@ public class Member {
     @Column(nullable = false, unique = true)
     private String identifier;
 
-    @Column(nullable = false, unique = true)
+    @Column(unique = true)
     private String email;
 
     @Builder.Default
@@ -35,6 +35,8 @@ public class Member {
     private String nickname;
 
     private String image;
+
+    private String fcmToken;
 
     @Builder.Default
     @Column(name = "reg_date", nullable = false)
