@@ -31,6 +31,9 @@ public class ReplyService {
     private String mediaBaseDirName;
     private String replyImageDirName = "/reply";
 
+    @Value("${spring.profiles.active}")
+    private String profile;
+
     @PostConstruct
     protected void init() {
         replyImageDirName = mediaBaseDirName + replyImageDirName;
@@ -41,7 +44,7 @@ public class ReplyService {
         Long memberId = newReply.getAuthor().getMemberId();
         Long questionId = newReply.getQuestion().getQuestionId();
 
-        if (isAlreadyRepliedToday(memberId))
+        if (! isTest() && isAlreadyRepliedToday(memberId))
             throw new BadRequestException("이미 오늘 답변한 사용자입니다.");
 
         if (!questionService.existsById(questionId))
@@ -59,6 +62,10 @@ public class ReplyService {
         badgeAccomplishedService.createMurengSet(memberId);
 
         return savedReply;
+    }
+
+    private boolean isTest() {
+        return "dev".equals(profile);
     }
 
     @Transactional(readOnly = true)
