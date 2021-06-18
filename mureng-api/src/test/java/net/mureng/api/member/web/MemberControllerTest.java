@@ -37,7 +37,8 @@ class MemberControllerTest extends AbstractControllerTest {
                                                     .attendanceCount(0)
                                                     .build())
                                             .memberSetting(MemberSetting.builder()
-                                                    .isPushActive(true)
+                                                    .isLikePushActive(true)
+                                                    .isDailyPushActive(false)
                                                     .build())
                                             .build();
 
@@ -72,7 +73,8 @@ class MemberControllerTest extends AbstractControllerTest {
                 .andExpect(MockMvcResultMatchers.jsonPath("$.data.lastAttendanceDate").value("2020-10-14"))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.data.murengCount").value(0))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.data.nickname").value("최대여섯글자"))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.data.pushActive").value(true));
+                .andExpect(MockMvcResultMatchers.jsonPath("$.data.memberSetting.likePushActive").value(true))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.data.memberSetting.dailyPushActive").value(false));
     }
 
     @Test
@@ -120,7 +122,8 @@ class MemberControllerTest extends AbstractControllerTest {
                 .andExpect(MockMvcResultMatchers.jsonPath("$.data.lastAttendanceDate").value("2020-10-14"))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.data.murengCount").value(0))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.data.nickname").value("변경된닉네임"))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.data.pushActive").value(true));
+                .andExpect(MockMvcResultMatchers.jsonPath("$.data.memberSetting.likePushActive").value(true))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.data.memberSetting.dailyPushActive").value(false));
         assertEquals("변경된닉네임", memberArgumentCaptor.getValue().getNickname());
         assertEquals("modified-image-path", memberArgumentCaptor.getValue().getImage());
     }
@@ -145,7 +148,8 @@ class MemberControllerTest extends AbstractControllerTest {
                 .andExpect(MockMvcResultMatchers.jsonPath("$.data.lastAttendanceDate").value("2020-10-14"))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.data.murengCount").value(0))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.data.nickname").value("변경된닉네임"))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.data.pushActive").value(true));
+                .andExpect(MockMvcResultMatchers.jsonPath("$.data.memberSetting.likePushActive").value(true))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.data.memberSetting.dailyPushActive").value(false));
         assertEquals("변경된닉네임", memberArgumentCaptor.getValue().getNickname());
         assertEquals("tester-image-path", memberArgumentCaptor.getValue().getImage());
     }

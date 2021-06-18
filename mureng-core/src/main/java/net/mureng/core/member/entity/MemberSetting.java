@@ -12,6 +12,10 @@ import javax.persistence.*;
 @AllArgsConstructor
 public class MemberSetting {
     @Builder.Default
-    @Column(name = "is_push_active", nullable = false)
-    private boolean isPushActive = true;
+    @Column(name = "is_daily_push_active", nullable = false)
+    private boolean isDailyPushActive = true;
+
+    @Builder.Default
+    @Column(name = "is_like_push_active", nullable = false)
+    private boolean isLikePushActive = true;
 }

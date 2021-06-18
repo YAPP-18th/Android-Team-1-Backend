@@ -9,4 +9,5 @@
 
     <include file="config/liquibase/changelog/00000000_initial_schema.xml"/>
     <include file="config/liquibase/changelog/20200527_add_unique_constraint.xml"/>
+    <include file="config/liquibase/changelog/20210618_update.xml"/>
 </databaseChangeLog>

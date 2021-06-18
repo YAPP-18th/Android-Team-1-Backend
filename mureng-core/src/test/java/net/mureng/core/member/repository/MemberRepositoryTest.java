@@ -9,8 +9,6 @@ import net.mureng.core.member.entity.MemberAttendance;
 import net.mureng.core.member.entity.MemberSetting;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.transaction.annotation.Propagation;
-import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import java.time.LocalDateTime;
@@ -64,7 +62,8 @@ public class MemberRepositoryTest {
         Member member = memberRepository.findById(2L).orElseThrow();
         MemberSetting memberSetting = member.getMemberSetting();
 
-        assertFalse(memberSetting.isPushActive());
+        assertTrue(memberSetting.isDailyPushActive());
+        assertFalse(memberSetting.isLikePushActive());
     }
 
     @Test

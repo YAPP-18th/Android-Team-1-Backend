@@ -28,9 +28,4 @@ public class ErrorControllerImpl implements ErrorController {
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                 .body(ApiResult.fail("Internal Server Error"));
     }
-
-    @Override
-    public String getErrorPath() {
-        return null;
-    }
 }

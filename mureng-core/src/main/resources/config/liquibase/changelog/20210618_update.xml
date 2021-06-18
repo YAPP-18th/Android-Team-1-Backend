@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd
+        http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+
+    <changeSet id="20210618" author="hkpark">
+        <dropNotNullConstraint columnDataType="varchar(255)"
+                                columnName="email"
+                                tableName="member"/>
+
+        <renameColumn columnDataType="boolean"
+                      oldColumnName="is_push_active"
+                       newColumnName="is_daily_push_active"
+                       tableName="member"/>
+
+        <addColumn tableName="member" >
+            <column name="is_like_push_active" type="boolean" defaultValueBoolean="true">
+                <constraints nullable="false"/>
+            </column>
+            <column name="fcm_token" type="varchar(255)">
+                <constraints unique="true"/>
+            </column>
+        </addColumn>
+    </changeSet>
+
+</databaseChangeLog>
