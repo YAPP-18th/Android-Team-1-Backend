@@ -1,21 +1,10 @@
-apiVersion: v1
-kind: Service
-metadata:
-  name: mureng-app-dev
-spec:
-  type: LoadBalancer
-  ports:
-    - port: 8081
-      targetPort: 8080
-  selector:
-    app: mureng-app-dev
----
 apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: mureng-app-dev-deployment
 spec:
-  replicas: 1
+  replicas: 2
+  minReadySeconds: 20
   selector:
     matchLabels:
       app: mureng-app-dev
@@ -30,24 +19,29 @@ spec:
           resources:
             requests:
               memory: "256Mi"
-              cpu: "300m"
-            limits:
-              memory: "512Mi"
               cpu: "500m"
+            limits:
+              memory: "256Mi"
+              cpu: "500m"
+          volumeMounts:
+            - name: content-server-volume
+              mountPath: /home/gradle/mount
           ports:
             - containerPort: 8080
-#          env:
-#            - name: NODE_ENV
-#              value: "production"
-#            - name: PORT
-#              value: "$PORT"
-#            - name: DB_NAME
-#              value: "$DB_NAME"
-#            - name: DB_USERNAME
-#              value: "$DB_USERNAME"
-#            - name: DB_PASSWORD
-#              value: "$DB_PASSWORD"
-#            - name: DB_HOST
-#              value: "$DB_HOST"
-#            - name: DB_PORT
-#              value: "$DB_PORT"
+          env:
+            - name: SPRING_PROFILES_ACTIVE
+              value: "dev"
+            - name: SPRING_DATASOURCE_DRIVER_CLASS_NAME
+              value: "$DEV_DB_DRIVER"
+            - name: SPRING_DATASOURCE_URL
+              value: "$DEV_DB_URL"
+            - name: SPRING_DATASOURCE_USERNAME
+              value: "$DEV_DB_USERNAME"
+            - name: SPRING_DATASOURCE_PASSWORD
+              value: "$DEV_DB_PASSWORD"
+      volumes:
+        - name: content-server-volume
+          hostPath:
+            path: "$DEV_STATIC_DATA_PATH" # secret
+            type: Directory
+

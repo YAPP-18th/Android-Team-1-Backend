@@ -1,0 +1,46 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mureng-app-deployment
+spec:
+  replicas: 2
+  minReadySeconds: 20
+  selector:
+    matchLabels:
+      app: mureng-app
+  template:
+    metadata:
+      labels:
+        app: mureng-app
+    spec:
+      containers:
+        - name: mureng-app
+          image: gcr.io/PROJECT_ID/IMAGE:TAG
+          resources:
+            requests:
+              memory: "256Mi"
+              cpu: "250m"
+            limits:
+              memory: "256Mi"
+              cpu: "250m"
+          volumeMounts:
+            - name: content-server-volume
+              mountPath: /home/gradle/mount
+          ports:
+            - containerPort: 8080
+          env:
+            - name: SPRING_PROFILES_ACTIVE
+              value: "prod"
+            - name: SPRING_DATASOURCE_DRIVER_CLASS_NAME
+              value: "$PROD_DB_DRIVER"
+            - name: SPRING_DATASOURCE_URL
+              value: "$PROD_DB_URL"
+            - name: SPRING_DATASOURCE_USERNAME
+              value: "$PROD_DB_USERNAME"
+            - name: SPRING_DATASOURCE_PASSWORD
+              value: "$PROD_DB_PASSWORD"
+      volumes:
+        - name: content-server-volume
+          persistentVolumeClaim:
+            claimName: nfs
+

@@ -1,0 +1,153 @@
+name: Test and Deploy with Noti - prod
+
+on:
+  workflow_dispatch:
+    inputs:
+      logLevel:
+        description: 'Log level'
+        required: true
+        default: 'warning'
+      tags:
+        description: 'Test scenario tags'
+
+env:
+  PROJECT_ID: ${{ secrets.GKE_PROJECT }}
+  GKE_CLUSTER: mureng-cluster    # Add your cluster name here.
+  GKE_ZONE: asia-east1-a   # Add your cluster zone here.
+  DEPLOYMENT_NAME: mureng-app-deployment # Add your deployment name here.
+  IMAGE: mureng
+
+jobs:
+  test:
+    name: Gradle 테스트
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up JDK 11
+        uses: actions/setup-java@v2
+        with:
+          java-version: '11'
+          distribution: 'adopt'
+      - name: Grant execute permission for gradlew
+        run: chmod +x gradlew
+      - name: Gradle 빌드 캐싱
+        id: gradle-cache
+        uses: actions/cache@v2
+        with:
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
+          restore-keys: |
+            ${{ runner.os }}-gradle-
+      - name: Gradle 테스트 및 실행파일 생성
+        run: ./gradlew :mureng-api:build :mureng-api:test :mureng-api:bootJar
+
+      - uses: actions/upload-artifact@v2
+        name: 생성한 파일 업로드
+        with:
+          name: mureng-app-artifact
+          path: ${{ github.workspace }}/mureng-api/build/libs/mureng-api-0.0.1-SNAPSHOT.jar
+  deployment-api:
+    name: Setup, Build, Publish, and Deploy
+    needs: test
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: 업로드한 파일 다운로드
+        uses: actions/download-artifact@v2
+        with:
+          name: mureng-app-artifact
+
+      - name: 업로드한 파일 빌드 경로로 위치
+        run: |
+          mkdir mureng-api/build
+          mkdir mureng-api/build/libs
+          mv mureng-api-0.0.1-SNAPSHOT.jar mureng-api/build/libs/
+
+      # Setup gcloud CLI
+      - uses: google-github-actions/setup-gcloud@v0.2.0
+        with:
+          service_account_key: ${{ secrets.GKE_SA_KEY }}
+          project_id: ${{ secrets.GKE_PROJECT }}
+
+      # Configure docker to use the gcloud command-line tool as a credential helper
+      - run: |-
+          gcloud --quiet auth configure-docker
+
+      # Get the GKE credentials so we can deploy to the cluster
+      - uses: google-github-actions/get-gke-credentials@v0.2.1
+        with:
+          cluster_name: ${{ env.GKE_CLUSTER }}
+          location: ${{ env.GKE_ZONE }}
+          credentials: ${{ secrets.GKE_SA_KEY }}
+
+      # Build the Docker image
+      - name: Build
+        run: |-
+          docker build \
+            --tag "gcr.io/$PROJECT_ID/$IMAGE:$GITHUB_SHA" \
+            --build-arg GITHUB_SHA="$GITHUB_SHA" \
+            --build-arg GITHUB_REF="$GITHUB_REF" \
+            ./mureng-api/
+
+      # Push the Docker image to Google Container Registry
+      - name: Publish
+        run: |-
+          docker push "gcr.io/$PROJECT_ID/$IMAGE:$GITHUB_SHA"
+
+      - name: 환경변수 치환 후 최종 배포 파일 생성
+        uses: danielr1996/envsubst-action@1.0.0
+        env:
+          PROD_DB_DRIVER: ${{ secrets.PROD_DB_DRIVER }}
+          PROD_DB_URL: ${{ secrets.PROD_DB_URL }}
+          PROD_DB_USERNAME: ${{ secrets.PROD_DB_USERNAME }}
+          PROD_DB_PASSWORD: ${{ secrets.PROD_DB_PASSWORD }}
+        with:
+          input: deployment/deployment.yml
+          output: deploy.yml
+
+      # Set up kustomize
+      - name: Set up Kustomize
+        run: |-
+          curl -sfLo kustomize https://github.com/kubernetes-sigs/kustomize/releases/download/v3.1.0/kustomize_3.1.0_linux_amd64
+          chmod u+x ./kustomize
+
+      # Deploy the Docker image to the GKE cluster
+      - name: Deploy
+        run: |-
+          ./kustomize edit set image gcr.io/PROJECT_ID/IMAGE:TAG=gcr.io/$PROJECT_ID/$IMAGE:$GITHUB_SHA
+          ./kustomize build . | kubectl apply -f -
+          kubectl rollout status deployment/$DEPLOYMENT_NAME
+          kubectl get services -o wide
+  notification-success:
+    name: 슬랙에 성공 알림
+    if: success()
+    needs: [ test, deployment-api ]
+    runs-on: ubuntu-latest
+    steps:
+      - name: 슬랙 성공 알림
+        env:
+          SLACK_BOT_TOKEN: ${{ secrets.SLACK_NOTIFICATIONS_BOT_TOKEN }}
+        uses: voxmedia/github-action-slack-notify-build@v1
+        with:
+          channel: 1-서버-알림
+          status: SUCCESS
+          color: good
+
+  notification-failure:
+    name: 슬랙에 실패 알림
+    if: failure()
+    needs: [ test, deployment-api ]
+    runs-on: ubuntu-latest
+    steps:
+      - name: 슬랙 실패 알림
+        env:
+          SLACK_BOT_TOKEN: ${{ secrets.SLACK_NOTIFICATIONS_BOT_TOKEN }}
+        uses: voxmedia/github-action-slack-notify-build@v1
+        with:
+          channel: 1-서버-알림
+          status: FAILED
+          color: danger

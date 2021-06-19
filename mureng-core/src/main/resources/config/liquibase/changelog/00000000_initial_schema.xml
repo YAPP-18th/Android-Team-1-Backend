@@ -1,0 +1,208 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd
+        http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+
+    <changeSet id="20200506" author="hkpark">
+        <createTable tableName="member">
+            <column name="member_id" type="bigint" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false" unique="true"/>
+            </column>
+            <column name="identifier" type="varchar(255)">
+                <constraints nullable="false" unique="true"/>
+            </column>
+            <column name="email" type="varchar(255)">
+                <constraints nullable="false" unique="true"/>
+            </column>
+            <column name="is_active" type="boolean" value="true">
+                <constraints nullable="false"/>
+            </column>
+            <column name="nickname" type="varchar(255)">
+                <constraints nullable="false" unique="true"/>
+            </column>
+            <column name="image" type="varchar(255)"/>
+            <column name="mureng_count" type="int" value="0">
+                <constraints nullable="false"/>
+            </column>
+            <column name="attendance_count" type="int">
+                <constraints nullable="false"/>
+            </column>
+            <column name="is_push_active" type="boolean" value="true">
+                <constraints nullable="false"/>
+            </column>
+            <column name="last_attendance_date" type="date">
+                <constraints nullable="false"/>
+            </column>
+            <column name="reg_date" type="datetime">
+                <constraints nullable="false"/>
+            </column>
+            <column name="mod_date" type="datetime">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <createTable tableName="today_expression">
+            <column name="exp_id" type="bigint" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false" unique="true"/>
+            </column>
+            <column name="expression" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="meaning" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="expression_example" type="varchar(255)"/>
+            <column name="expression_example_meaning" type="varchar(255)"/>
+            <column name="reg_date" type="datetime">
+                <constraints nullable="false"/>
+            </column>
+            <column name="mod_date" type="datetime">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <createTable tableName="member_scrap">
+            <column name="member_id" type="bigint">
+                <constraints primaryKey="true" nullable="false" foreignKeyName="fk_member_scrap_member"
+                             references="member(member_id)"/>
+            </column>
+            <column name="exp_id" type="bigint">
+                <constraints primaryKey="true" nullable="false" foreignKeyName="fk_member_scrap_today_expression"
+                             references="today_expression(exp_id)"/>
+            </column>
+            <column name="reg_date" type="datetime">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <createTable tableName="question">
+            <column name="question_id" type="bigint" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false" unique="true"/>
+            </column>
+            <column name="member_id" type="bigint">
+                <constraints foreignKeyName="fk_question_member" references="member(member_id)"/>
+            </column>
+            <column name="category" type="varchar(20)"/>
+            <column name="content" type="varchar(150)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="ko_content" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="reg_date" type="datetime">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <createTable tableName="today_question">
+            <column name="member_id" type="bigint">
+                <constraints nullable="false" primaryKey="true" unique="true" foreignKeyName="fk_today_question_member"
+                             references="member(member_id)"/>
+            </column>
+            <column name="question_id" type="bigint">
+                <constraints nullable="false" unique="true" foreignKeyName="fk_today_question_question"
+                             references="question(question_id)"/>
+            </column>
+            <column name="reg_date" type="datetime">
+                <constraints nullable="false"/>
+            </column>
+            <column name="mod_date" type="datetime">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <createTable tableName="word_hint">
+            <column name="hint_id" type="bigint" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false" unique="true"/>
+            </column>
+            <column name="question_id" type="bigint">
+                <constraints nullable="false" foreignKeyName="fk_world_hint_question"
+                             references="question(question_id)"/>
+            </column>
+            <column name="word" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="meaning" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="reg_date" type="datetime">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <createTable tableName="reply">
+            <column name="reply_id" type="bigint" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false" unique="true"/>
+            </column>
+            <column name="member_id" type="bigint">
+                <constraints nullable="false" foreignKeyName="fk_reply_member" references="member(member_id)"/>
+            </column>
+            <column name="question_id" type="bigint">
+                <constraints nullable="false" foreignKeyName="fk_reply_question" references="question(question_id)"/>
+            </column>
+            <column name="content" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="image" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="visible" type="boolean" value="true">
+                <constraints nullable="false"/>
+            </column>
+            <column name="deleted" type="boolean" value="false">
+                <constraints nullable="false"/>
+            </column>
+            <column name="reg_date" type="datetime">
+                <constraints nullable="false"/>
+            </column>
+            <column name="mod_date" type="datetime">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <createTable tableName="reply_likes">
+            <column name="member_id" type="bigint">
+                <constraints primaryKey="true" nullable="false" foreignKeyName="fk_reply_likes_member"
+                             references="member(member_id)"/>
+            </column>
+            <column name="reply_id" type="bigint">
+                <constraints primaryKey="true" nullable="false" foreignKeyName="fk_reply_likes_reply"
+                             references="reply(reply_id)"/>
+            </column>
+            <column name="reg_date" type="datetime">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <createTable tableName="badge">
+            <column name="badge_id" type="bigint" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false" unique="true"/>
+            </column>
+            <column name="name" type="varchar(20)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="content" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <createTable tableName="badge_accomplished">
+            <column name="member_id" type="bigint">
+                <constraints primaryKey="true" nullable="false" foreignKeyName="fk_badge_accomplished_member"
+                             references="member(member_id)"/>
+            </column>
+            <column name="badge_id" type="bigint">
+                <constraints primaryKey="true" nullable="false" foreignKeyName="fk_badge_accomplished_badge"
+                             references="badge(badge_id)"/>
+            </column>
+            <column name="reg_date" type="datetime">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+</databaseChangeLog>

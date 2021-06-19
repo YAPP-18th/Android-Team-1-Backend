@@ -1,0 +1,9 @@
+spring:
+  liquibase:
+      enabled: false
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+  sql:
+    init:
+      data-locations: local-test-data.sql
