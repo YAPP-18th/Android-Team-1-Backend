@@ -191,6 +191,7 @@ jobs:
           DEV_DB_URL: ${{ secrets.DEV_DB_URL }}
           DEV_DB_USERNAME: ${{ secrets.DEV_DB_USERNAME }}
           DEV_DB_PASSWORD: ${{ secrets.DEV_DB_PASSWORD }}
+          FIREBASE_SERVICE_KEY: ${{ secrets.FIREBASE_SERVICE_KEY }}
           DEV_STATIC_DATA_PATH: ${{ secrets.DEV_STATIC_DATA_PATH }}
         with:
           input: deployment/deployment-batch-dev.yml
