@@ -14,8 +14,8 @@ env:
   PROJECT_ID: ${{ secrets.GKE_PROJECT }}
   GKE_CLUSTER: mureng-cluster    # Add your cluster name here.
   GKE_ZONE: asia-east1-a   # Add your cluster zone here.
-  DEPLOYMENT_NAME: mureng-app-deployment # Add your deployment name here.
-  IMAGE: mureng
+  DEPLOYMENT_NAME: mureng-batch-deployment # Add your deployment name here.
+  IMAGE: mureng-batch
 
 jobs:
   test:
