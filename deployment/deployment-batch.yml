@@ -18,11 +18,11 @@ spec:
           image: gcr.io/PROJECT_ID/IMAGE:TAG
           resources:
             requests:
-              memory: "256Mi"
-              cpu: "500m"
+              memory: "350Mi"
+              cpu: "350m"
             limits:
-              memory: "256Mi"
-              cpu: "500m"
+              memory: "350Mi"
+              cpu: "350m"
           volumeMounts:
             - name: content-server-volume
               mountPath: /home/gradle/mount
