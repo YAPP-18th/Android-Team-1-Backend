@@ -68,11 +68,6 @@ public class MemberDto {
                 position = PropertyDisplayOrder.MEMBER_SETTING)
         @JsonProperty(index = PropertyDisplayOrder.MEMBER_SETTING)
         private MemberSetting memberSetting;
-
-        @ApiModelProperty(value = "회원 설정 정보", accessMode = ApiModelProperty.AccessMode.READ_ONLY,
-                position = PropertyDisplayOrder.FCM_TOKEN)
-        @JsonProperty(index = PropertyDisplayOrder.FCM_TOKEN)
-        private String fcmToken;
     }
 
     private static class PropertyDisplayOrder {
@@ -85,6 +80,5 @@ public class MemberDto {
         private static final int ATTENDANCE_COUNT       = 6;
         private static final int LAST_ATTENDANCE_DATE   = 7;
         private static final int MEMBER_SETTING         = 8;
-        private static final int FCM_TOKEN              = 9;
     }
 }
