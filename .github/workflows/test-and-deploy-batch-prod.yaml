@@ -14,8 +14,8 @@ env:
   PROJECT_ID: ${{ secrets.GKE_PROJECT }}
   GKE_CLUSTER: mureng-cluster    # Add your cluster name here.
   GKE_ZONE: asia-east1-a   # Add your cluster zone here.
-  DEPLOYMENT_NAME: mureng-app-deployment # Add your deployment name here.
-  IMAGE: mureng
+  DEPLOYMENT_NAME: mureng-batch-deployment # Add your deployment name here.
+  IMAGE: mureng-batch
 
 jobs:
   test:
@@ -105,6 +105,7 @@ jobs:
           PROD_DB_URL: ${{ secrets.PROD_DB_URL }}
           PROD_DB_USERNAME: ${{ secrets.PROD_DB_USERNAME }}
           PROD_DB_PASSWORD: ${{ secrets.PROD_DB_PASSWORD }}
+          FIREBASE_SERVICE_KEY: ${{ secrets.FIREBASE_SERVICE_KEY }}
         with:
           input: deployment/deployment-batch.yml
           output: deploy.yml

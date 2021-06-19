@@ -39,6 +39,8 @@ spec:
               value: "$DEV_DB_USERNAME"
             - name: SPRING_DATASOURCE_PASSWORD
               value: "$DEV_DB_PASSWORD"
+            - name: FIREBASE_SERVICE_KEY
+              value: "$FIREBASE_SERVICE_KEY"
       volumes:
         - name: content-server-volume
           hostPath:
