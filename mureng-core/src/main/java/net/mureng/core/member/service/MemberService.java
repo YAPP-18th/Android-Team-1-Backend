@@ -26,6 +26,11 @@ public class MemberService {
         return memberRepository.saveAndFlush(newMember);
     }
 
+    @Transactional
+    public Member updateMember(@Valid Member newMember) {
+        return memberRepository.saveAndFlush(newMember);
+    }
+
     @Transactional(readOnly = true)
     public boolean isNicknameDuplicated(String nickname) {
         return memberRepository.existsByNickname(nickname);

@@ -33,7 +33,7 @@ public class MemberSettingController {
                                                                     @RequestBody PushActive pushActive) {
         member.getMemberSetting().setLikePushActive(pushActive.isPushActive());
         return ResponseEntity.ok(ApiResult.ok(memberMapper.toDto(
-                memberService.saveMember(member)
+                memberService.updateMember(member)
         )));
     }
 
@@ -44,7 +44,7 @@ public class MemberSettingController {
                                                                      @RequestBody PushActive pushActive) {
         member.getMemberSetting().setDailyPushActive(pushActive.isPushActive());
         return ResponseEntity.ok(ApiResult.ok(memberMapper.toDto(
-                memberService.saveMember(member)
+                memberService.updateMember(member)
         )));
     }
 
