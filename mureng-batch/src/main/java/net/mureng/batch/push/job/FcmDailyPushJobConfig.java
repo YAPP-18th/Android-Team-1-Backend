@@ -5,9 +5,8 @@ import lombok.extern.slf4j.Slf4j;
 import net.mureng.batch.core.config.AbstractJobConfig;
 import net.mureng.batch.core.job.MurengJobLauncher;
 import net.mureng.batch.push.service.FcmDailyPushService;
+import net.mureng.core.member.entity.FcmToken;
 import net.mureng.core.member.entity.Member;
-import net.mureng.push.dto.NotificationRequest;
-import net.mureng.push.service.FcmService;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.Step;
 import org.springframework.batch.core.configuration.annotation.JobScope;
@@ -44,27 +43,27 @@ public class FcmDailyPushJobConfig extends AbstractJobConfig {
     @JobScope
     public Step fcmDailyPushStep() {
         return stepBuilderFactory.get("fcmDailyPushStep")
-                .<Member, Member>chunk(1000)
+                .<FcmToken, FcmToken>chunk(1000)
                 .reader(fcmDailyPushReader())
                 .writer(todayQuestionRefreshWriter())
                 .build();
     }
 
     @Bean
-    public JpaPagingItemReader<Member> fcmDailyPushReader() {
-        return new JpaPagingItemReaderBuilder<Member>()
+    public JpaPagingItemReader<FcmToken> fcmDailyPushReader() {
+        return new JpaPagingItemReaderBuilder<FcmToken>()
                 .name("fcmDailyPushReader")
                 .entityManagerFactory(emf)
                 .pageSize(1000)
-                .queryString("SELECT m FROM Member m")
+                .queryString("SELECT f FROM FcmToken f")
                 .build();
     }
 
-    private ItemWriter<Member> todayQuestionRefreshWriter() {
-        return members -> {
+    private ItemWriter<FcmToken> todayQuestionRefreshWriter() {
+        return fcmTokens -> {
             log.info(">>>>>>>>>>> Sending FCM");
-            for (Member member : members) {
-                fcmDailyPushService.pushToMember(member);
+            for (FcmToken fcmToken : fcmTokens) {
+                fcmDailyPushService.push(fcmToken);
             }
         };
     }

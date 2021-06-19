@@ -15,6 +15,7 @@ import net.mureng.api.member.component.MemberMapper;
 import net.mureng.api.member.dto.MemberDto;
 import net.mureng.api.member.service.MemberSignupService;
 import net.mureng.core.member.entity.Member;
+import net.mureng.core.member.repository.FcmTokenRepository;
 import net.mureng.core.member.service.MemberService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -30,6 +31,7 @@ public class MemberController {
     private final MemberService memberService;
     private final MemberSignupService memberSignupService;
     private final MemberMapper memberMapper;
+    private final FcmTokenRepository fcmTokenRepository;
 
     @ApiOperation(value = "신규 회원 가입", notes = "신규 회원가입입니다.")
     @PostMapping("/signup")
@@ -78,17 +80,6 @@ public class MemberController {
         return ResponseEntity.ok(ApiResult.ok(memberMapper.toDto(member)));
     }
 
-    @ApiOperation(value = "FCM 토큰 갱신", notes = "FCM 토큰을 갱신합니다.")
-    @PutMapping("/me/fcm-token")
-    public ResponseEntity<ApiResult<MemberDto.ReadOnly>> fcmToken(@CurrentUser Member member,
-                                                                  @ApiParam(value = "Fcm 토큰 정보", required = true)
-                                                                  @RequestBody FcmToken fcmToken) {
-        member.setFcmToken(fcmToken.getFcmToken());
-        return ResponseEntity.ok(ApiResult.ok(memberMapper.toDto(
-                memberService.saveMember(member)
-        )));
-    }
-
     @ApiOperation(value = "특정 사용자의 프로필 가져오기", notes = "특정 사용자의 프로필 정보를 가져옵니다.")
     @GetMapping("/{memberId}")
     public ResponseEntity<ApiResult<MemberDto.ReadOnly>> getMemberProfile(@CurrentUser Member member,
@@ -113,12 +104,5 @@ public class MemberController {
 
         @ApiModelProperty(value = "프로필 이미지 경로")
         private String image;
-    }
-
-    @NoArgsConstructor
-    @Getter @Setter
-    public static class FcmToken {
-        @ApiModelProperty(value = "FCM 토큰 값")
-        private String fcmToken;
     }
 }

@@ -40,6 +40,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                         .antMatchers("/api/test", "/api/test-failure").anonymous()
                         .antMatchers("/api/jwt", "/api/member/signin").anonymous()
                         .antMatchers("/").anonymous()
+                        .antMatchers("/api/fcm-token").anonymous()
                         .anyRequest().authenticated()
                 .and()
                     .addFilterBefore(new JwtAuthenticationFilter(jwtResolver, jwtValidator), UsernamePasswordAuthenticationFilter.class);

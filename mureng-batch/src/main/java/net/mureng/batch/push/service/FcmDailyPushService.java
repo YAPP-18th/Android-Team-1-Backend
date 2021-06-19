@@ -1,6 +1,7 @@
 package net.mureng.batch.push.service;
 
 import lombok.RequiredArgsConstructor;
+import net.mureng.core.member.entity.FcmToken;
 import net.mureng.core.member.entity.Member;
 import net.mureng.core.question.service.TodayQuestionService;
 import net.mureng.push.dto.NotificationRequest;
@@ -17,13 +18,14 @@ public class FcmDailyPushService {
     private final FcmService fcmService;
     private final TodayQuestionService todayQuestionService;
 
-    public void pushToMember(Member member) {
-        if (! member.getMemberSetting().isLikePushActive()) {
+    public void push(FcmToken fcmToken) {
+        Member member = fcmToken.getMember();
+        if (member == null || ! member.getMemberSetting().isLikePushActive()) {
             return;
         }
 
         fcmService.send(NotificationRequest.builder()
-                .token(member.getFcmToken())
+                .token(fcmToken.getToken())
                 .title(DAILY_PUSH_TITLE)
                 .message(todayQuestionService.getTodayQuestionByMemberId(member.getMemberId()).getContent())
                 .clickAction(DAILY_PUSH_CLICK_ACTION)

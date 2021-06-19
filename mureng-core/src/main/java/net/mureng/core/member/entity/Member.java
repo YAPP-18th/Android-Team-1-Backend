@@ -36,8 +36,6 @@ public class Member {
 
     private String image;
 
-    private String fcmToken;
-
     @Builder.Default
     @Column(name = "reg_date", nullable = false)
     private LocalDateTime regDate = LocalDateTime.now();

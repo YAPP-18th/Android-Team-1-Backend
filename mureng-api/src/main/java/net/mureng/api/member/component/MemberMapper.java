@@ -24,6 +24,5 @@ public interface MemberMapper extends EntityMapper<Member, MemberDto> {
     @Mapping(target = "memberAttendance", ignore = true)
     @Mapping(target = "regDate", ignore = true)
     @Mapping(target = "modDate", ignore = true)
-    @Mapping(target = "fcmToken", ignore = true)
     Member toEntity(MemberDto memberDto);
 }
