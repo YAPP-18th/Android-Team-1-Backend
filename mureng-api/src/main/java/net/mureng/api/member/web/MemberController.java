@@ -82,7 +82,7 @@ public class MemberController {
     @PutMapping("/me/fcm-token")
     public ResponseEntity<ApiResult<MemberDto.ReadOnly>> fcmToken(@CurrentUser Member member,
                                                                   @ApiParam(value = "Fcm 토큰 정보", required = true)
-                                                                  @RequestBody MemberSettingController.FcmToken fcmToken) {
+                                                                  @RequestBody FcmToken fcmToken) {
         member.setFcmToken(fcmToken.getFcmToken());
         return ResponseEntity.ok(ApiResult.ok(memberMapper.toDto(
                 memberService.saveMember(member)
@@ -113,5 +113,12 @@ public class MemberController {
 
         @ApiModelProperty(value = "프로필 이미지 경로")
         private String image;
+    }
+
+    @NoArgsConstructor
+    @Getter @Setter
+    public static class FcmToken {
+        @ApiModelProperty(value = "FCM 토큰 값")
+        private String fcmToken;
     }
 }

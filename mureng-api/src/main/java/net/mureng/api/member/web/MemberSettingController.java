@@ -27,36 +27,22 @@ public class MemberSettingController {
     private final MemberMapper memberMapper;
 
     @ApiOperation(value = "좋아요 Push 알림 ON", notes = "좋아요 Push 알림을 켭니다.")
-    @PostMapping("/me/setting/push/like")
-    public ResponseEntity<ApiResult<MemberDto.ReadOnly>> likePushOn(@CurrentUser Member member) {
-        member.getMemberSetting().setLikePushActive(true);
-        return ResponseEntity.ok(ApiResult.ok(memberMapper.toDto(
-                memberService.saveMember(member)
-        )));
-    }
-
-    @ApiOperation(value = "좋아요 Push 알림 OFF", notes = "좋아요 Push 알림을 끕니다.")
-    @DeleteMapping("/me/setting/push/like")
-    public ResponseEntity<ApiResult<MemberDto.ReadOnly>> likePushOff(@CurrentUser Member member) {
-        member.getMemberSetting().setLikePushActive(false);
+    @PutMapping("/me/setting/push/like")
+    public ResponseEntity<ApiResult<MemberDto.ReadOnly>> likePushOn(@CurrentUser Member member,
+                                                                    @ApiParam(value = "Push 설정 여부", required = true)
+                                                                    @RequestBody PushActive pushActive) {
+        member.getMemberSetting().setLikePushActive(pushActive.isPushActive());
         return ResponseEntity.ok(ApiResult.ok(memberMapper.toDto(
                 memberService.saveMember(member)
         )));
     }
 
     @ApiOperation(value = "데일리 Push 알림 ON", notes = "데일리 Push 알림을 켭니다.")
-    @PostMapping("/me/setting/push/daily")
-    public ResponseEntity<ApiResult<MemberDto.ReadOnly>> dailyPushOn(@CurrentUser Member member) {
-        member.getMemberSetting().setDailyPushActive(true);
-        return ResponseEntity.ok(ApiResult.ok(memberMapper.toDto(
-                memberService.saveMember(member)
-        )));
-    }
-
-    @ApiOperation(value = "데일리 Push 알림 OFF", notes = "데일리 Push 알림을 끕니다.")
-    @DeleteMapping("/me/setting/push/daily")
-    public ResponseEntity<ApiResult<MemberDto.ReadOnly>> dailyPushOff(@CurrentUser Member member) {
-        member.getMemberSetting().setDailyPushActive(false);
+    @PutMapping("/me/setting/push/daily")
+    public ResponseEntity<ApiResult<MemberDto.ReadOnly>> dailyPushOn(@CurrentUser Member member,
+                                                                     @ApiParam(value = "Push 설정 여부", required = true)
+                                                                     @RequestBody PushActive pushActive) {
+        member.getMemberSetting().setDailyPushActive(pushActive.isPushActive());
         return ResponseEntity.ok(ApiResult.ok(memberMapper.toDto(
                 memberService.saveMember(member)
         )));
@@ -64,7 +50,8 @@ public class MemberSettingController {
 
     @NoArgsConstructor
     @Getter @Setter
-    public static class FcmToken {
-        private String fcmToken;
+    public static class PushActive {
+        @ApiModelProperty(value = "푸시 알림 활성화 여부")
+        private boolean pushActive;
     }
 }
