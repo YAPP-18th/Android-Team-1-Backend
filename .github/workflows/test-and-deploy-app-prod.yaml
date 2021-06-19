@@ -105,6 +105,7 @@ jobs:
           PROD_DB_URL: ${{ secrets.PROD_DB_URL }}
           PROD_DB_USERNAME: ${{ secrets.PROD_DB_USERNAME }}
           PROD_DB_PASSWORD: ${{ secrets.PROD_DB_PASSWORD }}
+          FIREBASE_SERVICE_KEY: ${{ secrets.FIREBASE_SERVICE_KEY }}
         with:
           input: deployment/deployment.yml
           output: deploy.yml
