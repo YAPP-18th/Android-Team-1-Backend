@@ -8,6 +8,7 @@ import net.mureng.core.reply.entity.Reply;
 import net.mureng.core.reply.entity.ReplyLikes;
 import net.mureng.core.reply.entity.ReplyLikesPK;
 import net.mureng.core.reply.repository.ReplyLikesRepository;
+import net.mureng.push.service.FcmLikePushService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -17,6 +18,7 @@ public class ReplyLikesService {
     private final ReplyLikesRepository replyLikesRepository;
     private final ReplyService replyService;
     private final BadgeAccomplishedService badgeAccomplishedService;
+    private final FcmLikePushService fcmLikePushService;
 
     @Transactional
     public ReplyLikes postReplyLikes(Member member, Long replyId){
@@ -32,6 +34,7 @@ public class ReplyLikesService {
         replyLikesRepository.saveAndFlush(replyLikes);
 
         badgeAccomplishedService.createCelebrityMureng(replyId);
+        fcmLikePushService.pushToAuthor(reply, member);
 
         return replyLikes;
     }

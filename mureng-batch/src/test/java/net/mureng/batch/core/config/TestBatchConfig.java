@@ -9,9 +9,9 @@ import org.springframework.context.annotation.Configuration;
 import static org.junit.jupiter.api.Assertions.*;
 
 @Configuration
-@EnableAutoConfiguration
+//@EnableAutoConfiguration
 @EnableBatchProcessing
-@ComponentScan(basePackageClasses = CoreBasePackage.class)
+@ComponentScan(basePackages = {"net.mureng.core", "net.mureng.push", "net.mureng.batch.core"})
 public class TestBatchConfig {
 
 }
