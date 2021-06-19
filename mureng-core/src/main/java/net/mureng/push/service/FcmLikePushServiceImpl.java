@@ -18,6 +18,10 @@ public class FcmLikePushServiceImpl implements FcmLikePushService {
 
     @Override
     public void pushToAuthor(Reply reply, Member likedMember) {
+        if (! reply.getAuthor().getMemberSetting().isLikePushActive()) {
+            return;
+        }
+
         fcmService.send(NotificationRequest.builder()
                 .token(reply.getAuthor().getFcmToken())
                 .title(LIKE_PUSH_TITLE)

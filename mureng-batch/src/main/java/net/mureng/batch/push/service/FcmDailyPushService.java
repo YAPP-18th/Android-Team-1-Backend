@@ -18,6 +18,10 @@ public class FcmDailyPushService {
     private final TodayQuestionService todayQuestionService;
 
     public void pushToMember(Member member) {
+        if (! member.getMemberSetting().isLikePushActive()) {
+            return;
+        }
+
         fcmService.send(NotificationRequest.builder()
                 .token(member.getFcmToken())
                 .title(DAILY_PUSH_TITLE)

@@ -11,7 +11,7 @@ import static org.junit.jupiter.api.Assertions.*;
 @Configuration
 //@EnableAutoConfiguration
 @EnableBatchProcessing
-@ComponentScan(basePackages = {"net.mureng.core", "net.mureng.batch.core"})
+@ComponentScan(basePackages = {"net.mureng.core", "net.mureng.push", "net.mureng.batch.core"})
 public class TestBatchConfig {
 
 }
