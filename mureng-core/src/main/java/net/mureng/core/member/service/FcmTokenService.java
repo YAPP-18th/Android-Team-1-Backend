@@ -15,8 +15,8 @@ public class FcmTokenService {
     private final FcmTokenRepository fcmTokenRepository;
 
     @Transactional
-    public void insertToken(String token, Member member) {
-        fcmTokenRepository.saveAndFlush(FcmToken.builder().member(member).token(token).build());
+    public void insertToken(String token) {
+        fcmTokenRepository.saveAndFlush(FcmToken.builder().token(token).build());
     }
 
     @Transactional

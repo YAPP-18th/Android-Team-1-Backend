@@ -23,10 +23,9 @@ public class FcmTokenController {
 
     @ApiOperation(value = "FCM 토큰 삽입", notes = "FCM 토큰 삽입합니다.")
     @PostMapping("/fcm-token")
-    public ResponseEntity<ApiResult<MemberDto.ReadOnly>> fcmToken(@CurrentUser Member member,
-                                                                    @ApiParam(value = "Fcm 토큰 정보", required = true)
+    public ResponseEntity<ApiResult<MemberDto.ReadOnly>> fcmToken(@ApiParam(value = "Fcm 토큰 정보", required = true)
                                                                   @RequestBody FcmToken fcmToken) {
-        fcmTokenService.insertToken(fcmToken.getFcmToken(), member);
+        fcmTokenService.insertToken(fcmToken.getFcmToken());
         return ResponseEntity.ok(ApiResult.ok(null));
     }
 
