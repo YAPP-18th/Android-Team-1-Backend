@@ -10,13 +10,10 @@ import lombok.Setter;
 import net.mureng.api.core.annotation.CurrentUser;
 import net.mureng.api.core.dto.ApiResult;
 import net.mureng.api.member.dto.MemberDto;
-import net.mureng.api.member.web.MemberController;
 import net.mureng.core.member.entity.Member;
 import net.mureng.core.member.service.FcmTokenService;
-import net.mureng.core.member.service.MemberService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import springfox.documentation.annotations.ApiIgnore;
 
 @RestController
 @RequestMapping("/api")
@@ -26,9 +23,10 @@ public class FcmTokenController {
 
     @ApiOperation(value = "FCM 토큰 삽입", notes = "FCM 토큰 삽입합니다.")
     @PostMapping("/fcm-token")
-    public ResponseEntity<ApiResult<MemberDto.ReadOnly>> fcmToken(@ApiParam(value = "Fcm 토큰 정보", required = true)
+    public ResponseEntity<ApiResult<MemberDto.ReadOnly>> fcmToken(@CurrentUser Member member,
+                                                                    @ApiParam(value = "Fcm 토큰 정보", required = true)
                                                                   @RequestBody FcmToken fcmToken) {
-        fcmTokenService.insertToken(fcmToken.getFcmToken());
+        fcmTokenService.insertToken(fcmToken.getFcmToken(), member);
         return ResponseEntity.ok(ApiResult.ok(null));
     }
 
