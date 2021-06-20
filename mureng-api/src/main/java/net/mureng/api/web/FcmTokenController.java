@@ -10,13 +10,10 @@ import lombok.Setter;
 import net.mureng.api.core.annotation.CurrentUser;
 import net.mureng.api.core.dto.ApiResult;
 import net.mureng.api.member.dto.MemberDto;
-import net.mureng.api.member.web.MemberController;
 import net.mureng.core.member.entity.Member;
 import net.mureng.core.member.service.FcmTokenService;
-import net.mureng.core.member.service.MemberService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import springfox.documentation.annotations.ApiIgnore;
 
 @RestController
 @RequestMapping("/api")

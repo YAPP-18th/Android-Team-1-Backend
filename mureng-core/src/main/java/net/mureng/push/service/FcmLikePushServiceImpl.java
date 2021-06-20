@@ -23,7 +23,7 @@ public class FcmLikePushServiceImpl implements FcmLikePushService {
 
     @Override
     public void pushToAuthor(Reply reply, Member likedMember) {
-        Optional<FcmToken> fcmToken = fcmTokenRepository.findByMember(reply.getAuthor());
+        Optional<FcmToken> fcmToken = fcmTokenRepository.findByMemberMemberId(reply.getAuthor().getMemberId());
         if (! reply.getAuthor().getMemberSetting().isLikePushActive() || fcmToken.isEmpty()) {
             return;
         }
