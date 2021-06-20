@@ -6,9 +6,10 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.Optional;
 
 public interface MemberRepository extends JpaRepository<Member, Long> {
-    Optional<Member> findByEmail(String email);
-    boolean existsByNickname(String nickname);
-    boolean existsByEmail(String email);
+    boolean existsByNicknameAndIsActive(String nickname, Boolean active);
+//    boolean existsByEmail(String email);
     Optional<Member> findByIdentifier(String identifier);
+    Optional<Member> findByIdentifierAndIsActive(String identifier, Boolean active);
     boolean existsByIdentifier(String identifier);
+    boolean existsByIdentifierAndIsActive(String identifier, Boolean active);
 }
