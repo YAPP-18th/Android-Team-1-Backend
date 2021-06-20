@@ -25,7 +25,7 @@ public class MemberSignupService {
             Member member = memberService.findByIdentifierIncludingDropped(newMember.getIdentifier());
             member.updateMember(newMember);
             member.setIsActive(true);
-            memberService.updateMember(member);
+            return memberService.updateMember(member);
         }
 
         Member savedMember = memberService.saveMember(newMember);
