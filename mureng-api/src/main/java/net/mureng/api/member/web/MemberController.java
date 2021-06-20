@@ -31,7 +31,6 @@ public class MemberController {
     private final MemberService memberService;
     private final MemberSignupService memberSignupService;
     private final MemberMapper memberMapper;
-    private final FcmTokenRepository fcmTokenRepository;
 
     @ApiOperation(value = "신규 회원 가입", notes = "신규 회원가입입니다.")
     @PostMapping("/signup")
@@ -87,6 +86,14 @@ public class MemberController {
         return ResponseEntity.ok(ApiResult.ok(
                 memberMapper.toDto(memberService.findById(memberId))
         ));
+    }
+
+    @ApiOperation(value = "로그인한 사용자 탈퇴", notes = "현재 로그인한 사용자를 탈퇴시킵니다. " +
+            "DB 상에서 실제 삭제는 되지 않습니다.")
+    @DeleteMapping("/me")
+    public ResponseEntity<ApiResult<MemberDto.ReadOnly>> delete(@CurrentUser Member member) {
+        memberService.dropOutMember(member);
+        return ResponseEntity.ok(ApiResult.ok(null));
     }
 
     @ApiIgnore
