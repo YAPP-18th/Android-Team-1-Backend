@@ -1,6 +1,7 @@
 package net.mureng.api.reply.component;
 
 import net.mureng.api.common.DtoCreator;
+import net.mureng.core.badge.service.BadgeAccomplishedServiceImpl;
 import net.mureng.core.common.EntityCreator;
 import net.mureng.core.question.entity.Question;
 import net.mureng.api.reply.dto.ReplyDto;
@@ -55,7 +56,7 @@ class ReplyMapperTest {
         assertEquals(replyDto.getReplyLikeCount(), mappedDto.getReplyLikeCount());
         assertEquals(replyDto.getRequestedByAuthor(), mappedDto.getRequestedByAuthor());
         assertEquals(replyDto.getLikedByRequester(), mappedDto.getLikedByRequester());
-        assertEquals(4L, mappedDto.getAccomplishedBadge());
+        assertEquals(BadgeAccomplishedServiceImpl.MurengSet.id, mappedDto.getAccomplishedBadge());
     }
 
     @Test

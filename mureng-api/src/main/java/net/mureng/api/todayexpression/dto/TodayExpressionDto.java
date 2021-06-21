@@ -38,6 +38,9 @@ public class TodayExpressionDto {
     @ApiModelProperty(value = "요청자의 스크랩 여부", position = PropertyDisplayOrder.SCRAPPED_BY_REQUESTER)
     private boolean scrappedByRequester;
 
+    @ApiModelProperty(value = "사용자가 획득한 뱃지 번호", position = PropertyDisplayOrder.ACCOMPLISHED_BADGE)
+    private Long accomplishedBadge;
+
     private static class PropertyDisplayOrder {
         private static final int EXP_ID                     = 0;
         private static final int EXPRESSION                 = 1;
@@ -45,5 +48,6 @@ public class TodayExpressionDto {
         private static final int EXPRESSION_EXAMPLE         = 3;
         private static final int EXPRESSION_EXAMPLE_MEANING = 4;
         private static final int SCRAPPED_BY_REQUESTER      = 5;
+        private static final int ACCOMPLISHED_BADGE         = 6;
     }
 }

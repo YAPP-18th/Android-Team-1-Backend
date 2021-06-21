@@ -37,8 +37,6 @@ public class MemberExpressionScrapService {
 
         memberScrapRepository.saveAndFlush(memberScrap);
 
-        badgeAccomplishedService.createAcademicMureng(member.getMemberId());
-
         return memberScrap;
     }
 
