@@ -8,4 +8,5 @@ import java.util.List;
 
 public interface MemberScrapRepository extends JpaRepository<MemberScrap, MemberScrapPK> {
     List<MemberScrap> findAllByIdMemberId(Long memberId);
+    Long countByMemberMemberId(Long memberId);
 }

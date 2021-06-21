@@ -73,6 +73,8 @@ public class ReplyDto {
                 accessMode = ApiModelProperty.AccessMode.READ_ONLY, position = PropertyDisplayOrder.LIKED_BY_MEMBER)
         @JsonProperty(index = PropertyDisplayOrder.LIKED_BY_MEMBER)
         private Boolean likedByRequester;
+
+        private Long accomplishedBadge;
     }
 
     private static class PropertyDisplayOrder {

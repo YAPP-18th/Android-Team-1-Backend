@@ -24,7 +24,7 @@ public class BadgeAccomplishedServiceImpl implements BadgeAccomplishedService {
 
     @Transactional
     public boolean createMureng3Days(Long memberId) {
-        if ( replyRepository.findAllByAuthorMemberId(memberId).size() == Mureng3Days.conditionOfCount &&
+        if ( replyRepository.countAllByAuthorMemberId(memberId) == Mureng3Days.conditionOfCount &&
                 !badgeAccomplishedRepository.existsBadgeAccomplishedByMemberMemberIdAndBadgeBadgeId(memberId, Mureng3Days.id) ){
 
             badgeAccomplishedRepository.saveAndFlush(makeBadgeAccomplished(memberId, Mureng3Days.id));
@@ -51,7 +51,7 @@ public class BadgeAccomplishedServiceImpl implements BadgeAccomplishedService {
 
     @Transactional
     public boolean createAcademicMureng(Long memberId) {
-        if( memberScrapRepository.findAllByIdMemberId(memberId).size() == AcademicMureng.conditionOfCount &&
+        if( memberScrapRepository.countByMemberMemberId(memberId) == AcademicMureng.conditionOfCount &&
                 !badgeAccomplishedRepository.existsBadgeAccomplishedByMemberMemberIdAndBadgeBadgeId(memberId, AcademicMureng.id ) ){
 
             badgeAccomplishedRepository.saveAndFlush(makeBadgeAccomplished(memberId, AcademicMureng.id));
@@ -63,7 +63,7 @@ public class BadgeAccomplishedServiceImpl implements BadgeAccomplishedService {
 
     @Transactional
     public boolean createMurengSet(Long memberId){
-        if ( replyRepository.findAllByAuthorMemberId(memberId).size() == MurengSet.conditionOfCount &&
+        if ( replyRepository.countAllByAuthorMemberId(memberId) == MurengSet.conditionOfCount &&
                 !badgeAccomplishedRepository.existsBadgeAccomplishedByMemberMemberIdAndBadgeBadgeId(memberId, MurengSet.id) ){
 
             badgeAccomplishedRepository.saveAndFlush(makeBadgeAccomplished(memberId, MurengSet.id));
