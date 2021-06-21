@@ -15,6 +15,8 @@ public interface ReplyRepository extends JpaRepository<Reply, Long> {
     List<Reply> findAllByQuestionQuestionId(Long questionId);
     Page<Reply> findAllByQuestionQuestionId(Long questionId, Pageable pageable);
 
+    Long countAllByAuthorMemberId(Long memberId);
+
     @Query("Select r from Reply r where r.question.questionId = :questionId order by r.replyLikes.size desc")
     Page<Reply> findAllByQuestionQuestionIdOrderByReplyLikesSize(Long questionId, Pageable pageable);
 

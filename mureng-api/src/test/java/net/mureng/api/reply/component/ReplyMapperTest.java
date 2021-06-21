@@ -46,6 +46,19 @@ class ReplyMapperTest {
     }
 
     @Test
+    public void 엔티티에서_DTO변환_로그인사용자_테스트_뱃지획득() {
+        ReplyDto.ReadOnly mappedDto = replyMapper.toDto(reply, EntityCreator.createMemberEntity(), false, true);
+        assertEquals(replyDto.getReplyId(), mappedDto.getReplyId());
+        assertEquals(replyDto.getContent(), mappedDto.getContent());
+        assertEquals(replyDto.getAuthor().getMemberId(), mappedDto.getAuthor().getMemberId());
+        assertEquals(replyDto.getQuestion().getQuestionId(), mappedDto.getQuestion().getQuestionId());
+        assertEquals(replyDto.getReplyLikeCount(), mappedDto.getReplyLikeCount());
+        assertEquals(replyDto.getRequestedByAuthor(), mappedDto.getRequestedByAuthor());
+        assertEquals(replyDto.getLikedByRequester(), mappedDto.getLikedByRequester());
+        assertEquals(4L, mappedDto.getAccomplishedBadge());
+    }
+
+    @Test
     public void DTO에서_엔티티변환_테스트() {
         Reply mappedEntity = replyMapper.toEntity(replyDto);
         assertEquals(reply.getContent(), mappedEntity.getContent());
