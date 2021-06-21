@@ -87,24 +87,25 @@ public class BadgeAccomplishedServiceImpl implements BadgeAccomplishedService {
 
         return badgeAccomplished;
     }
-    
-    private static class Mureng3Days{
-        private final static Long id = 1L;
-        private final static int conditionOfCount = 3;
+
+
+    public static class Mureng3Days{
+        public final static Long id = 1L;
+        public final static int conditionOfCount = 3;
     }
 
-    private static class CelebrityMureng {
-        private final static Long id = 2L;
-        private final static int conditionOfCount = 10;
+    public static class CelebrityMureng {
+        public final static Long id = 2L;
+        public final static int conditionOfCount = 10;
     }
 
-    private static class AcademicMureng {
-        private final static Long id = 3L;
-        private final static int conditionOfCount = 3;
+    public static class AcademicMureng {
+        public final static Long id = 3L;
+        public final static int conditionOfCount = 3;
     }
 
-    private static class MurengSet{
-        private final static Long id = 4L;
-        private final static int conditionOfCount = 30;
+    public static class MurengSet{
+        public final static Long id = 4L;
+        public final static int conditionOfCount = 30;
     }
 }

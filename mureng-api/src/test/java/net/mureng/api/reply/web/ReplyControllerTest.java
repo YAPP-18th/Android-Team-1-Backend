@@ -4,6 +4,7 @@ import net.mureng.api.annotation.WithMockMurengUser;
 import net.mureng.api.core.dto.ApiPageRequest;
 import net.mureng.api.reply.service.ReplyPaginationService;
 import net.mureng.core.badge.service.BadgeAccomplishedService;
+import net.mureng.core.badge.service.BadgeAccomplishedServiceImpl;
 import net.mureng.core.common.EntityCreator;
 import net.mureng.core.reply.entity.Reply;
 import net.mureng.core.reply.service.ReplyService;
@@ -112,7 +113,7 @@ public class ReplyControllerTest extends AbstractControllerTest {
                 .andExpect(MockMvcResultMatchers.jsonPath("$.data.replyId").value(1L))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.data.content").value("Test Reply"))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.data.image").value("image-path"))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.data.accomplishedBadge").value(4L))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.data.accomplishedBadge").value(BadgeAccomplishedServiceImpl.MurengSet.id))
                 .andDo(print());
     }
 
