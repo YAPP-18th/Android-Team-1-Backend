@@ -34,9 +34,14 @@ public class FcmTokenService {
             return;
         }
 
+        FcmToken fcmToken = fcmTokenOptional.get();
         // 토큰이 이미 존재한다면, 요청자 토큰으로 업데이트 한다.
         if (fcmTokenRepository.existsByToken(token)) {
-            FcmToken fcmToken = fcmTokenRepository.findByToken(token).orElseThrow();
+            // 기존에 찾은 토큰의 주인을 null로 바꾼다.
+            fcmToken.setMember(null);
+            fcmTokenRepository.save(fcmToken);
+
+            fcmToken = fcmTokenRepository.findByToken(token).orElseThrow();
             if (fcmToken.getMember() == null) {
                 fcmToken.setMember(member);
             }
@@ -44,7 +49,6 @@ public class FcmTokenService {
             return;
         }
 
-        FcmToken fcmToken = fcmTokenOptional.get();
         fcmToken.setToken(token);
         fcmTokenRepository.saveAndFlush(fcmToken);
     }
