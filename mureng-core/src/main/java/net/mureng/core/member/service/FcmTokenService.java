@@ -27,7 +27,9 @@ public class FcmTokenService {
         // 토큰이 이미 존재한다면, 요청자 토큰으로 업데이트 한다.
         if (fcmTokenRepository.existsByToken(token)) {
             FcmToken fcmToken = fcmTokenRepository.findByToken(token).orElseThrow();
-            fcmToken.setMember(member);
+            if (fcmToken.getMember() == null) {
+                fcmToken.setMember(member);
+            }
             fcmTokenRepository.saveAndFlush(fcmToken);
             return;
         }

@@ -25,6 +25,7 @@ public class FcmInitializer {
     @PostConstruct
     public void initialize()  {
         if (! StringUtils.hasText(firebaseServiceKey)) {
+            log.warn("firebaseServiceKey was not set");
             return;
         }
 
