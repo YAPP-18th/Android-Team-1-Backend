@@ -24,16 +24,6 @@ public class FcmTokenService {
 
     @Transactional
     public void updateTokenOfMember(String token, Member member) {
-        // 토큰이 이미 존재한다면, 요청자 토큰으로 업데이트 한다.
-        if (fcmTokenRepository.existsByToken(token)) {
-            FcmToken fcmToken = fcmTokenRepository.findByToken(token).orElseThrow();
-            if (fcmToken.getMember() == null) {
-                fcmToken.setMember(member);
-            }
-            fcmTokenRepository.saveAndFlush(fcmToken);
-            return;
-        }
-
         // 토큰이 존재하지 않으면 새로 생성
         Optional<FcmToken> fcmTokenOptional = fcmTokenRepository.findByMemberMemberId(member.getMemberId());
         if (fcmTokenOptional.isEmpty()) {
@@ -41,6 +31,16 @@ public class FcmTokenService {
                     .member(member)
                     .token(token)
                     .build());
+            return;
+        }
+
+        // 토큰이 이미 존재한다면, 요청자 토큰으로 업데이트 한다.
+        if (fcmTokenRepository.existsByToken(token)) {
+            FcmToken fcmToken = fcmTokenRepository.findByToken(token).orElseThrow();
+            if (fcmToken.getMember() == null) {
+                fcmToken.setMember(member);
+            }
+            fcmTokenRepository.saveAndFlush(fcmToken);
             return;
         }
 
