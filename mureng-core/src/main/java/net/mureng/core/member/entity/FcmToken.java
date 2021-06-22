@@ -18,7 +18,7 @@ public class FcmToken {
     private Long idx;
 
     @OneToOne
-    @JoinColumn(name = "member_id")
+    @JoinColumn(name = "member_id", unique = true)
     private Member member;
 
     @NotNull
