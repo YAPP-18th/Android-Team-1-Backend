@@ -58,8 +58,6 @@ public class ReplyService {
 
         Reply savedReply = replyRepository.saveAndFlush(newReply);
         replyPostProcessService.postProcess(savedReply);
-        badgeAccomplishedService.createMureng3Days(memberId);
-        badgeAccomplishedService.createMurengSet(memberId);
 
         return savedReply;
     }

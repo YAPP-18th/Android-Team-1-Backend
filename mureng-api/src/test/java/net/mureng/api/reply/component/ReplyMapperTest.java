@@ -1,6 +1,7 @@
 package net.mureng.api.reply.component;
 
 import net.mureng.api.common.DtoCreator;
+import net.mureng.core.badge.service.BadgeAccomplishedServiceImpl;
 import net.mureng.core.common.EntityCreator;
 import net.mureng.core.question.entity.Question;
 import net.mureng.api.reply.dto.ReplyDto;
@@ -43,6 +44,19 @@ class ReplyMapperTest {
         assertEquals(replyDto.getReplyLikeCount(), mappedDto.getReplyLikeCount());
         assertEquals(replyDto.getRequestedByAuthor(), mappedDto.getRequestedByAuthor());
         assertEquals(replyDto.getLikedByRequester(), mappedDto.getLikedByRequester());
+    }
+
+    @Test
+    public void 엔티티에서_DTO변환_로그인사용자_테스트_뱃지획득() {
+        ReplyDto.ReadOnly mappedDto = replyMapper.toDto(reply, EntityCreator.createMemberEntity(), false, true);
+        assertEquals(replyDto.getReplyId(), mappedDto.getReplyId());
+        assertEquals(replyDto.getContent(), mappedDto.getContent());
+        assertEquals(replyDto.getAuthor().getMemberId(), mappedDto.getAuthor().getMemberId());
+        assertEquals(replyDto.getQuestion().getQuestionId(), mappedDto.getQuestion().getQuestionId());
+        assertEquals(replyDto.getReplyLikeCount(), mappedDto.getReplyLikeCount());
+        assertEquals(replyDto.getRequestedByAuthor(), mappedDto.getRequestedByAuthor());
+        assertEquals(replyDto.getLikedByRequester(), mappedDto.getLikedByRequester());
+        assertEquals(BadgeAccomplishedServiceImpl.MurengSet.id, mappedDto.getAccomplishedBadge());
     }
 
     @Test

@@ -73,4 +73,11 @@ class BadgeAccomplishedRepositoryTest {
         assertEquals("테스트2", todayExpressions.get(1).getName());
         assertEquals("테스트2 배지", todayExpressions.get(1).getContent());
     }
+
+    @Test
+    public void 멤버와_뱃지_획득했는지_테스트(){
+        boolean isAccomplished = badgeAccomplishedRepository.existsBadgeAccomplishedByMemberMemberIdAndBadgeBadgeId(MEMBER_ID, 1L);
+
+        assertTrue(isAccomplished);
+    }
 }

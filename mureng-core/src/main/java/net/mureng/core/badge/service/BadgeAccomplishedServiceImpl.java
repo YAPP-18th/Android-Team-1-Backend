@@ -24,7 +24,7 @@ public class BadgeAccomplishedServiceImpl implements BadgeAccomplishedService {
 
     @Transactional
     public boolean createMureng3Days(Long memberId) {
-        if ( replyRepository.findAllByAuthorMemberId(memberId).size() == Mureng3Days.conditionOfCount &&
+        if ( replyRepository.countAllByAuthorMemberId(memberId) == Mureng3Days.conditionOfCount &&
                 !badgeAccomplishedRepository.existsBadgeAccomplishedByMemberMemberIdAndBadgeBadgeId(memberId, Mureng3Days.id) ){
 
             badgeAccomplishedRepository.saveAndFlush(makeBadgeAccomplished(memberId, Mureng3Days.id));
@@ -51,7 +51,7 @@ public class BadgeAccomplishedServiceImpl implements BadgeAccomplishedService {
 
     @Transactional
     public boolean createAcademicMureng(Long memberId) {
-        if( memberScrapRepository.findAllByIdMemberId(memberId).size() == AcademicMureng.conditionOfCount &&
+        if( memberScrapRepository.countByMemberMemberId(memberId) == AcademicMureng.conditionOfCount &&
                 !badgeAccomplishedRepository.existsBadgeAccomplishedByMemberMemberIdAndBadgeBadgeId(memberId, AcademicMureng.id ) ){
 
             badgeAccomplishedRepository.saveAndFlush(makeBadgeAccomplished(memberId, AcademicMureng.id));
@@ -63,7 +63,7 @@ public class BadgeAccomplishedServiceImpl implements BadgeAccomplishedService {
 
     @Transactional
     public boolean createMurengSet(Long memberId){
-        if ( replyRepository.findAllByAuthorMemberId(memberId).size() == MurengSet.conditionOfCount &&
+        if ( replyRepository.countAllByAuthorMemberId(memberId) == MurengSet.conditionOfCount &&
                 !badgeAccomplishedRepository.existsBadgeAccomplishedByMemberMemberIdAndBadgeBadgeId(memberId, MurengSet.id) ){
 
             badgeAccomplishedRepository.saveAndFlush(makeBadgeAccomplished(memberId, MurengSet.id));
@@ -87,24 +87,25 @@ public class BadgeAccomplishedServiceImpl implements BadgeAccomplishedService {
 
         return badgeAccomplished;
     }
-    
-    private static class Mureng3Days{
-        private final static Long id = 1L;
-        private final static int conditionOfCount = 3;
+
+
+    public static class Mureng3Days{
+        public final static Long id = 1L;
+        public final static int conditionOfCount = 3;
     }
 
-    private static class CelebrityMureng {
-        private final static Long id = 2L;
-        private final static int conditionOfCount = 10;
+    public static class CelebrityMureng {
+        public final static Long id = 2L;
+        public final static int conditionOfCount = 10;
     }
 
-    private static class AcademicMureng {
-        private final static Long id = 3L;
-        private final static int conditionOfCount = 3;
+    public static class AcademicMureng {
+        public final static Long id = 3L;
+        public final static int conditionOfCount = 3;
     }
 
-    private static class MurengSet{
-        private final static Long id = 4L;
-        private final static int conditionOfCount = 30;
+    public static class MurengSet{
+        public final static Long id = 4L;
+        public final static int conditionOfCount = 30;
     }
 }
