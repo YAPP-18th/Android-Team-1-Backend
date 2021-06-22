@@ -17,7 +17,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @EnableWebSecurity
 @RequiredArgsConstructor
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
-
+    public static final String[] EXCLUDED_URLS = {"", "", };
     private final JwtResolver jwtResolver;
     private final JwtValidator jwtValidator;
 
@@ -36,11 +36,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                     .authorizeRequests()
                         .antMatchers("/api/member/signup",
                                 "/api/member/nickname-exists/**",
-                                "/api/member/user-exists/**").anonymous()
-                        .antMatchers("/api/test", "/api/test-failure").anonymous()
-                        .antMatchers("/api/jwt", "/api/member/signin").anonymous()
-                        .antMatchers("/").anonymous()
-                        .antMatchers("/api/fcm-token").anonymous()
+                                "/api/member/user-exists/**").permitAll()
+                        .antMatchers("/api/test", "/api/test-failure").permitAll()
+                        .antMatchers("/api/jwt", "/api/member/signin").permitAll()
+                        .antMatchers("/").permitAll()
+                        .antMatchers("/api/fcm-token").permitAll()
                         .anyRequest().authenticated()
                 .and()
                     .addFilterBefore(new JwtAuthenticationFilter(jwtResolver, jwtValidator), UsernamePasswordAuthenticationFilter.class);

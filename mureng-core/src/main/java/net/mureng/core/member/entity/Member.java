@@ -28,7 +28,7 @@ public class Member {
 
     @Builder.Default
     @Column(name = "is_active", nullable = false)
-    private boolean isActive = true;
+    private Boolean isActive = true;
 
     @NotNull
     @Column(nullable = false, unique = true)

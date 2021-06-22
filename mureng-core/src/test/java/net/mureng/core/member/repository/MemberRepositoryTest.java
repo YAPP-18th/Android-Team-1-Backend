@@ -85,16 +85,26 @@ public class MemberRepositoryTest {
             "classpath:dbunit/entity/member.xml"
     })
     public void 닉네임_존재_조회() {
-        assertTrue(memberRepository.existsByNickname("Test"));
-        assertFalse(memberRepository.existsByNickname("Non-exist"));
+        assertTrue(memberRepository.existsByNicknameAndIsActive("Test", true));
+        assertFalse(memberRepository.existsByNicknameAndIsActive("Non-exist", true));
+        assertFalse(memberRepository.existsByNicknameAndIsActive("Test3", true));
     }
+
+//    @Test
+//    @DatabaseSetup({
+//            "classpath:dbunit/entity/member.xml"
+//    })
+//    public void 이메일_존재_조회(){
+//        assertTrue(memberRepository.existsByEmail("test@gmail.com"));
+//        assertFalse(memberRepository.existsByEmail("bleum@gmail.com"));
+//    }
 
     @Test
     @DatabaseSetup({
             "classpath:dbunit/entity/member.xml"
     })
-    public void 이메일_존재_조회(){
-        assertTrue(memberRepository.existsByEmail("test@gmail.com"));
-        assertFalse(memberRepository.existsByEmail("bleum@gmail.com"));
+    public void 식별자_존재_조회() {
+        assertTrue(memberRepository.existsByIdentifierAndIsActive("123", true));
+        assertFalse(memberRepository.existsByIdentifierAndIsActive("125", true));
     }
 }

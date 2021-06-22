@@ -41,6 +41,8 @@ spec:
               value: "$PROD_DB_PASSWORD"
             - name: FIREBASE_SERVICE_KEY
               value: "$FIREBASE_SERVICE_KEY"
+            - name: SPRING_JWT_SECRET
+              value: "$SPRING_JWT_SECRET"
       volumes:
         - name: content-server-volume
           persistentVolumeClaim:

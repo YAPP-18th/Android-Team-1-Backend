@@ -27,23 +27,36 @@ public class MemberService {
     }
 
     @Transactional
-    public Member updateMember(@Valid Member newMember) {
-        return memberRepository.saveAndFlush(newMember);
+    public Member updateMember(@Valid Member member) {
+        return memberRepository.saveAndFlush(member);
+    }
+
+    @Transactional
+    public void dropOutMember(@Valid Member member) {
+        member.setIsActive(false);
+        memberRepository.saveAndFlush(member);
     }
 
     @Transactional(readOnly = true)
     public boolean isNicknameDuplicated(String nickname) {
-        return memberRepository.existsByNickname(nickname);
+        return memberRepository.existsByNicknameAndIsActive(nickname, true);
     }
 
     @Transactional(readOnly = true)
-    public boolean isMemberExist(String identifier) { return memberRepository.existsByIdentifier(identifier); }
+    public boolean isMemberExist(String identifier) { return memberRepository.existsByIdentifierAndIsActive(identifier, true); }
 
     @Transactional(readOnly = true)
-    public Member findByIdentifier(String identifier) { return memberRepository.findByIdentifier(identifier)
+    public boolean isMemberExistIncludingDropped(String identifier) { return memberRepository.existsByIdentifier(identifier); }
+
+    @Transactional(readOnly = true)
+    public Member findByIdentifier(String identifier) { return memberRepository.findByIdentifierAndIsActive(identifier, true)
+            .orElseThrow(() -> new ResourceNotFoundException("존재하지 않는 사용자에 대한 요청입니다.")); }
+
+    @Transactional(readOnly = true)
+    public Member findByIdentifierIncludingDropped(String identifier) { return memberRepository.findByIdentifier(identifier)
             .orElseThrow(() -> new ResourceNotFoundException("존재하지 않는 사용자에 대한 요청입니다.")); }
 
     @Transactional(readOnly = true)
     public Member findById(Long memberId) { return memberRepository.findById(memberId)
-            .orElseThrow(()->new ResourceNotFoundException("존재하지 않는 사용자에 대한 요청입니다.")); }
+            .orElseThrow(() -> new ResourceNotFoundException("존재하지 않는 사용자에 대한 요청입니다.")); }
 }

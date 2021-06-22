@@ -21,9 +21,20 @@ public class MemberSignupService {
 
     @Transactional
     public Member signup(@Valid Member newMember) {
+        if (isDroppedOutMember(newMember)) {
+            Member member = memberService.findByIdentifierIncludingDropped(newMember.getIdentifier());
+            member.updateMember(newMember);
+            member.setIsActive(true);
+            return memberService.updateMember(member);
+        }
+
         Member savedMember = memberService.saveMember(newMember);
         afterSignUp(savedMember);
         return savedMember;
+    }
+    
+    private boolean isDroppedOutMember(Member member) {
+        return memberService.isMemberExistIncludingDropped(member.getIdentifier());
     }
 
     private void afterSignUp(Member newMember) {

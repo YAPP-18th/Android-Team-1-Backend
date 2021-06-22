@@ -13,5 +13,5 @@ RUN mkdir /home/gradle/mount
 
 #RUN gradle clean bootJar
 
-ENTRYPOINT ["java","-jar","/home/gradle/project/mureng-batch-0.0.1-SNAPSHOT.jar"]
+ENTRYPOINT ["java","-jar","-Duser.timezone=Asia/Seoul","/home/gradle/project/mureng-batch-0.0.1-SNAPSHOT.jar"]
 EXPOSE 8080
