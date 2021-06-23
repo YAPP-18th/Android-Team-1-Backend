@@ -17,6 +17,7 @@ import org.springframework.stereotype.Service;
 import java.text.ParseException;
 import java.time.ZoneId;
 import java.util.Date;
+import java.util.TimeZone;
 
 import static org.quartz.CronExpression.isValidExpression;
 
@@ -70,6 +71,7 @@ public class ScheduledJobFactory {
         factoryBean.setName(jobRequest.getJobName());
         factoryBean.setGroup(jobRequest.getJobGroup());
         factoryBean.setCronExpression(jobRequest.getCronExpression());
+        factoryBean.setTimeZone(TimeZone.getTimeZone("Asia/Seoul"));
         factoryBean.setMisfireInstruction(SimpleTrigger.MISFIRE_INSTRUCTION_FIRE_NOW);
         try {
             factoryBean.afterPropertiesSet();
