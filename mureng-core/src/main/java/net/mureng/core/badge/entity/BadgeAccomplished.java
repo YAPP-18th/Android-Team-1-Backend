@@ -28,6 +28,10 @@ public class BadgeAccomplished {
     private Badge badge;
 
     @Builder.Default
+    @Column(name = "is_checked", nullable = false)
+    private Boolean isChecked = false;
+
+    @Builder.Default
     @Column(name = "reg_date", nullable = false)
     private LocalDateTime regDate = LocalDateTime.now();
 

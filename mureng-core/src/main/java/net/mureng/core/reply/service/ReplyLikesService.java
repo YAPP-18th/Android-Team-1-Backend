@@ -33,7 +33,7 @@ public class ReplyLikesService {
 
         replyLikesRepository.saveAndFlush(replyLikes);
 
-//        badgeAccomplishedService.createCelebrityMureng(replyId);
+        badgeAccomplishedService.createCelebrityMureng(replyId);
         fcmLikePushService.pushToAuthor(reply, member);
 
         return replyLikes;

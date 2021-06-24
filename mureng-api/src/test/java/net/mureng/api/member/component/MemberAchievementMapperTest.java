@@ -5,6 +5,7 @@ import net.mureng.api.common.DtoCreator;
 import net.mureng.api.member.dto.MemberAchievementDto;
 import net.mureng.api.member.dto.MemberDto;
 import net.mureng.core.badge.entity.Badge;
+import net.mureng.core.badge.service.BadgeAccomplishedServiceImpl;
 import net.mureng.core.common.EntityCreator;
 import net.mureng.core.member.entity.Member;
 import org.junit.jupiter.api.Test;
@@ -38,5 +39,16 @@ public class MemberAchievementMapperTest {
         assertEquals(mappedDto.getBadges().size(), badgeDtos.size());
         assertEquals(mappedDto.getBadges().get(0).getName(), badgeDtos.get(0).getName());
         assertTrue(mappedDto.isRequesterProfile());
+    }
+
+    @Test
+    public void 엔티티에서_DTO변환_테스트_뱃지획득() {
+        MemberAchievementDto mappedDto = memberAchievementMapper.toDto(member, badges, member, true);
+
+        assertEquals(mappedDto.getMember().getEmail(), memberDto.getEmail());
+        assertEquals(mappedDto.getBadges().size(), badgeDtos.size());
+        assertEquals(mappedDto.getBadges().get(0).getName(), badgeDtos.get(0).getName());
+        assertTrue(mappedDto.isRequesterProfile());
+        assertEquals(BadgeAccomplishedServiceImpl.CelebrityMureng.id, mappedDto.getAccomplishedBadge());
     }
 }

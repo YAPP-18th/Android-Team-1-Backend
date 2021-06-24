@@ -12,6 +12,8 @@ import net.mureng.core.reply.repository.ReplyRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Optional;
+
 @RequiredArgsConstructor
 @Service
 public class BadgeAccomplishedServiceImpl implements BadgeAccomplishedService {
@@ -71,6 +73,20 @@ public class BadgeAccomplishedServiceImpl implements BadgeAccomplishedService {
         }
 
         return false;
+    }
+
+    /**
+     * 뱃지를 획득하지 않았거나 혹은 획득했는데 이미 확인한 경우
+     */
+    @Transactional(readOnly = true)
+    public boolean needCheckingCelebrityMureng(Long memberId){
+        BadgeAccomplishedPK pk = BadgeAccomplishedPK.builder().memberId(memberId).badgeId(CelebrityMureng.id).build();
+        Optional<BadgeAccomplished> badgeAccomplished = badgeAccomplishedRepository.findById(pk);
+
+        if(badgeAccomplished.isEmpty() || badgeAccomplished.get().getIsChecked())
+            return false;
+
+        return true;
     }
 
     private BadgeAccomplished makeBadgeAccomplished(Long memberId, Long badgeId){
