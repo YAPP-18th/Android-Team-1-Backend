@@ -11,6 +11,7 @@ import org.mapstruct.Mapping;
 public interface TodayExpressionMapper {
 
     @Mapping(target = "scrappedByRequester", expression = "java(todayExpression.scrappedByRequester(loggedInMember))")
+    @Mapping(target = "accomplishedBadge", ignore = true)
     TodayExpressionDto toDto(TodayExpression todayExpression, @Context Member loggedInMember);
 
     @Mapping(target = "scrappedByRequester", expression = "java(todayExpression.scrappedByRequester(loggedInMember))")

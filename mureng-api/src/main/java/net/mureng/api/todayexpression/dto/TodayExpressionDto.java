@@ -1,5 +1,6 @@
 package net.mureng.api.todayexpression.dto;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -38,6 +39,7 @@ public class TodayExpressionDto {
     @ApiModelProperty(value = "요청자의 스크랩 여부", position = PropertyDisplayOrder.SCRAPPED_BY_REQUESTER)
     private boolean scrappedByRequester;
 
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @ApiModelProperty(value = "사용자가 획득한 뱃지 번호", position = PropertyDisplayOrder.ACCOMPLISHED_BADGE)
     private Long accomplishedBadge;
 
