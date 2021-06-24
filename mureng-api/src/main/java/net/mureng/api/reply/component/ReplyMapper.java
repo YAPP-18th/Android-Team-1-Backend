@@ -17,6 +17,7 @@ public interface ReplyMapper extends EntityMapper<Reply, ReplyDto> {
     @Mapping(target = "questionId", expression = "java(reply.getQuestion().getQuestionId())")
     @Mapping(target = "requestedByAuthor", ignore = true)
     @Mapping(target = "likedByRequester", ignore = true)
+    @Mapping(target = "accomplishedBadge", ignore = true)
     ReplyDto.ReadOnly toDto(Reply reply);
 
     @Mapping(target = "image", source = "reply.image")
@@ -25,6 +26,7 @@ public interface ReplyMapper extends EntityMapper<Reply, ReplyDto> {
     @Mapping(target = "questionId", expression = "java(reply.getQuestion().getQuestionId())")
     @Mapping(target = "requestedByAuthor", expression = "java(reply.isAuthor(loggedInMember))")
     @Mapping(target = "likedByRequester", expression = "java(reply.likedByRequester(loggedInMember))")
+    @Mapping(target = "accomplishedBadge", ignore = true)
     ReplyDto.ReadOnly toDto(Reply reply, Member loggedInMember);
 
     @Mapping(target = "image", source = "reply.image")
