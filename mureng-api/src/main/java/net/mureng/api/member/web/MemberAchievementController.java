@@ -10,6 +10,7 @@ import net.mureng.api.member.dto.MemberAchievementDto;
 import net.mureng.api.member.service.MemberBadgeService;
 import net.mureng.core.badge.entity.Badge;
 import net.mureng.core.badge.entity.BadgeAccomplished;
+import net.mureng.core.badge.service.BadgeAccomplishedService;
 import net.mureng.core.member.entity.Member;
 import net.mureng.core.member.service.MemberService;
 import org.springframework.http.ResponseEntity;
@@ -29,6 +30,7 @@ public class MemberAchievementController {
     private final MemberBadgeService memberBadgeService;
     private final MemberAchievementMapper memberAchievementMapper;
     private final MemberService memberService;
+    private final BadgeAccomplishedService badgeAccomplishedService;
 
     @ApiOperation(value = "사용자의 성과 페이지", notes = "사용자의 뱃지 목록을 가져옵니다.")
     @GetMapping("/{memberId}/achievement")
@@ -38,7 +40,7 @@ public class MemberAchievementController {
         Member profileMember = memberService.findById(memberId);
 
         return ResponseEntity.ok(ApiResult.ok(
-                memberAchievementMapper.toDto(profileMember, badges, member)
+                memberAchievementMapper.toDto(profileMember, badges, member, badgeAccomplishedService.isAlreadyCheckedCelebrityMureng(memberId))
         ));
     }
 }

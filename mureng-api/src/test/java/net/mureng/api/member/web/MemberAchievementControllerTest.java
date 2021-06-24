@@ -5,6 +5,8 @@ import net.mureng.api.member.service.MemberBadgeService;
 import net.mureng.api.web.AbstractControllerTest;
 import net.mureng.core.badge.entity.Badge;
 import net.mureng.core.badge.entity.BadgeAccomplished;
+import net.mureng.core.badge.service.BadgeAccomplishedService;
+import net.mureng.core.badge.service.BadgeAccomplishedServiceImpl;
 import net.mureng.core.common.EntityCreator;
 import net.mureng.core.member.entity.Member;
 import net.mureng.core.member.service.MemberService;
@@ -16,6 +18,7 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import java.util.Arrays;
 import java.util.List;
 
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -25,10 +28,13 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 public class MemberAchievementControllerTest extends AbstractControllerTest {
 
     @MockBean
-    MemberBadgeService memberBadgeService;
+    private MemberBadgeService memberBadgeService;
 
     @MockBean
-    MemberService memberService;
+    private MemberService memberService;
+
+    @MockBean
+    private BadgeAccomplishedService badgeAccomplishedService;
 
     private static final long MEMBER_ID = 1L;
     private static final List<BadgeAccomplished> badgeAccomplisheds = Arrays.asList(EntityCreator.createBadgeAccomplishedEntity(), EntityCreator.createBadgeAccomplishedEntity());
@@ -41,6 +47,7 @@ public class MemberAchievementControllerTest extends AbstractControllerTest {
     public void 사용자_성과_가져오기_테스트() throws Exception{
         given(memberBadgeService.getMemberBadges(eq(MEMBER_ID))).willReturn(badgeAccomplisheds);
         given(memberService.findById(eq(MEMBER_ID))).willReturn(member);
+        given(badgeAccomplishedService.isAlreadyCheckedCelebrityMureng(any())).willReturn(true);
 
         mockMvc.perform(
                 get("/api/member/{memberId}/achievement", 1)
@@ -52,6 +59,8 @@ public class MemberAchievementControllerTest extends AbstractControllerTest {
                 .andExpect(MockMvcResultMatchers.jsonPath("$.data.badges[0].name").value("Badge Test"))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.data.badges[0].content").value("Badge Test Content"))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.data.requesterProfile").value("true"))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.data.accomplishedBadge").value(BadgeAccomplishedServiceImpl.CelebrityMureng.id))
                 .andDo(print());
     }
+
 }
