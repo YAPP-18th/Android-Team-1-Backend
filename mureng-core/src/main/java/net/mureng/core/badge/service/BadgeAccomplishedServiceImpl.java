@@ -79,7 +79,7 @@ public class BadgeAccomplishedServiceImpl implements BadgeAccomplishedService {
      * 뱃지를 획득하지 않았거나 혹은 획득했는데 이미 확인한 경우
      */
     @Transactional(readOnly = true)
-    public boolean needCheckingCelebrityMureng(Long memberId){
+    public boolean isAlreadyCheckedCelebrityMureng(Long memberId){
         BadgeAccomplishedPK pk = BadgeAccomplishedPK.builder().memberId(memberId).badgeId(CelebrityMureng.id).build();
         Optional<BadgeAccomplished> badgeAccomplished = badgeAccomplishedRepository.findById(pk);
 

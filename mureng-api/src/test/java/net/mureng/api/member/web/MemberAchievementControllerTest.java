@@ -47,7 +47,7 @@ public class MemberAchievementControllerTest extends AbstractControllerTest {
     public void 사용자_성과_가져오기_테스트() throws Exception{
         given(memberBadgeService.getMemberBadges(eq(MEMBER_ID))).willReturn(badgeAccomplisheds);
         given(memberService.findById(eq(MEMBER_ID))).willReturn(member);
-        given(badgeAccomplishedService.needCheckingCelebrityMureng(any())).willReturn(true);
+        given(badgeAccomplishedService.isAlreadyCheckedCelebrityMureng(any())).willReturn(true);
 
         mockMvc.perform(
                 get("/api/member/{memberId}/achievement", 1)
