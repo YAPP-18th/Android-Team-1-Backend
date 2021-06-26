@@ -28,12 +28,14 @@ public class FcmTokenService {
         Optional<FcmToken> fcmTokenOptionalFindByToken = fcmTokenRepository.findByToken(token);
         if (fcmTokenOptionalFindByMemberId.isPresent() && fcmTokenOptionalFindByToken.isPresent()) {
             // 둘 다 찾아질 경우 - 둘이 같은 것일 경우 - 아무것도 할 필요 없음
-            if (fcmTokenOptionalFindByMemberId.get() == fcmTokenOptionalFindByToken.get()) {
+            if (fcmTokenOptionalFindByMemberId.get().getIdx().equals(fcmTokenOptionalFindByToken.get().getIdx())) {
                 return;
             }
 
             // 둘 다 찾아질 경우 - 둘이 다른 것일 경우 - 회원에 찾은 값을 token 값으로 초기화 (기존 token객체 삭제)
             fcmTokenRepository.delete(fcmTokenOptionalFindByToken.get());
+            fcmTokenRepository.flush();
+
             FcmToken fcmToken = fcmTokenOptionalFindByMemberId.get();
             fcmToken.setToken(token);
             fcmTokenRepository.saveAndFlush(fcmToken);
