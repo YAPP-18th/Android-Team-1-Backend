@@ -1,16 +1,14 @@
 package net.mureng.api.core.jwt.service;
 
 import lombok.RequiredArgsConstructor;
+import net.mureng.api.core.jwt.component.JwtCreator;
 import net.mureng.api.core.jwt.component.JwtResolver;
 import net.mureng.api.core.jwt.component.JwtValidator;
-import net.mureng.api.core.oauth2.service.OAuth2Service;
-import net.mureng.api.core.jwt.component.JwtCreator;
 import net.mureng.api.core.jwt.dto.TokenDto;
+import net.mureng.api.core.oauth2.service.OAuth2Service;
 import net.mureng.core.core.component.DateFactory;
-import net.mureng.core.core.exception.AccessNotAllowedException;
-import net.mureng.core.core.exception.BadRequestException;
+import net.mureng.core.core.exception.UnauthorizedException;
 import net.mureng.core.member.entity.Member;
-import net.mureng.core.member.repository.MemberRepository;
 import net.mureng.core.member.service.MemberService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -52,7 +50,7 @@ public class JwtService {
     @Transactional
     public TokenDto.Mureng refresh(TokenDto.MurengRefresh murengRefreshToken){
         if (isExpired(murengRefreshToken)) {
-            throw new AccessNotAllowedException("Refresh Token이 만료되었습니다. 다시 로그인 해주세요.");
+            throw new UnauthorizedException("Refresh Token이 만료되었습니다. 다시 로그인 해주세요.");
         }
 
         String identifier = jwtResolver.getUserIdentifier(murengRefreshToken.getMurengRefreshToken());

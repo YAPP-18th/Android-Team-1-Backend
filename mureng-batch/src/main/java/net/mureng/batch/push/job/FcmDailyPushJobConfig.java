@@ -6,7 +6,6 @@ import net.mureng.batch.core.config.AbstractJobConfig;
 import net.mureng.batch.core.job.MurengJobLauncher;
 import net.mureng.batch.push.service.FcmDailyPushService;
 import net.mureng.core.member.entity.FcmToken;
-import net.mureng.core.member.entity.Member;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.Step;
 import org.springframework.batch.core.configuration.annotation.JobScope;
