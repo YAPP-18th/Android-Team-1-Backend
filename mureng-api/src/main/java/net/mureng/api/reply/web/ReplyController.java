@@ -11,6 +11,7 @@ import net.mureng.api.core.dto.ApiPageRequest;
 import net.mureng.api.core.dto.ApiPageResult;
 import net.mureng.api.core.dto.ApiResult;
 import net.mureng.api.reply.service.ReplyPaginationService;
+import net.mureng.core.badge.service.BadgeAccomplishedService;
 import net.mureng.core.member.entity.Member;
 import net.mureng.core.question.entity.Question;
 import net.mureng.api.reply.component.ReplyMapper;
@@ -32,6 +33,7 @@ public class ReplyController {
     private final ReplyMapper replyMapper;
     private final ReplyService replyService;
     private final ReplyPaginationService replyPaginationService;
+    private final BadgeAccomplishedService badgeAccomplishedService;
 
     @ApiOperation(value = "답변 목록 가져오기", notes = "전체 답변 목록을 페이징으로 가져옵니다.")
     @GetMapping
@@ -60,7 +62,9 @@ public class ReplyController {
             Reply newReply = replyMapper.toEntity(replyDto, member, Question.builder().questionId(replyDto.getQuestionId()).build());
 
             return ResponseEntity.ok(ApiResult.ok(replyMapper.toDto(
-                replyService.create(newReply), member
+                replyService.create(newReply), member,
+                    badgeAccomplishedService.createMureng3Days(member.getMemberId()),
+                    badgeAccomplishedService.createMurengSet(member.getMemberId())
         )));
     }
 

@@ -47,6 +47,12 @@ server:
     whitelabel:
           enabled: false
 
+  servlet:
+    encoding:
+      charset: UTF-8
+      enabled: true
+      force: true
+
 
 # media
 media:

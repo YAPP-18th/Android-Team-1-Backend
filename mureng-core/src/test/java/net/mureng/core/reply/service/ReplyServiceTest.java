@@ -1,6 +1,5 @@
 package net.mureng.core.reply.service;
 
-import net.mureng.core.badge.service.BadgeAccomplishedService;
 import net.mureng.core.common.EntityCreator;
 import net.mureng.core.core.exception.BadRequestException;
 import net.mureng.core.member.entity.Member;
@@ -39,9 +38,6 @@ public class ReplyServiceTest {
     @Mock
     private ReplyPostProcessService replyPostProcessService;
 
-    @Mock
-    private BadgeAccomplishedService badgeAccomplishedService;
-
     private static final Long MEMBER_ID = 1L;
     private static final Long QUESTION_ID = 1L;
     private static final Long REPLY_ID = 1L;
@@ -63,9 +59,6 @@ public class ReplyServiceTest {
             given(questionService.getQuestionById(eq(QUESTION_ID))).willReturn(newReply.getQuestion());
             given(replyRepository.saveAndFlush(any())).willReturn(newReply);
             doNothing().when(replyPostProcessService).postProcess(any());
-
-            given(badgeAccomplishedService.createMureng3Days(any())).willReturn(false);
-            given(badgeAccomplishedService.createMurengSet(any())).willReturn(false);
 
             // when
             Reply createdReply = replyService.create(newReply);

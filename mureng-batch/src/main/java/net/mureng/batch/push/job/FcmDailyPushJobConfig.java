@@ -23,7 +23,7 @@ import org.springframework.context.annotation.Configuration;
 public class FcmDailyPushJobConfig extends AbstractJobConfig {
     public static final String FCM_DAILY_PUSH_JOB_NAME = "fcmDailyPushJob";
     public static final String FCM_DAILY_PUSH_JOB_LAUNCHER_NAME = FCM_DAILY_PUSH_JOB_NAME + "Launcher";
-    public static final String FCM_DAILY_PUSH_JOB_JOB_CRON = "0 0 9 * * ?";
+    public static final String FCM_DAILY_PUSH_JOB_JOB_CRON = "0 0 21 * * ?";
 
     private final FcmDailyPushService fcmDailyPushService;
 

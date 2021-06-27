@@ -5,4 +5,5 @@ public interface BadgeAccomplishedService {
     boolean createCelebrityMureng(Long replyId);
     boolean createAcademicMureng(Long memberId);
     boolean createMurengSet(Long memberId);
+    boolean isAlreadyCheckedCelebrityMureng(Long memberId);
 }

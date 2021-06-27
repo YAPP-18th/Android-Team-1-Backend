@@ -1,5 +1,6 @@
 package net.mureng.api.reply.dto;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -73,6 +74,12 @@ public class ReplyDto {
                 accessMode = ApiModelProperty.AccessMode.READ_ONLY, position = PropertyDisplayOrder.LIKED_BY_MEMBER)
         @JsonProperty(index = PropertyDisplayOrder.LIKED_BY_MEMBER)
         private Boolean likedByRequester;
+
+        @JsonInclude(JsonInclude.Include.NON_EMPTY)
+        @ApiModelProperty(value = "사용자가 획득한 뱃지 번호",
+                accessMode = ApiModelProperty.AccessMode.READ_ONLY, position = PropertyDisplayOrder.ACCOMPLISHED_BADGE)
+        @JsonProperty(index = PropertyDisplayOrder.ACCOMPLISHED_BADGE)
+        private Long accomplishedBadge;
     }
 
     private static class PropertyDisplayOrder {
@@ -86,6 +93,7 @@ public class ReplyDto {
         private static final int AUTHOR                 = 7;
         private static final int REQUESTED_BY_AUTHOR    = 8;
         private static final int LIKED_BY_MEMBER        = 9;
+        private static final int ACCOMPLISHED_BADGE     = 10;
     }
 }
 

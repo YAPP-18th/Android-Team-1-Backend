@@ -3,6 +3,8 @@ package net.mureng.api.member.web;
 import net.mureng.api.annotation.WithMockMurengUser;
 import net.mureng.api.member.service.MemberExpressionScrapService;
 import net.mureng.api.web.AbstractControllerTest;
+import net.mureng.core.badge.service.BadgeAccomplishedService;
+import net.mureng.core.badge.service.BadgeAccomplishedServiceImpl;
 import net.mureng.core.common.EntityCreator;
 import net.mureng.core.member.entity.Member;
 import net.mureng.core.member.entity.MemberScrap;
@@ -31,6 +33,9 @@ public class MemberScrapControllerTest extends AbstractControllerTest {
     @MockBean
     private MemberService memberService;
 
+    @MockBean
+    private BadgeAccomplishedService badgeAccomplishedService;
+
     private static final long EXP_ID = 1L;
     private static final long MEMBER_ID = 1L;
 
@@ -43,6 +48,7 @@ public class MemberScrapControllerTest extends AbstractControllerTest {
         MemberScrap memberScrap = EntityCreator.createMemberScrapEntity();
 
         given(memberExpressionScrapService.scrapTodayExpression(any(), eq(EXP_ID))).willReturn(memberScrap);
+        given(badgeAccomplishedService.createAcademicMureng(any())).willReturn(true);
 
         mockMvc.perform(
                 post("/api/member/scrap/{expId}", 1)
@@ -55,6 +61,7 @@ public class MemberScrapControllerTest extends AbstractControllerTest {
                 .andExpect(MockMvcResultMatchers.jsonPath("$.data.expressionExample").value("test driven development"))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.data.expressionExampleMeaning").value("테스트 주도 개발"))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.data.scrappedByRequester").value(true))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.data.accomplishedBadge").value(BadgeAccomplishedServiceImpl.AcademicMureng.id))
                 .andDo(print());
     }
 

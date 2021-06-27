@@ -24,26 +24,37 @@ public class FcmTokenService {
 
     @Transactional
     public void updateTokenOfMember(String token, Member member) {
-        // 토큰이 이미 존재한다면, 요청자 토큰으로 업데이트 한다.
-        if (fcmTokenRepository.existsByToken(token)) {
-            FcmToken fcmToken = fcmTokenRepository.findByToken(token).orElseThrow();
+        Optional<FcmToken> fcmTokenOptionalFindByMemberId = fcmTokenRepository.findByMemberMemberId(member.getMemberId());
+        Optional<FcmToken> fcmTokenOptionalFindByToken = fcmTokenRepository.findByToken(token);
+        if (fcmTokenOptionalFindByMemberId.isPresent() && fcmTokenOptionalFindByToken.isPresent()) {
+            // 둘 다 찾아질 경우 - 둘이 같은 것일 경우 - 아무것도 할 필요 없음
+            if (fcmTokenOptionalFindByMemberId.get().getIdx().equals(fcmTokenOptionalFindByToken.get().getIdx())) {
+                return;
+            }
+
+            // 둘 다 찾아질 경우 - 둘이 다른 것일 경우 - 회원에 찾은 값을 token 값으로 초기화 (기존 token객체 삭제)
+            fcmTokenRepository.delete(fcmTokenOptionalFindByToken.get());
+            fcmTokenRepository.flush();
+
+            FcmToken fcmToken = fcmTokenOptionalFindByMemberId.get();
+            fcmToken.setToken(token);
+            fcmTokenRepository.saveAndFlush(fcmToken);
+
+        } else if (fcmTokenOptionalFindByMemberId.isPresent()) {
+            FcmToken fcmToken = fcmTokenOptionalFindByMemberId.get();
+            fcmToken.setToken(token);
+            fcmTokenRepository.saveAndFlush(fcmToken);
+
+        } else if (fcmTokenOptionalFindByToken.isPresent()) {
+            FcmToken fcmToken = fcmTokenOptionalFindByToken.get();
             fcmToken.setMember(member);
             fcmTokenRepository.saveAndFlush(fcmToken);
-            return;
-        }
 
-        // 토큰이 존재하지 않으면 새로 생성
-        Optional<FcmToken> fcmTokenOptional = fcmTokenRepository.findByMemberMemberId(member.getMemberId());
-        if (fcmTokenOptional.isEmpty()) {
+        } else {
             fcmTokenRepository.saveAndFlush(FcmToken.builder()
                     .member(member)
                     .token(token)
                     .build());
-            return;
         }
-
-        FcmToken fcmToken = fcmTokenOptional.get();
-        fcmToken.setToken(token);
-        fcmTokenRepository.saveAndFlush(fcmToken);
     }
 }

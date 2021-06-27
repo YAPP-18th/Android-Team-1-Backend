@@ -7,10 +7,13 @@
         xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd
         http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
 
-    <include file="config/liquibase/changelog/00000000_initial_schema.xml"/>
-    <include file="config/liquibase/changelog/20200527_add_unique_constraint.xml"/>
-    <include file="config/liquibase/changelog/20210618_update.xml"/>
-    <include file="config/liquibase/changelog/20210619_fcm_token.xml"/>
-    <include file="config/liquibase/changelog/20210620_fcm_token_member_unique.xml"/>
-    <include file="config/liquibase/changelog/20210622_add_badge_is_checked_field.xml"/>
+    <changeSet id="20210622" author="bleum">
+        <addColumn tableName="badge_accomplished" >
+            <column name="is_checked" type="boolean" defaultValueBoolean="false">
+                <constraints nullable="false"/>
+            </column>
+
+        </addColumn>
+    </changeSet>
+
 </databaseChangeLog>
