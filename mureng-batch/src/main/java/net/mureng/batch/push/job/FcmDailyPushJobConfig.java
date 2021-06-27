@@ -6,7 +6,6 @@ import net.mureng.batch.core.config.AbstractJobConfig;
 import net.mureng.batch.core.job.MurengJobLauncher;
 import net.mureng.batch.push.service.FcmDailyPushService;
 import net.mureng.core.member.entity.FcmToken;
-import net.mureng.core.member.entity.Member;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.Step;
 import org.springframework.batch.core.configuration.annotation.JobScope;
@@ -23,7 +22,7 @@ import org.springframework.context.annotation.Configuration;
 public class FcmDailyPushJobConfig extends AbstractJobConfig {
     public static final String FCM_DAILY_PUSH_JOB_NAME = "fcmDailyPushJob";
     public static final String FCM_DAILY_PUSH_JOB_LAUNCHER_NAME = FCM_DAILY_PUSH_JOB_NAME + "Launcher";
-    public static final String FCM_DAILY_PUSH_JOB_JOB_CRON = "0 0 9 * * ?";
+    public static final String FCM_DAILY_PUSH_JOB_JOB_CRON = "0 0 21 * * ?";
 
     private final FcmDailyPushService fcmDailyPushService;
 
