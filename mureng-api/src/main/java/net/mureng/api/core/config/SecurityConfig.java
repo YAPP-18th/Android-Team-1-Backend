@@ -1,6 +1,7 @@
 package net.mureng.api.core.config;
 
 import lombok.RequiredArgsConstructor;
+import net.mureng.api.core.jwt.component.JwtAuthenticationEntryPoint;
 import net.mureng.api.core.jwt.component.JwtAuthenticationFilter;
 import net.mureng.api.core.jwt.component.JwtResolver;
 import net.mureng.api.core.jwt.component.JwtValidator;
@@ -20,6 +21,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     public static final String[] EXCLUDED_URLS = {"", "", };
     private final JwtResolver jwtResolver;
     private final JwtValidator jwtValidator;
+    private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
 
     @Override
     public AuthenticationManager authenticationManagerBean() throws Exception {
@@ -31,6 +33,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http
                 .httpBasic().disable()
                 .csrf().disable()
+                .exceptionHandling()
+                .authenticationEntryPoint(jwtAuthenticationEntryPoint)
+                .and()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
                     .authorizeRequests()

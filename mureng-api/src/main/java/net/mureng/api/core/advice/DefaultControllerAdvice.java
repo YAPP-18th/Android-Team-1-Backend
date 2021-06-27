@@ -1,10 +1,7 @@
 package net.mureng.api.core.advice;
 
 import net.mureng.api.core.dto.ApiResult;
-import net.mureng.core.core.exception.AccessNotAllowedException;
-import net.mureng.core.core.exception.BadRequestException;
-import net.mureng.core.core.exception.MurengException;
-import net.mureng.core.core.exception.ResourceNotFoundException;
+import net.mureng.core.core.exception.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -33,5 +30,10 @@ public class DefaultControllerAdvice extends AbstractControllerAdvice {
     @ExceptionHandler(value = { AccessNotAllowedException.class})
     public ResponseEntity<ApiResult<?>> handleForbiddenException(Exception e) {
         return handleException(e, HttpStatus.FORBIDDEN);
+    }
+
+    @ExceptionHandler(value = { UnauthorizedException.class})
+    public ResponseEntity<ApiResult<?>> handleUnauthorizedException(Exception e) {
+        return handleException(e, HttpStatus.UNAUTHORIZED);
     }
 }

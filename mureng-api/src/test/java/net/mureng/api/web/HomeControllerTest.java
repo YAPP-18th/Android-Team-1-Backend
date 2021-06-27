@@ -29,7 +29,7 @@ class HomeControllerTest extends AbstractControllerTest {
     public void 테스트_GET_비인가사용자() throws Exception {
         mockMvc.perform(
                 get("/api/authenticated-test")
-        ).andExpect(status().isForbidden());
+        ).andExpect(status().isUnauthorized());
         // mockMvc 레벨 테스트에서는 필터에 걸러지면 후처리는 안하기 때문에 응답 바디 데이터 검증이 불가능하다.
         // 즉, /error 엔드포인트까지 도달하지 않는다.
     }
