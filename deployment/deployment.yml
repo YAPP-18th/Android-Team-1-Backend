@@ -3,8 +3,8 @@ kind: Deployment
 metadata:
   name: mureng-app-deployment
 spec:
-  replicas: 2
-  minReadySeconds: 20
+  replicas: 1
+  minReadySeconds: 30
   selector:
     matchLabels:
       app: mureng-app
@@ -18,11 +18,11 @@ spec:
           image: gcr.io/PROJECT_ID/IMAGE:TAG
           resources:
             requests:
-              memory: "350Mi"
-              cpu: "350m"
+              memory: "800Mi"
+              cpu: "820m"
             limits:
-              memory: "350Mi"
-              cpu: "350m"
+              memory: "800Mi"
+              cpu: "820m"
           volumeMounts:
             - name: content-server-volume
               mountPath: /home/gradle/mount

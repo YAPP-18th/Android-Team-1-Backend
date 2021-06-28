@@ -3,8 +3,8 @@ kind: Deployment
 metadata:
   name: mureng-batch-deployment
 spec:
-  replicas: 2
-  minReadySeconds: 20
+  replicas: 1
+  minReadySeconds: 30
   selector:
     matchLabels:
       app: mureng-batch
