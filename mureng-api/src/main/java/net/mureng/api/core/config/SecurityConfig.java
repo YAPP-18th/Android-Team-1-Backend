@@ -43,7 +43,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                                 "/api/member/nickname-exists/**",
                                 "/api/member/user-exists/**").permitAll()
                         .antMatchers("/api/test", "/api/test-failure").permitAll()
-                        .antMatchers("/api/jwt", "/api/member/signin").permitAll()
+                        .antMatchers("/api/jwt", "/api/member/signin", "/api/member/refresh").permitAll()
                         .antMatchers("/").permitAll()
                         .antMatchers("/api/fcm-token").permitAll()
                         .anyRequest().authenticated()
