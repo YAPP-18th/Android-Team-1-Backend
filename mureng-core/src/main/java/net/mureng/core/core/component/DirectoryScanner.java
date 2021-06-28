@@ -6,6 +6,8 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
+import static net.mureng.core.core.message.ErrorMessage.NOT_DIRECTORY;
+
 @Component
 public class DirectoryScanner {
 
@@ -18,7 +20,7 @@ public class DirectoryScanner {
     public List<String> scanFileListInDirectory(String directoryPath) {
         File[] listFiles = new File(directoryPath).listFiles();
         if (listFiles == null) { // null 인 경우 파일이다.
-            throw new IllegalArgumentException("Not a directory");
+            throw new IllegalArgumentException(NOT_DIRECTORY);
         }
 
         List<String> fileList = new ArrayList<>();

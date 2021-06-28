@@ -15,6 +15,8 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.HashSet;
 import java.util.Set;
 
+import static net.mureng.core.core.message.ErrorMessage.QUESTION_REFRESH_FAIL;
+
 @Service
 @RequiredArgsConstructor
 public class TodayQuestionSelectionServiceImpl implements TodayQuestionSelectionService {
@@ -38,7 +40,7 @@ public class TodayQuestionSelectionServiceImpl implements TodayQuestionSelection
         while (checked.size() < highestId) {
             retry++;
             if (retry > highestId * MAX_TOLERATE) {
-                throw new MurengException("질문 새로 고침이 실패하였습니다.");
+                throw new MurengException(QUESTION_REFRESH_FAIL);
             }
 
             long randomId = numberRandomizer.getRandomInt(highestId);

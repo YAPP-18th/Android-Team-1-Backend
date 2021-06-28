@@ -11,6 +11,9 @@ import org.springframework.validation.annotation.Validated;
 
 import javax.validation.Valid;
 
+import static net.mureng.core.core.message.ErrorMessage.DUPLICATED_NICKNAME;
+import static net.mureng.core.core.message.ErrorMessage.NOT_EXIST_MEMBER;
+
 @Validated
 @Service
 @RequiredArgsConstructor
@@ -20,7 +23,7 @@ public class MemberService {
     @Transactional
     public Member saveMember(@Valid Member newMember) {
         if (isNicknameDuplicated(newMember.getNickname())) {
-            throw new BadRequestException("중복된 닉네임입니다.");
+            throw new BadRequestException(DUPLICATED_NICKNAME);
         }
 
         return memberRepository.saveAndFlush(newMember);
@@ -50,13 +53,13 @@ public class MemberService {
 
     @Transactional(readOnly = true)
     public Member findByIdentifier(String identifier) { return memberRepository.findByIdentifierAndIsActive(identifier, true)
-            .orElseThrow(() -> new ResourceNotFoundException("존재하지 않는 사용자에 대한 요청입니다.")); }
+            .orElseThrow(() -> new ResourceNotFoundException(NOT_EXIST_MEMBER)); }
 
     @Transactional(readOnly = true)
     public Member findByIdentifierIncludingDropped(String identifier) { return memberRepository.findByIdentifier(identifier)
-            .orElseThrow(() -> new ResourceNotFoundException("존재하지 않는 사용자에 대한 요청입니다.")); }
+            .orElseThrow(() -> new ResourceNotFoundException(NOT_EXIST_MEMBER)); }
 
     @Transactional(readOnly = true)
     public Member findById(Long memberId) { return memberRepository.findById(memberId)
-            .orElseThrow(() -> new ResourceNotFoundException("존재하지 않는 사용자에 대한 요청입니다.")); }
+            .orElseThrow(() -> new ResourceNotFoundException(NOT_EXIST_MEMBER)); }
 }

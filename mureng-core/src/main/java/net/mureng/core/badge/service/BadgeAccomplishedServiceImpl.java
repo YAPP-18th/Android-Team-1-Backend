@@ -14,6 +14,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
+import static net.mureng.core.core.message.ErrorMessage.NOT_EXIST_REPLY;
+
 @RequiredArgsConstructor
 @Service
 public class BadgeAccomplishedServiceImpl implements BadgeAccomplishedService {
@@ -38,7 +40,7 @@ public class BadgeAccomplishedServiceImpl implements BadgeAccomplishedService {
 
     @Transactional
     public boolean createCelebrityMureng(Long replyId) {
-        Reply reply = replyRepository.findById(replyId).orElseThrow(() -> new BadRequestException("존재하지 않는 답변에 대한 요청입니다."));
+        Reply reply = replyRepository.findById(replyId).orElseThrow(() -> new BadRequestException(NOT_EXIST_REPLY));
         Long memberId = reply.getAuthor().getMemberId();
 
         if(reply.getReplyLikes().size() == CelebrityMureng.conditionOfCount &&
