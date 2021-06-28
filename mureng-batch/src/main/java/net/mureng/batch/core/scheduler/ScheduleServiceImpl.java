@@ -27,7 +27,11 @@ public class ScheduleServiceImpl implements ScheduleService {
         JobKey jobKey = JobKey.jobKey(scheduledJob.getJobName(), scheduledJob.getJobGroup());
 
         try {
-            Date dt = schedulerFactoryBean.getScheduler().scheduleJob(jobDetail, trigger);
+            Scheduler scheduler = schedulerFactoryBean.getScheduler();
+            if (scheduler.checkExists(jobKey)){
+                scheduler.deleteJob(jobKey);
+            }
+            Date dt = scheduler.scheduleJob(jobDetail, trigger);
             log.debug("Job with jobKey : {} scheduled successfully at date : {}", jobDetail.getKey(), dt);
             return true;
         } catch (SchedulerException e) {
