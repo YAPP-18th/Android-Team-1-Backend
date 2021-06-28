@@ -13,6 +13,8 @@ public class FcmService {
     public void send(final NotificationRequest notificationRequest) {
         Message message = Message.builder()
                 .setToken(notificationRequest.getToken())
+                .setNotification(new Notification(notificationRequest.getTitle(),
+                        notificationRequest.getMessage()))
                 .setWebpushConfig(WebpushConfig.builder().putHeader("ttl", "300")
                         .setNotification(new WebpushNotification(notificationRequest.getTitle(),
                                 notificationRequest.getMessage(),
