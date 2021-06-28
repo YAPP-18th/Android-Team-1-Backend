@@ -19,10 +19,10 @@ spec:
           resources:
             requests:
               memory: "800Mi"
-              cpu: "820m"
+              cpu: "600m"
             limits:
               memory: "800Mi"
-              cpu: "820m"
+              cpu: "600m"
           volumeMounts:
             - name: content-server-volume
               mountPath: /home/gradle/mount
