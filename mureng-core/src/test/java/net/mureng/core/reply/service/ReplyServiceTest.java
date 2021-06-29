@@ -2,6 +2,7 @@ package net.mureng.core.reply.service;
 
 import net.mureng.core.common.EntityCreator;
 import net.mureng.core.core.exception.BadRequestException;
+import net.mureng.core.core.exception.ResourceNotFoundException;
 import net.mureng.core.member.entity.Member;
 import net.mureng.core.question.service.QuestionService;
 import net.mureng.core.reply.entity.Reply;
@@ -16,6 +17,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.LocalDateTime;
 
+import static net.mureng.core.core.message.ErrorMessage.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
@@ -83,7 +85,7 @@ public class ReplyServiceTest {
             BadRequestException exception =  assertThrows(BadRequestException.class, () -> replyService.create(newReply));
 
             // then
-            assertEquals("이미 오늘 답변한 사용자입니다.", exception.getMessage());
+            assertEquals(ALREADY_ANSWERED_MEMBER, exception.getMessage());
         }
 
         @Test
@@ -98,10 +100,10 @@ public class ReplyServiceTest {
             given(questionService.existsById(eq(QUESTION_ID))).willReturn(false);
 
             // when
-            BadRequestException exception =  assertThrows(BadRequestException.class, () -> replyService.create(newReply));
+            ResourceNotFoundException exception =  assertThrows(ResourceNotFoundException.class, () -> replyService.create(newReply));
 
             // then
-            assertEquals("존재하지 않는 질문에 대한 요청입니다.", exception.getMessage());
+            assertEquals(NOT_EXIST_QUESTION, exception.getMessage());
         }
 
         @Test
@@ -120,7 +122,7 @@ public class ReplyServiceTest {
             BadRequestException exception =  assertThrows(BadRequestException.class, () -> replyService.create(newReply));
 
             // then
-            assertEquals("이미 답변한 질문입니다.", exception.getMessage());
+            assertEquals(ALREADY_ANSWERED_REPLY, exception.getMessage());
         }
     }
 
@@ -171,13 +173,13 @@ public class ReplyServiceTest {
             Reply oldReply = EntityCreator.createReplyEntity();
             oldReply.modifyReply(newReply);
 
-            given(replyRepository.findById(eq(REPLY_ID))).willThrow(new BadRequestException("존재하지 않는 질문에 대한 요청입니다."));
+            given(replyRepository.findById(eq(REPLY_ID))).willThrow(new ResourceNotFoundException(NOT_EXIST_REPLY));
 
             // when
-            BadRequestException exception =  assertThrows(BadRequestException.class, () -> replyService.update(newReply));
+            ResourceNotFoundException exception =  assertThrows(ResourceNotFoundException.class, () -> replyService.update(newReply));
 
             // then
-            assertEquals("존재하지 않는 질문에 대한 요청입니다.", exception.getMessage());
+            assertEquals(NOT_EXIST_REPLY, exception.getMessage());
         }
     }
 

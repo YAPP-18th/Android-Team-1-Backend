@@ -1,13 +1,15 @@
 package net.mureng.core.question.service;
 
 import lombok.RequiredArgsConstructor;
-import net.mureng.core.core.exception.BadRequestException;
+import net.mureng.core.core.exception.ResourceNotFoundException;
 import net.mureng.core.question.entity.Question;
 import net.mureng.core.question.repository.QuestionRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+
+import static net.mureng.core.core.message.ErrorMessage.NOT_EXIST_QUESTION;
 
 @Service
 @RequiredArgsConstructor
@@ -16,7 +18,7 @@ public class QuestionService {
 
     @Transactional(readOnly = true)
     public Question getQuestionById(Long questionId){
-        return questionRepository.findById(questionId).orElseThrow(() -> new BadRequestException("존재하지 않는 질문입니다."));
+        return questionRepository.findById(questionId).orElseThrow(() -> new ResourceNotFoundException(NOT_EXIST_QUESTION));
     }
 
     @Transactional(readOnly = true)

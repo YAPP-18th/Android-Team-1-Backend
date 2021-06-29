@@ -1,11 +1,11 @@
 package net.mureng.core.reply.service;
 
 import lombok.RequiredArgsConstructor;
-import net.mureng.core.badge.service.BadgeAccomplishedService;
 import net.mureng.core.core.exception.AccessNotAllowedException;
 import net.mureng.core.core.exception.BadRequestException;
 import net.mureng.core.core.exception.ResourceNotFoundException;
 import net.mureng.core.member.entity.Member;
+import net.mureng.core.member.repository.MemberRepository;
 import net.mureng.core.question.service.QuestionService;
 import net.mureng.core.reply.entity.Reply;
 import net.mureng.core.reply.repository.ReplyRepository;
@@ -19,13 +19,15 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.List;
 
+import static net.mureng.core.core.message.ErrorMessage.*;
+
 @Service
 @RequiredArgsConstructor
 public class ReplyService {
     private final ReplyRepository replyRepository;
     private final QuestionService questionService;
     private final ReplyPostProcessService replyPostProcessService;
-    private final BadgeAccomplishedService badgeAccomplishedService;
+    private final MemberRepository memberRepository;
 
     @Value("${media.base.dir.name}")
     private String mediaBaseDirName;
@@ -45,13 +47,13 @@ public class ReplyService {
         Long questionId = newReply.getQuestion().getQuestionId();
 
         if (! isTest() && isAlreadyRepliedToday(memberId))
-            throw new BadRequestException("이미 오늘 답변한 사용자입니다.");
+            throw new BadRequestException(ALREADY_ANSWERED_MEMBER);
 
         if (!questionService.existsById(questionId))
-            throw new BadRequestException("존재하지 않는 질문에 대한 요청입니다.");
+            throw new ResourceNotFoundException(NOT_EXIST_QUESTION);
 
         if (isQuestionAlreadyReplied(questionId, memberId))
-            throw new BadRequestException("이미 답변한 질문입니다.");
+            throw new BadRequestException(ALREADY_ANSWERED_REPLY);
 
         newReply.setAuthor(newReply.getAuthor());
         newReply.setQuestion(questionService.getQuestionById(questionId));
@@ -84,10 +86,10 @@ public class ReplyService {
         Long replyId = newReply.getReplyId();
 
         Reply oldReply = replyRepository.findById(replyId)
-                .orElseThrow(() -> new BadRequestException("존재하지 않는 질문에 대한 요청입니다."));
+                .orElseThrow(() -> new ResourceNotFoundException(NOT_EXIST_REPLY));
 
         if (!oldReply.isAuthor(newReply.getAuthor()))
-            throw new AccessNotAllowedException("접근 권한이 없습니다.");
+            throw new AccessNotAllowedException(UNAUTHORIZED);
 
         oldReply.modifyReply(newReply);
 
@@ -97,10 +99,10 @@ public class ReplyService {
     @Transactional
     public void delete(Member member, Long replyId) {
         Reply reply = replyRepository.findById(replyId)
-                .orElseThrow(() -> new BadRequestException("존재하지 않는 답변에 대한 요청입니다."));
+                .orElseThrow(() -> new ResourceNotFoundException(NOT_EXIST_REPLY));
 
         if (!reply.isAuthor(member))
-            throw new AccessNotAllowedException("접근 권한이 없습니다.");
+            throw new AccessNotAllowedException(UNAUTHORIZED);
 
         replyRepository.deleteById(replyId);
     }
@@ -108,7 +110,7 @@ public class ReplyService {
     @Transactional(readOnly = true)
     public Reply findReplyByQuestionIdAndMember(Long memberId, Long questionId) {
         return replyRepository.findByAuthorMemberIdAndQuestionQuestionId(memberId, questionId)
-                .orElseThrow(() -> new ResourceNotFoundException("사용자 답변이 존재하지 않습니다."));
+                .orElseThrow(() -> new ResourceNotFoundException(NOT_EXIST_REPLY));
     }
 
     @Transactional(readOnly = true)
@@ -118,6 +120,6 @@ public class ReplyService {
 
     @Transactional(readOnly = true)
     public Reply findById(Long replyId){
-        return replyRepository.findById(replyId).orElseThrow(() -> new BadRequestException("존재하지 않는 답변에 대한 요청입니다."));
+        return replyRepository.findById(replyId).orElseThrow(() -> new ResourceNotFoundException(NOT_EXIST_REPLY));
     }
 }
