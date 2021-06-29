@@ -2,15 +2,18 @@ package net.mureng.api.reply.component;
 
 import net.mureng.api.core.component.EntityMapper;
 import net.mureng.api.member.component.MemberMapper;
-import net.mureng.core.member.entity.Member;
 import net.mureng.api.question.component.QuestionMapper;
-import net.mureng.core.question.entity.Question;
 import net.mureng.api.reply.dto.ReplyDto;
+import net.mureng.core.member.entity.Member;
+import net.mureng.core.question.entity.Question;
 import net.mureng.core.reply.entity.Reply;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
+import org.mapstruct.NullValueMappingStrategy;
+import org.mapstruct.ReportingPolicy;
 
-@Mapper(componentModel = "spring", uses = { QuestionMapper.class, MemberMapper.class })
+@Mapper(componentModel = "spring", uses = { QuestionMapper.class, MemberMapper.class }, unmappedTargetPolicy = ReportingPolicy.IGNORE,
+        nullValueMappingStrategy = NullValueMappingStrategy.RETURN_DEFAULT)
 public interface ReplyMapper extends EntityMapper<Reply, ReplyDto> {
     @Override
     @Mapping(target = "replyLikeCount", expression = "java(reply.getReplyLikes().size())")
@@ -35,7 +38,7 @@ public interface ReplyMapper extends EntityMapper<Reply, ReplyDto> {
     @Mapping(target = "questionId", expression = "java(reply.getQuestion().getQuestionId())")
     @Mapping(target = "requestedByAuthor", expression = "java(reply.isAuthor(loggedInMember))")
     @Mapping(target = "likedByRequester", expression = "java(reply.likedByRequester(loggedInMember))")
-    @Mapping(target = "accomplishedBadge", expression = "java(isMureng3DaysAccomplished == true ? 1L : isMurengSetAccomplished == true ? 4L : null)")
+    @Mapping(target = "accomplishedBadge", expression = "java(isMureng3DaysAccomplished == true ? 1L : isMurengSetAccomplished == true ? 4L : 0L)")
     ReplyDto.ReadOnly toDto(Reply reply, Member loggedInMember, boolean isMureng3DaysAccomplished, boolean isMurengSetAccomplished);
 
     @Override
