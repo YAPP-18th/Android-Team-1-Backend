@@ -13,7 +13,7 @@ import java.util.Optional;
 @Service
 @RequiredArgsConstructor
 public class FcmLikePushServiceImpl implements FcmLikePushService {
-    private static final String LIKE_PUSH_TITLE = "오늘의 영어 질문";
+    private static final String LIKE_PUSH_TITLE = "머렝";
     private static final String LIKE_PUSH_MESSAGE_TEMPLATE = "%s님이 회원님의 글을 좋아해요❤";
     private static final String LIKE_PUSH_CLICK_ACTION = "MAIN";
     private static final String LIKE_PUSH_CHANNEL_ID = "LIKE_CHANNEL";
