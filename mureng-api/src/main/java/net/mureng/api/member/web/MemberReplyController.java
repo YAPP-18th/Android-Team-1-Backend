@@ -34,11 +34,12 @@ public class MemberReplyController {
     @GetMapping("/{memberId}/replies")
     public ResponseEntity<ApiResult<List<ReplyDto.ReadOnly>>> getQuestionMemberReplied(
             @ApiParam(value = "사용자 id", required = true)
-            @PathVariable Long memberId){
+            @PathVariable Long memberId,
+            @CurrentUser Member member){
         return ResponseEntity.ok(
                 ApiResult.ok(
                         replyService.findRepliesByMemberId(memberId).stream()
-                        .map(replyMapper::toDto)
+                        .map(x -> replyMapper.toDto(x, member))
                         .collect(Collectors.toList())
                 )
         );
