@@ -38,18 +38,18 @@ public class ReplyRepositoryTest {
     private static final Long REPLY_ID = 1L;
 
     @Test
-    public void 멤버_답변_목록_조회(){
-        List<Reply> replyList = replyRepository.findAllByAuthorMemberId(MEMBER_ID);
+    public void 멤버_답변_목록_조회_내림차순(){
+        List<Reply> replyList = replyRepository.findAllByAuthorMemberIdOrderByRegDateDesc(MEMBER_ID);
 
         assertEquals(2, replyList.size());
 
         assertEquals(MEMBER_ID, replyList.get(0).getAuthor().getMemberId());
-        assertEquals("yellow", replyList.get(0).getContent());
-        assertEquals("yellow image", replyList.get(0).getImage());
+        assertEquals("so cute", replyList.get(0).getContent());
+        assertEquals("cat image", replyList.get(0).getImage());
 
         assertEquals(MEMBER_ID, replyList.get(1).getAuthor().getMemberId());
-        assertEquals("so cute", replyList.get(1).getContent());
-        assertEquals("cat image", replyList.get(1).getImage());
+        assertEquals("yellow", replyList.get(1).getContent());
+        assertEquals("yellow image", replyList.get(1).getImage());
     }
 
     @Test
