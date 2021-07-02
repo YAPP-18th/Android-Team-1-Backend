@@ -10,10 +10,12 @@ import net.mureng.core.question.service.QuestionService;
 import net.mureng.core.reply.entity.Reply;
 import net.mureng.core.reply.repository.ReplyRepository;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.PostConstruct;
+import java.awt.print.Pageable;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -115,7 +117,8 @@ public class ReplyService {
 
     @Transactional(readOnly = true)
     public List<Reply> findRepliesByMemberId(Long memberId){
-        return replyRepository.findAllByAuthorMemberId(memberId);
+
+        return replyRepository.findAllByAuthorMemberIdOrderByRegDateDesc(memberId);
     }
 
     @Transactional(readOnly = true)
