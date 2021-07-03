@@ -20,7 +20,7 @@ public class FcmDailyPushService {
 
     public void push(FcmToken fcmToken) {
         Member member = fcmToken.getMember();
-        if (member == null || ! member.getMemberSetting().isLikePushActive()) {
+        if (member == null || ! member.getMemberSetting().isDailyPushActive()) {
             return;
         }
 
