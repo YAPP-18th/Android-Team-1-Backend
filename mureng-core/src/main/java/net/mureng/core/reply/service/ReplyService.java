@@ -118,7 +118,7 @@ public class ReplyService {
     @Transactional(readOnly = true)
     public List<Reply> findRepliesByMemberId(Long memberId){
 
-        return replyRepository.findAllByAuthorMemberIdOrderByRegDateDesc(memberId);
+        return replyRepository.findAllByAuthorMemberIdOrderByReplyIdDesc(memberId);
     }
 
     @Transactional(readOnly = true)
