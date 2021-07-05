@@ -39,7 +39,7 @@ public class ReplyRepositoryTest {
 
     @Test
     public void 멤버_답변_목록_조회_내림차순(){
-        List<Reply> replyList = replyRepository.findAllByAuthorMemberIdOrderByRegDateDesc(MEMBER_ID);
+        List<Reply> replyList = replyRepository.findAllByAuthorMemberIdOrderByReplyIdDesc(MEMBER_ID);
 
         assertEquals(2, replyList.size());
 

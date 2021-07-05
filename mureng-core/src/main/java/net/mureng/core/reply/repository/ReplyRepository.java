@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.Optional;
 
 public interface ReplyRepository extends JpaRepository<Reply, Long> {
-    List<Reply> findAllByAuthorMemberIdOrderByRegDateDesc(Long memberId);
+    List<Reply> findAllByAuthorMemberIdOrderByReplyIdDesc(Long memberId);
     List<Reply> findAllByQuestionQuestionId(Long questionId);
     Page<Reply> findAllByQuestionQuestionId(Long questionId, Pageable pageable);
 
