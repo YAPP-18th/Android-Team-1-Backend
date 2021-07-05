@@ -104,7 +104,7 @@
                              references="member(member_id)"/>
             </column>
             <column name="question_id" type="bigint">
-                <constraints nullable="false" unique="true" foreignKeyName="fk_today_question_question"
+                <constraints nullable="false" foreignKeyName="fk_today_question_question"
                              references="question(question_id)"/>
             </column>
             <column name="reg_date" type="datetime">
