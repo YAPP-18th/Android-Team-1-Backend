@@ -32,7 +32,7 @@ public class FcmService {
             String response = FirebaseMessaging.getInstance().sendAsync(message).get();
             log.info("Sent message: " + response);
         } catch (Exception e) {
-            log.error("Sent message was failed : ", e);
+            log.error("Sent message was failed with token : " + notificationRequest.getToken(), e);
         }
     }
 }
