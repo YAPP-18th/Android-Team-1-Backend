@@ -13,8 +13,8 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "cookie_achievement")
-public class CookieAchievement {
+@Table(name = "cookie_acquirement")
+public class CookieAcquirement {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
