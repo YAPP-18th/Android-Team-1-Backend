@@ -10,6 +10,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.test.context.support.WithSecurityContextFactory;
 
 import java.time.LocalDateTime;
+import java.util.Set;
 
 public class WithMockMurengUserSecurityContextFactory implements WithSecurityContextFactory<WithMockMurengUser> {
     @Override
@@ -26,7 +27,6 @@ public class WithMockMurengUserSecurityContextFactory implements WithSecurityCon
                         .image("tester-image-path")
                         .regDate(LocalDateTime.of(2020, 10, 14, 17, 11, 9))
                         .modDate(LocalDateTime.of(2020, 10, 14, 17, 11, 10))
-                        .murengCount(0)
                         .build());
         Authentication auth =
                 new UsernamePasswordAuthenticationToken(principal, "password", principal.getAuthorities());

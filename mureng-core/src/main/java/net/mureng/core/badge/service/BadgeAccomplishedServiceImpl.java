@@ -30,7 +30,7 @@ public class BadgeAccomplishedServiceImpl implements BadgeAccomplishedService {
 
     @Transactional
     public boolean createMureng3Days(Long memberId) {
-        if ( memberRepository.findById(memberId).get().getMurengCount() == Mureng3Days.conditionOfCount &&
+        if ( memberRepository.findById(memberId).get().getMurengCookies().size() == Mureng3Days.conditionOfCount &&
                 !badgeAccomplishedRepository.existsBadgeAccomplishedByMemberMemberIdAndBadgeBadgeId(memberId, Mureng3Days.id) ){
 
             badgeAccomplishedRepository.saveAndFlush(makeBadgeAccomplished(memberId, Mureng3Days.id));
@@ -69,7 +69,7 @@ public class BadgeAccomplishedServiceImpl implements BadgeAccomplishedService {
 
     @Transactional
     public boolean createMurengSet(Long memberId){
-        if ( memberRepository.findById(memberId).get().getMurengCount() == MurengSet.conditionOfCount &&
+        if ( memberRepository.findById(memberId).get().getMurengCookies().size() == MurengSet.conditionOfCount &&
                 !badgeAccomplishedRepository.existsBadgeAccomplishedByMemberMemberIdAndBadgeBadgeId(memberId, MurengSet.id) ){
 
             badgeAccomplishedRepository.saveAndFlush(makeBadgeAccomplished(memberId, MurengSet.id));
