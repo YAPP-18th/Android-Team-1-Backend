@@ -1,7 +1,7 @@
 package net.mureng.core.member.entity;
 
 import lombok.*;
-import net.mureng.core.cookie.entity.CookieAchievement;
+import net.mureng.core.cookie.entity.CookieAcquirement;
 import org.springframework.util.StringUtils;
 
 import javax.persistence.*;
@@ -49,7 +49,7 @@ public class Member {
 
     @Builder.Default
     @OneToMany(mappedBy = "member", cascade = CascadeType.ALL)
-    private Set<CookieAchievement> murengCookies = new HashSet<>();
+    private Set<CookieAcquirement> murengCookies = new HashSet<>();
 
     @Embedded
     @Builder.Default

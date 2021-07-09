@@ -1,7 +1,7 @@
 package net.mureng.core.reply.service;
 
 import lombok.RequiredArgsConstructor;
-import net.mureng.core.cookie.service.CookieAchievementService;
+import net.mureng.core.cookie.service.CookieAcquirementService;
 import net.mureng.core.member.entity.Member;
 import net.mureng.core.member.repository.MemberRepository;
 import net.mureng.core.reply.entity.Reply;
@@ -12,12 +12,12 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 public class ReplyPostProcessServiceImpl implements ReplyPostProcessService {
     private final MemberRepository memberRepository;
-    private final CookieAchievementService cookieAchievementService;
+    private final CookieAcquirementService cookieAchievementService;
 
     @Transactional
     public void postProcess(Reply reply) {
         Member member = reply.getAuthor();
-        cookieAchievementService.achievementMurengCookie(member);
+        cookieAchievementService.acquireMurengCookie(member);
 
         memberRepository.saveAndFlush(member);
     }
