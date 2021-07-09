@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd
+        http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+
+    <changeSet id="20210708-3" author="hkpark">
+        <renameTable newTableName="useful_expression"
+                      oldTableName="today_expression"/>
+
+        <createTable tableName="today_useful_expression">
+            <column name="id" type="bigint" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false" unique="true"/>
+            </column>
+            <column name="exp_id" type="bigint">
+                <constraints nullable="false" foreignKeyName="fk_today_useful_expression_useful_expression"
+                             references="useful_expression(exp_id)"/>
+            </column>
+            <column name="reg_date" type="datetime">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="mod_date" type="datetime">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+</databaseChangeLog>

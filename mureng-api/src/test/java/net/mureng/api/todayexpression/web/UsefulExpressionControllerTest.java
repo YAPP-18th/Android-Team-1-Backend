@@ -3,8 +3,8 @@ package net.mureng.api.todayexpression.web;
 import net.mureng.api.annotation.WithMockMurengUser;
 import net.mureng.api.web.AbstractControllerTest;
 import net.mureng.core.common.EntityCreator;
-import net.mureng.core.todayexpression.entity.TodayExpression;
-import net.mureng.core.todayexpression.service.TodayExpressionService;
+import net.mureng.core.todayexpression.entity.UsefulExpression;
+import net.mureng.core.todayexpression.service.UsefulExpressionService;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.data.domain.PageImpl;
@@ -20,22 +20,22 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-public class TodayExpressionControllerTest extends AbstractControllerTest {
+public class UsefulExpressionControllerTest extends AbstractControllerTest {
 
     @MockBean
-    private TodayExpressionService todayExpressionService;
+    private UsefulExpressionService usefulExpressionService;
 
     @Test
     @WithMockMurengUser
     public void 오늘의_표현_가져오기_테스트() throws Exception {
-        TodayExpression todayExpression1 = EntityCreator.createTodayExpressionEntity();
-        TodayExpression todayExpression2 = EntityCreator.createTodayExpressionEntity();
-        List<TodayExpression> todayExpressionList = Arrays.asList(todayExpression1, todayExpression2);
+        UsefulExpression usefulExpression1 = EntityCreator.createUsefulExpressionEntity();
+        UsefulExpression usefulExpression2 = EntityCreator.createUsefulExpressionEntity();
+        List<UsefulExpression> usefulExpressionList = Arrays.asList(usefulExpression1, usefulExpression2);
 
         int page = 0;
         int size = 2;
 
-        given(todayExpressionService.getTodayExpressions()).willReturn(new PageImpl<>(todayExpressionList, PageRequest.of(page, size), 2));
+        given(usefulExpressionService.getTodayExpressions()).willReturn(new PageImpl<>(usefulExpressionList, PageRequest.of(page, size), 2));
 
         mockMvc.perform(
                 get("/api/today-expression")

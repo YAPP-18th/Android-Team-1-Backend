@@ -11,13 +11,12 @@ import net.mureng.core.question.entity.WordHint;
 import net.mureng.core.reply.entity.Reply;
 import net.mureng.core.reply.entity.ReplyLikes;
 import net.mureng.core.reply.entity.ReplyLikesPK;
-import net.mureng.core.todayexpression.entity.TodayExpression;
+import net.mureng.core.todayexpression.entity.UsefulExpression;
 
 import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 public class EntityCreator {
     private static final Long QUESTION_ID = 1L;
@@ -87,8 +86,8 @@ public class EntityCreator {
                 .build();
     }
 
-    public static TodayExpression createTodayExpressionEntity() {
-        return TodayExpression.builder()
+    public static UsefulExpression createUsefulExpressionEntity() {
+        return UsefulExpression.builder()
                 .expId(1L)
                 .expression("test")
                 .meaning("테스트")
@@ -104,7 +103,7 @@ public class EntityCreator {
         return MemberScrap.builder()
                 .id(new MemberScrapPK(1L, 1L))
                 .member(EntityCreator.createMemberEntity())
-                .todayExpression(TodayExpression.builder()
+                .usefulExpression(UsefulExpression.builder()
                         .expId(1L)
                         .expression("test")
                         .meaning("테스트")
