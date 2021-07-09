@@ -17,6 +17,7 @@ import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public class EntityCreator {
     private static final Long QUESTION_ID = 1L;
@@ -64,7 +65,6 @@ public class EntityCreator {
                 .nickname("Test")
                 .regDate(LocalDateTime.of(2020, 10, 14, 17, 11, 9))
                 .modDate(LocalDateTime.of(2020, 10, 14, 17, 11, 10))
-                .murengCount(0)
                 .build();
     }
 

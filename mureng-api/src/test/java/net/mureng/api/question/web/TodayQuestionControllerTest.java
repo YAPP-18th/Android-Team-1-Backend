@@ -15,6 +15,7 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
@@ -31,7 +32,7 @@ class TodayQuestionControllerTest extends AbstractControllerTest {
 
     private final Question question = Question.builder()
             .questionId(1L)
-            .author(Member.builder().build())
+            .author(Member.builder().murengCookies(Set.of()).build())
             .category("카테고리")
             .content("This is english content.")
             .koContent("이것은 한글 내용입니다.")

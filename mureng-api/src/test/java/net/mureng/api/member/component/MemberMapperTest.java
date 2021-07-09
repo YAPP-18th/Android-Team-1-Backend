@@ -10,6 +10,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -26,7 +27,6 @@ class MemberMapperTest {
                                         .nickname("Test")
                                         .regDate(LocalDateTime.of(2020, 10, 14, 17, 11, 9))
                                         .modDate(LocalDateTime.of(2020, 10, 14, 17, 11, 10))
-                                        .murengCount(0)
                                         .memberAttendance(MemberAttendance.builder()
                                                 .attendanceCount(10)
                                                 .lastAttendanceDate(LocalDate.of(2020, 10, 14))
@@ -35,6 +35,7 @@ class MemberMapperTest {
                                                 .isLikePushActive(true)
                                                 .isDailyPushActive(false)
                                                 .build())
+                                        .murengCookies(Set.of())
                                         .build();
 
     private final MemberDto.ReadOnly memberDto = MemberDto.ReadOnly.builder()

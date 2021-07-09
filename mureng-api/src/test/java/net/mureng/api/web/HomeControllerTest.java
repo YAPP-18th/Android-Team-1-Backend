@@ -46,7 +46,6 @@ class HomeControllerTest extends AbstractControllerTest {
                             .nickname("Test")
                             .regDate(LocalDateTime.of(2020, 10, 14, 17, 11, 9))
                             .modDate(LocalDateTime.of(2020, 10, 14, 17, 11, 10))
-                            .murengCount(0)
                             .build();
 
         String token = jwtCreator.createAccessToken(member);
