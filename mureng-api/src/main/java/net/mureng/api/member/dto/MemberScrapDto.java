@@ -4,7 +4,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.*;
-import net.mureng.api.todayexpression.dto.TodayExpressionDto;
+import net.mureng.api.todayexpression.dto.UsefulExpressionDto;
 
 import java.util.List;
 
@@ -20,7 +20,7 @@ public class MemberScrapDto {
 
     @ApiModelProperty(value = "스크랩 목록")
     @JsonProperty(index = PropertyDisplayOrder.SCRAPLIST)
-    private List<TodayExpressionDto> scrapList;
+    private List<UsefulExpressionDto> scrapList;
 
     @ApiModelProperty(value = "요청자의 프로필인지")
     @JsonProperty(index = PropertyDisplayOrder.REQUESTER_PROFILE)

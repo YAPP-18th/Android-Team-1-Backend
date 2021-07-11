@@ -13,7 +13,7 @@ import javax.validation.constraints.NotEmpty;
 @NoArgsConstructor
 @AllArgsConstructor
 @ApiModel(value="오늘의 표현 모델", description="오늘의 표현 모델")
-public class TodayExpressionDto {
+public class UsefulExpressionDto {
     @NotEmpty
     @ApiModelProperty(value = "오늘의 표현 ID", required = true)
     @JsonProperty(index = PropertyDisplayOrder.EXP_ID)

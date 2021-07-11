@@ -1,0 +1,9 @@
+INSERT INTO member (member_id, email, identifier, image, is_active, attendance_count, last_attendance_date, is_daily_push_active, mod_date, nickname, reg_date, is_like_push_active) VALUES (1, 'test@email.com', 'identity', '/reply/1621586761110.png', true, 0, '2021-05-13', false, '2021-07-08 11:30:00.184937', '테스트유저', '2021-05-13 01:31:33.400876', true);
+
+INSERT INTO useful_expression (exp_id, expression, expression_example, expression_example_meaning, meaning, mod_date, reg_date) VALUES (1, 'I''m sure that ~', 'I''m sure that I will achieve my goal.', '난 내 목표를 달성할 거라고 확신해.', '~라는 것을 확신해', '2021-05-29 14:21:12', '2021-05-29 14:21:09');
+INSERT INTO useful_expression (exp_id, expression, expression_example, expression_example_meaning, meaning, mod_date, reg_date) VALUES (2, 'I''m happy to ~', 'I''m happy to see you again.', '널 다시 보게 돼서 기뻐.', '~해서 기뻐', '2021-05-29 14:21:49', '2021-05-29 14:21:48');
+INSERT INTO useful_expression (exp_id, expression, expression_example, expression_example_meaning, meaning, mod_date, reg_date) VALUES (3, 'I''m looking forward to ~ing', 'I''m looking forward to seeing you tomorrow.', '내일 널 보는 것이 기대돼.', '~이 너무 기대돼', '2021-06-28 00:55:57', '2021-06-28 00:56:10');
+INSERT INTO useful_expression (exp_id, expression, expression_example, expression_example_meaning, meaning, mod_date, reg_date) VALUES (4, 'I think that ~', 'I think that happiness is important in life.', '인생에서 행복이 중요하다고 생각해.', '~라고 생각해', '2021-06-28 00:55:57', '2021-06-28 00:56:12');
+
+INSERT INTO today_useful_expression (id, exp_id, mod_date, reg_date) VALUES (1, 1, '2021-05-29 14:21:12', '2021-05-29 14:21:09');
+INSERT INTO today_useful_expression (id, exp_id, mod_date, reg_date) VALUES (2, 2, '2021-05-29 14:21:12', '2021-05-29 14:21:09');

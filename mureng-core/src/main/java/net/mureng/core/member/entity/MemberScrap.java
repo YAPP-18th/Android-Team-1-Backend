@@ -1,7 +1,7 @@
 package net.mureng.core.member.entity;
 
 import lombok.*;
-import net.mureng.core.todayexpression.entity.TodayExpression;
+import net.mureng.core.todayexpression.entity.UsefulExpression;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -24,7 +24,7 @@ public class MemberScrap {
     @MapsId("expId")
     @ManyToOne
     @JoinColumn(name = "exp_id")
-    private TodayExpression todayExpression;
+    private UsefulExpression usefulExpression;
 
     @Builder.Default
     @Column(name = "reg_date", nullable = false)

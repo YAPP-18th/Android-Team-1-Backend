@@ -14,8 +14,8 @@ import java.util.Set;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "today_expression")
-public class TodayExpression {
+@Table(name = "useful_expression")
+public class UsefulExpression {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -43,7 +43,7 @@ public class TodayExpression {
     private LocalDateTime modDate = LocalDateTime.now();
 
     @Builder.Default
-    @OneToMany(mappedBy = "todayExpression", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "usefulExpression", cascade = CascadeType.ALL)
     private Set<MemberScrap> memberScraps = new HashSet<>();
 
     public boolean scrappedByRequester(Member member){
