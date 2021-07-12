@@ -35,7 +35,7 @@ public class UsefulExpressionControllerTest extends AbstractControllerTest {
         int page = 0;
         int size = 2;
 
-        given(usefulExpressionService.getTodayExpressions()).willReturn(new PageImpl<>(usefulExpressionList, PageRequest.of(page, size), 2));
+        given(usefulExpressionService.getTodayExpressions()).willReturn(usefulExpressionList);
 
         mockMvc.perform(
                 get("/api/today-expression")
