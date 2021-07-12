@@ -48,7 +48,7 @@ public class Member {
     private LocalDateTime modDate = LocalDateTime.now();
 
     @Builder.Default
-    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private Set<CookieAcquirement> murengCookies = new HashSet<>();
 
     @Embedded
