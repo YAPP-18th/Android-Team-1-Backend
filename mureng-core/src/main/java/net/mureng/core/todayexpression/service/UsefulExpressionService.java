@@ -26,10 +26,9 @@ public class UsefulExpressionService {
      * 매일 변경하는 로직
      */
     @Transactional(readOnly = true)
-    public Page<UsefulExpression> getTodayExpressions(){
-        List<UsefulExpression> usefulExpressions = todayUsefulExpressionRepository.findAll().stream()
+    public List<UsefulExpression> getTodayExpressions(){
+        return todayUsefulExpressionRepository.findAll().stream()
                 .map(TodayUsefulExpression::getUsefulExpression)
                 .collect(Collectors.toList());
-        return new PageImpl<>(usefulExpressions);
     }
 }
