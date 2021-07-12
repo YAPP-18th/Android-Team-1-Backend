@@ -1,11 +1,14 @@
 package net.mureng.core.member.entity;
 
 import lombok.*;
+import net.mureng.core.cookie.entity.CookieAcquirement;
 import org.springframework.util.StringUtils;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
+import java.util.HashSet;
+import java.util.Set;
 
 @Getter @Setter
 @Builder
@@ -45,8 +48,8 @@ public class Member {
     private LocalDateTime modDate = LocalDateTime.now();
 
     @Builder.Default
-    @Column(name = "mureng_count", nullable = false)
-    private int murengCount = 0;
+    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    private Set<CookieAcquirement> murengCookies = new HashSet<>();
 
     @Embedded
     @Builder.Default
@@ -58,11 +61,6 @@ public class Member {
 
     public boolean isRequesterProfile(Long memberId){
         return this.memberId == memberId;
-    }
-
-    public void increaseMurengCount() {
-        this.murengCount++;
-        this.modDate = LocalDateTime.now();
     }
 
     public void updateMember(Member member) {

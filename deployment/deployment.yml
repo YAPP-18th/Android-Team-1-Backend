@@ -4,7 +4,6 @@ metadata:
   name: mureng-app-deployment
 spec:
   replicas: 1
-  minReadySeconds: 30
   selector:
     matchLabels:
       app: mureng-app
@@ -28,6 +27,12 @@ spec:
               mountPath: /home/gradle/mount
           ports:
             - containerPort: 8080
+          readinessProbe:
+            httpGet:
+              path: /
+              port: 8080
+            initialDelaySeconds: 10
+            periodSeconds: 5
           env:
             - name: SPRING_PROFILES_ACTIVE
               value: "prod"

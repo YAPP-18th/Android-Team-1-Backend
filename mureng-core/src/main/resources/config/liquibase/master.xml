@@ -13,4 +13,7 @@
     <include file="config/liquibase/changelog/20210619_fcm_token.xml"/>
     <include file="config/liquibase/changelog/20210620_fcm_token_member_unique.xml"/>
     <include file="config/liquibase/changelog/20210622_add_badge_is_checked_field.xml"/>
+    <include file="config/liquibase/changelog/20210708_add_cookie_entity.xml"/>
+    <include file="config/liquibase/changelog/20210708_drop_member_mureng_count.xml"/>
+    <include file="config/liquibase/changelog/20210708_today_expression.xml"/>
 </databaseChangeLog>

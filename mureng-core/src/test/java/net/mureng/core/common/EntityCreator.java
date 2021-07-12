@@ -11,7 +11,7 @@ import net.mureng.core.question.entity.WordHint;
 import net.mureng.core.reply.entity.Reply;
 import net.mureng.core.reply.entity.ReplyLikes;
 import net.mureng.core.reply.entity.ReplyLikesPK;
-import net.mureng.core.todayexpression.entity.TodayExpression;
+import net.mureng.core.todayexpression.entity.UsefulExpression;
 
 import java.time.LocalDateTime;
 import java.util.Arrays;
@@ -64,7 +64,6 @@ public class EntityCreator {
                 .nickname("Test")
                 .regDate(LocalDateTime.of(2020, 10, 14, 17, 11, 9))
                 .modDate(LocalDateTime.of(2020, 10, 14, 17, 11, 10))
-                .murengCount(0)
                 .build();
     }
 
@@ -87,8 +86,8 @@ public class EntityCreator {
                 .build();
     }
 
-    public static TodayExpression createTodayExpressionEntity() {
-        return TodayExpression.builder()
+    public static UsefulExpression createUsefulExpressionEntity() {
+        return UsefulExpression.builder()
                 .expId(1L)
                 .expression("test")
                 .meaning("테스트")
@@ -104,7 +103,7 @@ public class EntityCreator {
         return MemberScrap.builder()
                 .id(new MemberScrapPK(1L, 1L))
                 .member(EntityCreator.createMemberEntity())
-                .todayExpression(TodayExpression.builder()
+                .usefulExpression(UsefulExpression.builder()
                         .expId(1L)
                         .expression("test")
                         .meaning("테스트")

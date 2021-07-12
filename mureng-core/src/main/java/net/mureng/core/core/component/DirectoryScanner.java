@@ -4,6 +4,7 @@ import org.springframework.stereotype.Component;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import static net.mureng.core.core.message.ErrorMessage.NOT_DIRECTORY;
@@ -31,6 +32,7 @@ public class DirectoryScanner {
 
             fileList.add(f.getAbsolutePath());
         }
+        Collections.sort(fileList);
         return fileList;
     }
 }

@@ -15,6 +15,7 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 import java.time.LocalDate;
+import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
@@ -31,7 +32,6 @@ class MemberControllerTest extends AbstractControllerTest {
                                             .identifier("user-identifier")
                                             .image("image-path")
                                             .nickname("최대여섯글자")
-                                            .murengCount(0)
                                             .memberAttendance(MemberAttendance.builder()
                                                     .lastAttendanceDate(LocalDate.parse("2020-10-14"))
                                                     .attendanceCount(0)
@@ -40,6 +40,7 @@ class MemberControllerTest extends AbstractControllerTest {
                                                     .isLikePushActive(true)
                                                     .isDailyPushActive(false)
                                                     .build())
+                                            .murengCookies(Set.of())
                                             .build();
 
     private final String newMemberJsonString = "{" +

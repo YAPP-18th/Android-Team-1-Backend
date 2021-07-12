@@ -28,5 +28,11 @@ public class ErrorMessage {
     // Today Question
     public static String QUESTION_REFRESH_FAIL = "질문 새로 고침에 실패하였습니다.";
 
+    // Today Expression
+    public static String EXPRESSION_REFRESH_FAIL = "오늘의 표현 새로 고침에 실패하였습니다.";
+
+    // Cookie
+    public static String ALREADY_COOKIE_ACQUIRED = "이미 오늘 쿠키를 획득하였습니다.";
+
 
 }

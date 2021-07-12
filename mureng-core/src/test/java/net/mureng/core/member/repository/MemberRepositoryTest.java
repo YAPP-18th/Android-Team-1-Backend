@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.persistence.EntityManager;
 import java.time.LocalDateTime;
+import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -37,22 +38,11 @@ public class MemberRepositoryTest {
                 .nickname("Test")
                 .regDate(LocalDateTime.of(2020, 10, 14, 17, 11, 9))
                 .modDate(LocalDateTime.of(2020, 10, 14, 17, 11, 10))
-                .murengCount(0)
                 .build();
 
         memberRepository.save(member);
     }
 
-    @Test
-    @DatabaseSetup({
-            "classpath:dbunit/entity/member.xml"
-    })
-    @ExpectedDatabase(value = "classpath:dbunit/expected/멤버_머렝_카운트_증가.xml",
-            assertionMode = DatabaseAssertionMode.NON_STRICT)
-    public void 멤버_머렝_카운트_증가_테스트() {
-        memberRepository.findById(1L).orElseThrow().increaseMurengCount(); // 0 -> 1
-        entityManager.flush(); // flush 연산을 통해 데이터베이스에 강제 반영
-    }
 
     @Test
     @DatabaseSetup({

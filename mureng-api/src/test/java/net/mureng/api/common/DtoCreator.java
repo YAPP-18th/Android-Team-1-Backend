@@ -6,7 +6,7 @@ import net.mureng.api.question.dto.QuestionDto;
 import net.mureng.api.question.dto.WordHintDto;
 import net.mureng.api.reply.dto.ReplyDto;
 import net.mureng.api.reply.dto.ReplyLikesDto;
-import net.mureng.api.todayexpression.dto.TodayExpressionDto;
+import net.mureng.api.todayexpression.dto.UsefulExpressionDto;
 import net.mureng.core.member.entity.MemberSetting;
 
 import java.util.Set;
@@ -73,8 +73,8 @@ public class DtoCreator {
                 .build();
     }
 
-    public static TodayExpressionDto createTodayExpressionDto() {
-        return TodayExpressionDto.builder()
+    public static UsefulExpressionDto createTodayExpressionDto() {
+        return UsefulExpressionDto.builder()
                 .expId(1L)
                 .expression("test")
                 .meaning("테스트")

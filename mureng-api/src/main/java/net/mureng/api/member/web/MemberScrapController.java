@@ -11,7 +11,7 @@ import net.mureng.api.member.component.MemberScrapMapper;
 import net.mureng.api.member.dto.MemberScrapDto;
 import net.mureng.api.member.service.MemberExpressionScrapService;
 import net.mureng.api.todayexpression.component.TodayExpressionMapper;
-import net.mureng.api.todayexpression.dto.TodayExpressionDto;
+import net.mureng.api.todayexpression.dto.UsefulExpressionDto;
 import net.mureng.core.badge.service.BadgeAccomplishedService;
 import net.mureng.core.member.entity.Member;
 import net.mureng.core.member.entity.MemberScrap;
@@ -36,10 +36,10 @@ public class MemberScrapController {
 
     @ApiOperation(value = "오늘의 표현 스크랩", notes = "오늘의 표현을 스크랩합니다.")
     @PostMapping("/scrap/{expId}")
-    public ResponseEntity<ApiResult<TodayExpressionDto>> scrap(@CurrentUser Member member, @PathVariable Long expId){
+    public ResponseEntity<ApiResult<UsefulExpressionDto>> scrap(@CurrentUser Member member, @PathVariable Long expId){
         return ResponseEntity.ok(ApiResult.ok(
                 todayExpressionMapper.toDto(
-                    memberExpressionScrapService.scrapTodayExpression(member, expId).getTodayExpression(), member,
+                    memberExpressionScrapService.scrapTodayExpression(member, expId).getUsefulExpression(), member,
                         badgeAccomplishedService.createAcademicMureng(member.getMemberId())
                 )
         ));
@@ -63,7 +63,7 @@ public class MemberScrapController {
         return ResponseEntity.ok(ApiResult.ok(
                 memberScrapMapper.toDto(
                         profileMember,
-                        scrapList.stream().map(MemberScrap::getTodayExpression).collect(Collectors.toList()),
+                        scrapList.stream().map(MemberScrap::getUsefulExpression).collect(Collectors.toList()),
                         member)
         ));
     }
@@ -78,7 +78,7 @@ public class MemberScrapController {
         return ResponseEntity.ok(ApiResult.ok(
                 memberScrapMapper.toDto(
                         member,
-                        scrapList.stream().map(MemberScrap::getTodayExpression).collect(Collectors.toList()),
+                        scrapList.stream().map(MemberScrap::getUsefulExpression).collect(Collectors.toList()),
                         member)
         ));
     }

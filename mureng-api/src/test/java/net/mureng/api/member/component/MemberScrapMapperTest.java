@@ -3,10 +3,10 @@ package net.mureng.api.member.component;
 import net.mureng.api.common.DtoCreator;
 import net.mureng.api.member.dto.MemberDto;
 import net.mureng.api.member.dto.MemberScrapDto;
-import net.mureng.api.todayexpression.dto.TodayExpressionDto;
+import net.mureng.api.todayexpression.dto.UsefulExpressionDto;
 import net.mureng.core.common.EntityCreator;
 import net.mureng.core.member.entity.Member;
-import net.mureng.core.todayexpression.entity.TodayExpression;
+import net.mureng.core.todayexpression.entity.UsefulExpression;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -23,9 +23,9 @@ public class MemberScrapMapperTest {
     private MemberScrapMapper memberScrapMapper;
 
     private static final MemberDto memberDto = DtoCreator.createMemberDto();
-    private static final List<TodayExpressionDto> todayExpressionDtoList = Arrays.asList(DtoCreator.createTodayExpressionDto(), DtoCreator.createTodayExpressionDto());
+    private static final List<UsefulExpressionDto> todayExpressionDtoList = Arrays.asList(DtoCreator.createTodayExpressionDto(), DtoCreator.createTodayExpressionDto());
     private static final Member member = EntityCreator.createMemberEntity();
-    private static final List<TodayExpression> todayExpressionList = Arrays.asList(EntityCreator.createTodayExpressionEntity(), EntityCreator.createTodayExpressionEntity());
+    private static final List<UsefulExpression> todayExpressionList = Arrays.asList(EntityCreator.createUsefulExpressionEntity(), EntityCreator.createUsefulExpressionEntity());
 
     @Test
     public void 엔티티에서_DTO변환_테스트() {

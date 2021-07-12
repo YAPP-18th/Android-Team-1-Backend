@@ -5,6 +5,7 @@ import net.mureng.core.badge.entity.BadgeAccomplished;
 import net.mureng.core.badge.entity.BadgeAccomplishedPK;
 import net.mureng.core.badge.repository.BadgeAccomplishedRepository;
 import net.mureng.core.core.exception.BadRequestException;
+import net.mureng.core.member.repository.MemberRepository;
 import net.mureng.core.member.repository.MemberScrapRepository;
 import net.mureng.core.member.service.MemberService;
 import net.mureng.core.reply.entity.Reply;
@@ -24,11 +25,12 @@ public class BadgeAccomplishedServiceImpl implements BadgeAccomplishedService {
     private final BadgeService badgeService;
     private final BadgeAccomplishedRepository badgeAccomplishedRepository;
     private final MemberScrapRepository memberScrapRepository;
+    private final MemberRepository memberRepository;
 
 
     @Transactional
     public boolean createMureng3Days(Long memberId) {
-        if ( replyRepository.countAllByAuthorMemberId(memberId) == Mureng3Days.conditionOfCount &&
+        if ( memberRepository.findById(memberId).get().getMurengCookies().size() == Mureng3Days.conditionOfCount &&
                 !badgeAccomplishedRepository.existsBadgeAccomplishedByMemberMemberIdAndBadgeBadgeId(memberId, Mureng3Days.id) ){
 
             badgeAccomplishedRepository.saveAndFlush(makeBadgeAccomplished(memberId, Mureng3Days.id));
@@ -67,7 +69,7 @@ public class BadgeAccomplishedServiceImpl implements BadgeAccomplishedService {
 
     @Transactional
     public boolean createMurengSet(Long memberId){
-        if ( replyRepository.countAllByAuthorMemberId(memberId) == MurengSet.conditionOfCount &&
+        if ( memberRepository.findById(memberId).get().getMurengCookies().size() == MurengSet.conditionOfCount &&
                 !badgeAccomplishedRepository.existsBadgeAccomplishedByMemberMemberIdAndBadgeBadgeId(memberId, MurengSet.id) ){
 
             badgeAccomplishedRepository.saveAndFlush(makeBadgeAccomplished(memberId, MurengSet.id));

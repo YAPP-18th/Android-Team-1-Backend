@@ -29,10 +29,10 @@ public class FcmService {
                 .build();
 
         try {
-            String response = FirebaseMessaging.getInstance().sendAsync(message).get();
+            String response = FirebaseMessaging.getInstance().send(message);
             log.info("Sent message: " + response);
-        } catch (Exception e) {
-            log.error("Sent message was failed : ", e);
+        } catch (FirebaseMessagingException e) {
+            log.error("Sent message was failed with token : " + notificationRequest.getToken(), e);
         }
     }
 }

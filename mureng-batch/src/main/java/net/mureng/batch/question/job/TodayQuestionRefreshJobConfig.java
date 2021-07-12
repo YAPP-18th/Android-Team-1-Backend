@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import net.mureng.batch.core.config.AbstractJobConfig;
 import net.mureng.batch.core.job.MurengJobLauncher;
+import net.mureng.batch.util.CronExpression;
 import net.mureng.core.member.entity.Member;
 import net.mureng.core.question.service.TodayQuestionSelectionService;
 import org.springframework.batch.core.Job;
@@ -22,7 +23,7 @@ import org.springframework.context.annotation.Configuration;
 public class TodayQuestionRefreshJobConfig extends AbstractJobConfig {
     public static final String TODAY_QUESTION_REFRESH_JOB_NAME = "todayQuestionRefreshJob";
     public static final String TODAY_QUESTION_REFRESH_JOB_LAUNCHER_NAME = TODAY_QUESTION_REFRESH_JOB_NAME + "Launcher";
-    public static final String TODAY_QUESTION_REFRESH_JOB_CRON = "0 0 0 ? * * *";
+    public static final String TODAY_QUESTION_REFRESH_JOB_CRON = CronExpression.EVERY_DAY_00_AM;
 
     private final TodayQuestionSelectionService todayQuestionSelectionService;
 

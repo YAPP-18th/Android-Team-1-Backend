@@ -4,7 +4,7 @@ import com.github.springtestdbunit.annotation.DatabaseSetup;
 import net.mureng.core.annotation.MurengDataTest;
 import net.mureng.core.member.entity.MemberScrap;
 import net.mureng.core.member.entity.MemberScrapPK;
-import net.mureng.core.todayexpression.entity.TodayExpression;
+import net.mureng.core.todayexpression.entity.UsefulExpression;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -17,7 +17,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 @MurengDataTest
 @DatabaseSetup({
         "classpath:dbunit/entity/member.xml",
-        "classpath:dbunit/entity/today_expression.xml",
+        "classpath:dbunit/entity/useful_expression.xml",
         "classpath:dbunit/entity/member_scrap.xml"
 })
 public class MemberScrapRepositoryTest {
@@ -62,20 +62,20 @@ public class MemberScrapRepositoryTest {
 
     @Test
     public void 멤버로_스크랩목록_내용조회_테스트(){
-        List<TodayExpression> todayExpressions = memberScrapRepository.findAllByIdMemberId(MEMBER_ID).stream()
-                .map(MemberScrap::getTodayExpression)
+        List<UsefulExpression> usefulExpressions = memberScrapRepository.findAllByIdMemberId(MEMBER_ID).stream()
+                .map(MemberScrap::getUsefulExpression)
                 .collect(Collectors.toList());
 
-        assertEquals(2, todayExpressions.size());
+        assertEquals(2, usefulExpressions.size());
 
-        assertEquals("test", todayExpressions.get(0).getExpression());
-        assertEquals("테스트", todayExpressions.get(0).getMeaning());
-        assertEquals("this is test.", todayExpressions.get(0).getExpressionExample());
-        assertEquals("이것은 테스트이다.", todayExpressions.get(0).getExpressionExampleMeaning());
+        assertEquals("test", usefulExpressions.get(0).getExpression());
+        assertEquals("테스트", usefulExpressions.get(0).getMeaning());
+        assertEquals("this is test.", usefulExpressions.get(0).getExpressionExample());
+        assertEquals("이것은 테스트이다.", usefulExpressions.get(0).getExpressionExampleMeaning());
 
-        assertEquals("test2", todayExpressions.get(1).getExpression());
-        assertEquals("테스트2", todayExpressions.get(1).getMeaning());
-        assertEquals("this is test2.", todayExpressions.get(1).getExpressionExample());
-        assertEquals("이것은 테스트2이다.", todayExpressions.get(1).getExpressionExampleMeaning());
+        assertEquals("test2", usefulExpressions.get(1).getExpression());
+        assertEquals("테스트2", usefulExpressions.get(1).getMeaning());
+        assertEquals("this is test2.", usefulExpressions.get(1).getExpressionExample());
+        assertEquals("이것은 테스트2이다.", usefulExpressions.get(1).getExpressionExampleMeaning());
     }
 }
