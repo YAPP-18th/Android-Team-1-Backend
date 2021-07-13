@@ -16,6 +16,9 @@ import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * 소스코드 출처 : https://velog.io/@sixhustle/log
+ */
 @Slf4j
 @WebFilter(urlPatterns= "/api/*")
 public class RequestLogFilter implements Filter {
