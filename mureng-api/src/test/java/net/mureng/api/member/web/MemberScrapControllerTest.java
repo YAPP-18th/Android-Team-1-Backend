@@ -17,49 +17,31 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import java.util.Arrays;
 import java.util.List;
 
+import static org.hamcrest.Matchers.hasSize;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 public class MemberScrapControllerTest extends AbstractControllerTest {
-
-    @MockBean
-    private MemberExpressionScrapService memberExpressionScrapService;
-
-    @MockBean
-    private MemberService memberService;
-
-    @MockBean
-    private BadgeAccomplishedService badgeAccomplishedService;
-
     private static final long EXP_ID = 1L;
     private static final long MEMBER_ID = 1L;
 
-    private static final Member member = EntityCreator.createMemberEntity();
-    private static final List<MemberScrap> scrapList = Arrays.asList(EntityCreator.createMemberScrapEntity(), EntityCreator.createMemberScrapEntity());
-
     @Test
     @WithMockMurengUser
-    public void 오늘의표현_스크랩_테스트() throws Exception{
-        MemberScrap memberScrap = EntityCreator.createMemberScrapEntity();
-
-        given(memberExpressionScrapService.scrapTodayExpression(any(), eq(EXP_ID))).willReturn(memberScrap);
-        given(badgeAccomplishedService.createAcademicMureng(any())).willReturn(true);
-
+    public void 오늘의표현_스크랩_추가_테스트() throws Exception{
         mockMvc.perform(
-                post("/api/member/scrap/{expId}", 1)
+                post("/api/member/scrap/{expId}", EXP_ID)
                         .contentType(MediaType.APPLICATION_JSON)
         ).andExpect(status().isOk())
                 .andExpect(MockMvcResultMatchers.jsonPath("$.message").value("ok"))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.data.expId").value(1))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.data.expression").value("test"))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.data.meaning").value("테스트"))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.data.expressionExample").value("test driven development"))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.data.expressionExampleMeaning").value("테스트 주도 개발"))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.data.expression").value("I'm sure that ~"))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.data.meaning").value("~라는 것을 확신해"))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.data.expressionExample").value("I'm sure that I will achieve my goal."))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.data.expressionExampleMeaning").value("난 내 목표를 달성할 거라고 확신해."))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.data.scrappedByRequester").value(true))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.data.accomplishedBadge").value(BadgeAccomplishedServiceImpl.AcademicMureng.id))
                 .andDo(print());
@@ -67,19 +49,27 @@ public class MemberScrapControllerTest extends AbstractControllerTest {
 
     @Test
     @WithMockMurengUser
-    public void 사용자_스크랩_목록_가져오기_테스트() throws Exception {
-
-        given(memberExpressionScrapService.getMemberScrap(eq(MEMBER_ID))).willReturn(scrapList);
-        given(memberService.findById(eq(MEMBER_ID))).willReturn(member);
-
+    public void 오늘의표현_스크랩_삭제_테스트() throws Exception{
         mockMvc.perform(
-                get("/api/member/{memberId}/scrap", 1)
+                delete("/api/member/scrap/{expId}", 2)
+                        .contentType(MediaType.APPLICATION_JSON)
+        ).andExpect(status().isOk())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.message").value("ok"))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.data.deleted").value(true))
+                .andDo(print());
+    }
+
+    @Test
+    @WithMockMurengUser
+    public void 사용자_스크랩_목록_가져오기_테스트() throws Exception {
+        mockMvc.perform(
+                get("/api/member/{memberId}/scrap", MEMBER_ID)
                         .contentType(MediaType.APPLICATION_JSON)
         ).andExpect(status().isOk())
                 .andExpect(MockMvcResultMatchers.jsonPath("$.message").value("ok"))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.data.member.memberId").value(1))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.data.member.email").value("test@gmail.com"))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.data.scrapList[0].expression").value("test"))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.data.scrapList", hasSize(2)))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.data.requesterProfile").value(true))
                 .andDo(print());
     }
@@ -87,9 +77,6 @@ public class MemberScrapControllerTest extends AbstractControllerTest {
     @Test
     @WithMockMurengUser
     public void 내_스크랩_목록_가져오기_테스트() throws Exception {
-        given( memberExpressionScrapService.getMemberScrap(eq(MEMBER_ID))).willReturn(scrapList);
-        given(memberService.findById(eq(MEMBER_ID))).willReturn(member);
-
         mockMvc.perform(
                 get("/api/member/me/scrap")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -97,7 +84,7 @@ public class MemberScrapControllerTest extends AbstractControllerTest {
                 .andExpect(MockMvcResultMatchers.jsonPath("$.message").value("ok"))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.data.member.memberId").value(1))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.data.member.email").value("test@gmail.com"))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.data.scrapList[0].expression").value("test"))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.data.scrapList", hasSize(2)))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.data.requesterProfile").value(true))
                 .andDo(print());
     }

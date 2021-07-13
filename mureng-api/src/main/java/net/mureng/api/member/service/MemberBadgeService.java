@@ -21,7 +21,7 @@ public class MemberBadgeService {
     }
 
     @Transactional
-    public boolean updateBadgeAccomplished(Long memberId, Long badgeId){
+    public boolean updateBadgeAccomplishedChecked(Long memberId, Long badgeId){
         BadgeAccomplishedPK pk = BadgeAccomplishedPK.builder().memberId(memberId).badgeId(badgeId).build();
         BadgeAccomplished badgeAccomplished = badgeAccomplishedRepository.findById(pk).orElseThrow(() -> new ResourceNotFoundException("존재하지 않는 리소스에 대한 요청입니다."));
         badgeAccomplished.setIsChecked(true);
