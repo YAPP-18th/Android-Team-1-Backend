@@ -40,6 +40,9 @@ logging:
                 type:
                   descriptor:
                           sql: trace
+        net:
+          mureng:
+            info
 
 # server
 server:
