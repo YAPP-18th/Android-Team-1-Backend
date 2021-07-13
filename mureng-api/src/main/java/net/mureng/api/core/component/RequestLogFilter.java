@@ -7,6 +7,7 @@ import org.springframework.web.util.ContentCachingResponseWrapper;
 import org.springframework.web.util.WebUtils;
 
 import javax.servlet.*;
+import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -16,7 +17,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 @Slf4j
-@Component
+@WebFilter(urlPatterns= "/api/*")
 public class RequestLogFilter implements Filter {
 
     @Override
