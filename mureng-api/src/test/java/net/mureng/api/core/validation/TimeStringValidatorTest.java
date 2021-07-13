@@ -1,8 +1,7 @@
-package net.mureng.api.core.component;
+package net.mureng.api.core.validation;
 
 
 import net.mureng.api.core.validation.annotation.TimeFormat;
-import net.mureng.api.core.validation.TimeStringValidator;
 import org.junit.jupiter.api.Test;
 
 import javax.validation.ConstraintViolation;

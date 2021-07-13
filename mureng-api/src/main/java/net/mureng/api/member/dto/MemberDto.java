@@ -8,6 +8,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.SuperBuilder;
+import net.mureng.api.core.util.NicknameNormalizer;
+import net.mureng.api.core.validation.annotation.KorEngOnly;
 import net.mureng.core.member.entity.MemberSetting;
 
 import javax.validation.constraints.Email;
@@ -29,6 +31,7 @@ public class MemberDto {
     @JsonProperty(index = PropertyDisplayOrder.EMAIL)
     private String email;
 
+    @KorEngOnly
     @NotBlank
     @ApiModelProperty(value = "닉네임", required = true, position = PropertyDisplayOrder.NICKNAME)
     @JsonProperty(index = PropertyDisplayOrder.NICKNAME)
@@ -37,6 +40,10 @@ public class MemberDto {
     @ApiModelProperty(value = "프로필 이미지 경로", position = PropertyDisplayOrder.IMAGE)
     @JsonProperty(index = PropertyDisplayOrder.IMAGE)
     private String image;
+
+    public void setNickname(String nickname) {
+        this.nickname = NicknameNormalizer.normalize(nickname);
+    }
 
     @SuperBuilder
     @Getter @Setter
