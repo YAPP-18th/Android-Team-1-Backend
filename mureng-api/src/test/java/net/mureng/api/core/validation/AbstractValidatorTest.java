@@ -1,4 +1,4 @@
-package net.mureng.api.core.component;
+package net.mureng.api.core.validation;
 
 import org.junit.jupiter.api.BeforeEach;
 
