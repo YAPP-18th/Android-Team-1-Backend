@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import net.mureng.core.member.entity.FcmToken;
 import net.mureng.core.member.entity.Member;
 import net.mureng.core.question.service.TodayQuestionService;
+import net.mureng.core.reply.service.ReplyService;
 import net.mureng.push.dto.NotificationRequest;
 import net.mureng.push.service.FcmService;
 import org.springframework.stereotype.Service;
@@ -17,10 +18,15 @@ public class FcmDailyPushService {
 
     private final FcmService fcmService;
     private final TodayQuestionService todayQuestionService;
+    private final ReplyService replyService;
 
     public void push(FcmToken fcmToken) {
         Member member = fcmToken.getMember();
         if (member == null || ! member.getMemberSetting().isDailyPushActive()) {
+            return;
+        }
+
+        if (replyService.isAlreadyRepliedToday(member.getMemberId())) {
             return;
         }
 
