@@ -40,7 +40,7 @@ public class MemberAchievementController {
         Member profileMember = memberService.findById(memberId);
 
         return ResponseEntity.ok(ApiResult.ok(
-                memberAchievementMapper.toDto(profileMember, badges, member, badgeAccomplishedService.isAlreadyCheckedCelebrityMureng(memberId))
+                memberAchievementMapper.toDto(profileMember, badges, member, badgeAccomplishedService.isAlreadyCheckedCelebrityMureng(memberId)) // TODO 이게 여기 오는게 맞는걸까?
         ));
     }
 }
