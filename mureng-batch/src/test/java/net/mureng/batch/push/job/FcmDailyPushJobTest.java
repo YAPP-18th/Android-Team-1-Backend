@@ -1,10 +1,12 @@
 package net.mureng.batch.push.job;
 
+import net.mureng.batch.AbstractJobTest;
 import net.mureng.batch.core.config.TestBatchConfig;
 import net.mureng.batch.push.service.FcmDailyPushService;
 import net.mureng.batch.question.job.TodayQuestionRefreshJobConfig;
 import net.mureng.core.question.service.TodayQuestionSelectionService;
 import org.junit.Assert;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.batch.core.ExitStatus;
@@ -19,15 +21,8 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-@SpringBatchTest
 @SpringBootTest(classes = {FcmDailyPushJobConfig.class, TestBatchConfig.class})
-class FcmDailyPushJobTest {
-    @Autowired
-    private JobLauncherTestUtils jobLauncherTestUtils;
-
-    @Autowired
-    private JobRepositoryTestUtils jobRepositoryTestUtils;
-
+class FcmDailyPushJobTest extends AbstractJobTest {
     @MockBean
     private FcmDailyPushService fcmDailyPushService;
 
@@ -47,7 +42,7 @@ class FcmDailyPushJobTest {
                 jobLauncherTestUtils.launchJob(jobParameters);
 
         // then
-        Assert.assertEquals(ExitStatus.COMPLETED,
+        assertEquals(ExitStatus.COMPLETED,
                 jobExecution.getExitStatus());
     }
 }
