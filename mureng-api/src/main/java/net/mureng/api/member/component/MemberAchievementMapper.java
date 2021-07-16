@@ -13,10 +13,6 @@ import java.util.List;
 public interface MemberAchievementMapper {
 
     @Mapping(target = "requesterProfile", expression = "java(member.isRequesterProfile(loggedInMember.getMemberId()))")
-    @Mapping(target = "accomplishedBadge", ignore = true)
-    MemberAchievementDto toDto(Member member, List<Badge> badges, Member loggedInMember);
-
-    @Mapping(target = "requesterProfile", expression = "java(member.isRequesterProfile(loggedInMember.getMemberId()))")
     @Mapping(target = "accomplishedBadge", expression = "java(isCelebrityMurengAccomplished && member.isRequesterProfile(loggedInMember.getMemberId()) ? 2L : 0L)")
     MemberAchievementDto toDto(Member member, List<Badge> badges, Member loggedInMember, boolean isCelebrityMurengAccomplished);
 }

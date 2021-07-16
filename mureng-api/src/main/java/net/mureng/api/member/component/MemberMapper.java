@@ -1,6 +1,5 @@
 package net.mureng.api.member.component;
 
-import net.mureng.api.core.component.EntityMapper;
 import net.mureng.api.member.dto.MemberDto;
 import net.mureng.core.member.entity.Member;
 import org.mapstruct.Mapper;
@@ -9,15 +8,13 @@ import org.mapstruct.Mapping;
 import java.time.format.DateTimeFormatter;
 
 @Mapper(componentModel = "spring", imports = DateTimeFormatter.class)
-public interface MemberMapper extends EntityMapper<Member, MemberDto> {
-    @Override
+public interface MemberMapper {
     @Mapping(target = "murengCount", expression = "java(member.getMurengCookies().isEmpty() ? 0 : member.getMurengCookies().size())")
     @Mapping(target = "attendanceCount", expression = "java(member.getMemberAttendance().getAttendanceCount())")
     @Mapping(target = "lastAttendanceDate", expression = "java(member.getMemberAttendance().getLastAttendanceDate()" +
             ".format(DateTimeFormatter.ofPattern(\"yyyy-MM-dd\")) )")
     MemberDto.ReadOnly toDto(Member member);
 
-    @Override
     @Mapping(target = "memberId", ignore = true)
     @Mapping(target = "isActive", ignore = true)
     @Mapping(target = "memberSetting", ignore = true)
