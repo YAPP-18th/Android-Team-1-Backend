@@ -28,9 +28,10 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 @RequestMapping("/api/member")
 public class MemberScrapController {
-    private final MemberExpressionScrapService memberExpressionScrapService;
-    private final TodayExpressionMapper todayExpressionMapper;
     private final MemberScrapMapper memberScrapMapper;
+    private final TodayExpressionMapper todayExpressionMapper;
+
+    private final MemberExpressionScrapService memberExpressionScrapService;
     private final MemberService memberService;
     private final BadgeAccomplishedService badgeAccomplishedService;
 
@@ -38,7 +39,7 @@ public class MemberScrapController {
     @PostMapping("/scrap/{expId}")
     public ResponseEntity<ApiResult<UsefulExpressionDto>> scrap(@CurrentUser Member member, @PathVariable Long expId){
         return ResponseEntity.ok(ApiResult.ok(
-                todayExpressionMapper.toDto(
+                todayExpressionMapper.toDtoWithBadge(
                     memberExpressionScrapService.scrapTodayExpression(member, expId).getUsefulExpression(), member,
                         badgeAccomplishedService.createAcademicMureng(member.getMemberId())
                 )

@@ -73,16 +73,6 @@ class QuestionMapperTest {
     }
 
     @Test
-    public void DTO에서_엔티티변환_테스트() {
-        Question mappedEntity = questionMapper.toEntity(questionDto);
-//        assertEquals(question.getQuestionId(), mappedEntity.getQuestionId());
-        assertEquals(question.getCategory(), mappedEntity.getCategory());
-        assertEquals(question.getContent(), mappedEntity.getContent());
-        assertEquals(question.getKoContent(), mappedEntity.getKoContent());
-//        assertEquals(question.getWordHints().size(), mappedEntity.getWordHints().size());
-    }
-
-    @Test
     public void DTO에서_엔티티_사용자추가_변환_테스트() {
         Question mappedEntity = questionMapper.toEntity(questionDto, EntityCreator.createMemberEntity());
         assertEquals(question.getCategory(), mappedEntity.getCategory());
