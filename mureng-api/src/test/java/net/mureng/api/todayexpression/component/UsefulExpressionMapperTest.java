@@ -37,7 +37,7 @@ public class UsefulExpressionMapperTest {
 
     @Test
     public void 엔티티에서_DTO변환_테스트_뱃지획득() {
-        UsefulExpressionDto mappedDto = todayExpressionMapper.toDto(usefulExpression, member, true);
+        UsefulExpressionDto mappedDto = todayExpressionMapper.toDtoWithBadge(usefulExpression, member, true);
         assertEquals(usefulExpressionDto.getExpId(), mappedDto.getExpId());
         assertEquals(usefulExpressionDto.getExpression(), mappedDto.getExpression());
         assertEquals(usefulExpressionDto.getMeaning(), mappedDto.getMeaning());

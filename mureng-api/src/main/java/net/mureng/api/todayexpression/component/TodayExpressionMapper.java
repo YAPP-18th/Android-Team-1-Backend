@@ -16,6 +16,6 @@ public interface TodayExpressionMapper {
 
     @Mapping(target = "scrappedByRequester", expression = "java(usefulExpression.scrappedByRequester(loggedInMember))")
     @Mapping(target = "accomplishedBadge", expression = "java(isAcademicMurengAccomplished == true ? 3L : 0L)")
-    UsefulExpressionDto toDto(UsefulExpression usefulExpression, @Context Member loggedInMember, Boolean isAcademicMurengAccomplished);
+    UsefulExpressionDto toDtoWithBadge(UsefulExpression usefulExpression, @Context Member loggedInMember, Boolean isAcademicMurengAccomplished);
 
 }
