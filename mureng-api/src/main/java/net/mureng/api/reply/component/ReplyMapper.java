@@ -10,35 +10,31 @@ import org.mapstruct.*;
 
 import static org.mapstruct.NullValueCheckStrategy.ALWAYS;
 
-@Mapper(componentModel = "spring", uses = { QuestionMapper.class, MemberMapper.class })
+@Mapper(componentModel = "spring",
+        unmappedTargetPolicy = ReportingPolicy.IGNORE,
+        uses = { QuestionMapper.class, MemberMapper.class })
 public interface ReplyMapper {
+
     @Mapping(target = "image", source = "reply.image")
     @Mapping(target = "regDate", source = "reply.regDate")
     @Mapping(target = "replyLikeCount", expression = "java(reply.getReplyLikes().size())")
     @Mapping(target = "questionId", expression = "java(reply.getQuestion().getQuestionId())")
     @Mapping(target = "requestedByAuthor", expression = "java(reply.isAuthor(loggedInMember))")
     @Mapping(target = "likedByRequester", expression = "java(reply.likedByRequester(loggedInMember))")
-    @Mapping(target = "accomplishedBadge", ignore = true)
     ReplyDto.ReadOnly toDto(Reply reply, Member loggedInMember);
 
-    @Mapping(target = "replyId", ignore = true)
-    @Mapping(target = "visible", ignore = true)
-    @Mapping(target = "deleted", ignore = true)
+
     @Mapping(target = "modDate", ignore = true)
     @Mapping(target = "regDate", ignore = true)
-    @Mapping(target = "replyLikes", ignore = true)
-    @Mapping(target = "image", expression = "java(replyDto.getImage())")
-    @Mapping(target = "content", expression = "java(replyDto.getContent())")
     @Mapping(target = "question", source = "question")
     @Mapping(target = "author", source = "author")
+    @Mapping(target = "image", expression = "java(replyDto.getImage())")
+    @Mapping(target = "content", expression = "java(replyDto.getContent())")
     Reply toEntityForPost(ReplyDto replyDto, Member author, Question question);
 
-    @Mapping(target = "question", ignore = true)
-    @Mapping(target = "visible", ignore = true)
-    @Mapping(target = "deleted", ignore = true)
+
     @Mapping(target = "modDate", ignore = true)
     @Mapping(target = "regDate", ignore = true)
-    @Mapping(target = "replyLikes", ignore = true)
     @Mapping(target = "author", source = "author")
     @Mapping(target = "image", expression = "java(replyDto.getImage())")
     Reply toEntityForPut(ReplyDto replyDto, Member author, Long replyId);

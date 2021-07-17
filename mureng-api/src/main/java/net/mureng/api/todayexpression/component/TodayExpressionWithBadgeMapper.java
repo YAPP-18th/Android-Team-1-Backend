@@ -8,9 +8,8 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
 @Mapper(componentModel = "spring")
-public interface TodayExpressionMapper {
+public interface TodayExpressionWithBadgeMapper {
     @Mapping(target = "scrappedByRequester", expression = "java(todayExpression.scrappedByRequester(loggedInMember))")
-    @Mapping(target = "accomplishedBadge", ignore = true)
-    TodayExpressionDto toDto(TodayExpression todayExpression, @Context Member loggedInMember);
-
+    @Mapping(target = "accomplishedBadge", expression = "java(isAcademicMurengAccomplished == true ? 3L : 0L)")
+    TodayExpressionDto toDto(TodayExpression todayExpression, @Context Member loggedInMember, Boolean isAcademicMurengAccomplished);
 }

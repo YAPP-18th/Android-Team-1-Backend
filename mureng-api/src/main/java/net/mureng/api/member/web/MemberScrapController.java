@@ -11,6 +11,7 @@ import net.mureng.api.member.component.MemberScrapMapper;
 import net.mureng.api.member.dto.MemberScrapDto;
 import net.mureng.api.member.service.MemberExpressionScrapService;
 import net.mureng.api.todayexpression.component.TodayExpressionMapper;
+import net.mureng.api.todayexpression.component.TodayExpressionWithBadgeMapper;
 import net.mureng.api.todayexpression.dto.TodayExpressionDto;
 import net.mureng.core.badge.service.BadgeAccomplishedService;
 import net.mureng.core.member.entity.Member;
@@ -28,9 +29,10 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 @RequestMapping("/api/member")
 public class MemberScrapController {
-    private final MemberExpressionScrapService memberExpressionScrapService;
-    private final TodayExpressionMapper todayExpressionMapper;
     private final MemberScrapMapper memberScrapMapper;
+    private final TodayExpressionWithBadgeMapper todayExpressionWithBadgeMapper;
+
+    private final MemberExpressionScrapService memberExpressionScrapService;
     private final MemberService memberService;
     private final BadgeAccomplishedService badgeAccomplishedService;
 
@@ -38,7 +40,7 @@ public class MemberScrapController {
     @PostMapping("/scrap/{expId}")
     public ResponseEntity<ApiResult<TodayExpressionDto>> scrap(@CurrentUser Member member, @PathVariable Long expId){
         return ResponseEntity.ok(ApiResult.ok(
-                todayExpressionMapper.toDto(
+                todayExpressionWithBadgeMapper.toDto(
                     memberExpressionScrapService.scrapTodayExpression(member, expId).getTodayExpression(), member,
                         badgeAccomplishedService.createAcademicMureng(member.getMemberId())
                 )

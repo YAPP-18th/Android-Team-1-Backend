@@ -19,6 +19,9 @@ public class TodayExpressionMapperTest {
     @Autowired
     private TodayExpressionMapper todayExpressionMapper;
 
+    @Autowired
+    private TodayExpressionWithBadgeMapper todayExpressionWithBadgeMapper;
+
     private final TodayExpression todayExpression = EntityCreator.createTodayExpressionEntity();
     private final TodayExpressionDto todayExpressionDto = DtoCreator.createTodayExpressionDto();
 
@@ -37,7 +40,7 @@ public class TodayExpressionMapperTest {
 
     @Test
     public void 엔티티에서_DTO변환_테스트_뱃지획득() {
-        TodayExpressionDto mappedDto = todayExpressionMapper.toDto(todayExpression, member, true);
+        TodayExpressionDto mappedDto = todayExpressionWithBadgeMapper.toDto(todayExpression, member, true);
         assertEquals(todayExpressionDto.getExpId(), mappedDto.getExpId());
         assertEquals(todayExpressionDto.getExpression(), mappedDto.getExpression());
         assertEquals(todayExpressionDto.getMeaning(), mappedDto.getMeaning());
