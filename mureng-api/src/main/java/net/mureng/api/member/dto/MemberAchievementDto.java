@@ -28,7 +28,7 @@ public class MemberAchievementDto {
     private boolean requesterProfile;
 
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
-    @ApiModelProperty(value = "사용자가 획득한 뱃지 번호")
+    @ApiModelProperty(value = "사용자가 획득한 뱃지 번호") // TODO 사용자 뱃지 목록이 있는데 왜 필요한지 ??
     @JsonProperty(index = PropertyDisplayOrder.ACCOMPLISHED_BADGE)
     private Long accomplishedBadge;
 

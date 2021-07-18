@@ -20,11 +20,11 @@ public class WithMockMurengUserSecurityContextFactory implements WithSecurityCon
         UserDetailsImpl principal =
                 new UserDetailsImpl(Member.builder()
                         .memberId(1L)
-                        .identifier("123")
+                        .identifier("identity")
                         .email("test@gmail.com")
                         .isActive(true)
-                        .nickname("Test")
-                        .image("tester-image-path")
+                        .nickname("테스트유저")
+                        .image("/reply/1621586761110.png")
                         .regDate(LocalDateTime.of(2020, 10, 14, 17, 11, 9))
                         .modDate(LocalDateTime.of(2020, 10, 14, 17, 11, 10))
                         .build());

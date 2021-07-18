@@ -26,7 +26,7 @@ public class MemberBadgeController {
     public ResponseEntity<ApiResult<BadgeAccomplishedCheckDto>> updateBadgeAccomplished(@CurrentUser Member member, @PathVariable Long badgeId) {
         return ResponseEntity.ok(
                 ApiResult.ok(
-                        new BadgeAccomplishedCheckDto(memberBadgeService.updateBadgeAccomplished(member.getMemberId(), badgeId))
+                        new BadgeAccomplishedCheckDto(memberBadgeService.updateBadgeAccomplishedChecked(member.getMemberId(), badgeId))
                 )
         );
     }

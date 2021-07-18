@@ -18,6 +18,7 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 
+import static org.hamcrest.Matchers.hasSize;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
@@ -26,51 +27,48 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 class QuestionReplyControllerTest extends AbstractControllerTest {
-    @MockBean
-    private ReplyService replyService;
-
-    @MockBean
-    private ReplyPaginationService replyPaginationService;
+    @Test
+    @WithMockMurengUser
+    public void 질문_관련_답변_목록_가져오기_인기순_테스트() throws Exception {
+        mockMvc.perform(
+                get("/api/questions/1/replies?page=0&size=2&sort=popular")
+        ).andExpect(status().isOk())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.message").value("ok"))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.data", hasSize(2)))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.data[0].content").value("this is test reply 1"))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.data[0].replyLikeCount").value(2))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.data[0].requestedByAuthor").value(true))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.data[1].content").value("this is test reply 3"))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.data[1].replyLikeCount").value(1))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.data[1].requestedByAuthor").value(false))
+                .andDo(print());
+    }
 
     @Test
     @WithMockMurengUser
-    public void 질문_관련_답변_목록_가져오기_테스트() throws Exception {
-        Reply reply1 = EntityCreator.createReplyEntity();
-        reply1.setContent("content1");
-        Reply reply2 = EntityCreator.createReplyEntity();
-        reply2.setContent("content2");
-        reply2.setReplyLikes(new HashSet<>());
-        List<Reply> replies = Arrays.asList(reply1, reply2);
-        int page = 0;
-        int size = 2;
-
-        given(replyPaginationService.findRepliesByQuestionId(eq(1L), eq(new ApiPageRequest(page, size, ApiPageRequest.PageSort.POPULAR))))
-                .willReturn(new PageImpl<>(replies, PageRequest.of(page, size), 2));
-
+    public void 질문_관련_답변_목록_가져오기_최신순_테스트() throws Exception {
         mockMvc.perform(
-                get("/api/questions/1/replies?page=0&size=2")
+                get("/api/questions/1/replies?page=0&size=2&sort=newest")
         ).andExpect(status().isOk())
                 .andExpect(MockMvcResultMatchers.jsonPath("$.message").value("ok"))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.data[0].content").value("content1"))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.data[0].replyLikeCount").value(2))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.data[1].content").value("content2"))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.data[1].replyLikeCount").value(0))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.data", hasSize(2)))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.data[0].content").value("this is test reply 5"))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.data[0].replyLikeCount").value(0))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.data[0].requestedByAuthor").value(false))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.data[1].content").value("this is test reply 3"))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.data[1].replyLikeCount").value(1))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.data[1].requestedByAuthor").value(false))
                 .andDo(print());
     }
 
     @Test
     @WithMockMurengUser
     public void 질문_내답변_가져오기_테스트() throws Exception {
-        Reply reply = EntityCreator.createReplyEntity();
-        reply.setContent("content1");
-
-        given(replyService.findReplyByQuestionIdAndMember(eq(1L), eq(1L))).willReturn(reply);
-
         mockMvc.perform(
                 get("/api/questions/1/replies/me")
         ).andExpect(status().isOk())
                 .andExpect(MockMvcResultMatchers.jsonPath("$.message").value("ok"))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.data.content").value("content1"))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.data.content").value("this is test reply 1"))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.data.replyLikeCount").value(2))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.data.requestedByAuthor").value(true))
                 .andDo(print());
@@ -79,11 +77,8 @@ class QuestionReplyControllerTest extends AbstractControllerTest {
     @Test
     @WithMockMurengUser
     public void 질문_내답변_가져오기_404_테스트() throws Exception {
-        given(replyService.findReplyByQuestionIdAndMember(eq(1L), eq(1L)))
-                .willThrow(ResourceNotFoundException.class);
-
         mockMvc.perform(
-                get("/api/questions/1/replies/me")
+                get("/api/questions/10/replies/me")
         ).andExpect(status().isNotFound())
                 .andDo(print());
     }

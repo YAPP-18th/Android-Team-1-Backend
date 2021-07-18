@@ -1,10 +1,12 @@
 package net.mureng.batch.question.job;
 
 import net.mureng.CoreBasePackage;
+import net.mureng.batch.AbstractJobTest;
 import net.mureng.batch.core.config.TestBatchConfig;
 import net.mureng.batch.push.service.FcmDailyPushService;
 import net.mureng.core.question.service.TodayQuestionSelectionService;
 import org.junit.Assert;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.batch.core.ExitStatus;
@@ -23,21 +25,13 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.jdbc.Sql;
+import org.springframework.transaction.annotation.Transactional;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-@SpringBatchTest
 @SpringBootTest(classes = {TodayQuestionRefreshJobConfig.class, TestBatchConfig.class})
-class TodayQuestionRefreshJobTest {
-    @Autowired
-    private JobLauncherTestUtils jobLauncherTestUtils;
-
-    @Autowired
-    private JobRepositoryTestUtils jobRepositoryTestUtils;
-
-    @MockBean
-    private TodayQuestionSelectionService todayQuestionSelectionService;
-
+class TodayQuestionRefreshJobTest extends AbstractJobTest {
     @BeforeEach
     public void clearMetadata() {
         jobRepositoryTestUtils.removeJobExecutions();
@@ -54,7 +48,7 @@ class TodayQuestionRefreshJobTest {
                 jobLauncherTestUtils.launchJob(jobParameters);
 
         // then
-        Assert.assertEquals(ExitStatus.COMPLETED,
+        assertEquals(ExitStatus.COMPLETED,
                 jobExecution.getExitStatus());
     }
 }

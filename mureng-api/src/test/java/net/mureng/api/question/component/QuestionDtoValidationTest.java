@@ -1,9 +1,7 @@
 package net.mureng.api.question.component;
 
 
-import net.mureng.api.core.component.AbstractValidatorTest;
-import net.mureng.api.core.validation.TimeStringValidator;
-import net.mureng.api.core.validation.annotation.TimeFormat;
+import net.mureng.api.core.validation.AbstractValidatorTest;
 import net.mureng.api.question.dto.QuestionDto;
 import org.junit.jupiter.api.Test;
 

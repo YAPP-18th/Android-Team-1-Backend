@@ -14,14 +14,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 public class MemberBadgeControllerTest extends AbstractControllerTest {
-    @MockBean
-    private MemberBadgeService memberBadgeService;
-
     @Test
     @WithMockMurengUser
     public void 사용자_뱃지_획득_확인_테스트() throws Exception {
-        given(memberBadgeService.updateBadgeAccomplished(any(), any())).willReturn(true);
-
         mockMvc.perform(
                 put("/api/member/me/check/badge/{badgeId}",  1)
         ).andExpect(status().isOk())
