@@ -19,9 +19,6 @@ class ReplyMapperTest {
     @Autowired
     private ReplyMapper replyMapper;
 
-    @Autowired
-    private ReplyWithBadgeMapper replyWithBadgeMapper;
-
     private final Reply reply = EntityCreator.createReplyEntity();
     private final ReplyDto.ReadOnly replyDto = DtoCreator.createReplyDto();
 
@@ -35,19 +32,6 @@ class ReplyMapperTest {
         assertEquals(replyDto.getReplyLikeCount(), mappedDto.getReplyLikeCount());
         assertEquals(replyDto.getRequestedByAuthor(), mappedDto.getRequestedByAuthor());
         assertEquals(replyDto.getLikedByRequester(), mappedDto.getLikedByRequester());
-    }
-
-    @Test
-    public void 엔티티에서_DTO변환_로그인사용자_테스트_뱃지획득() {
-        ReplyDto.ReadOnly mappedDto = replyWithBadgeMapper.toDto(reply, EntityCreator.createMemberEntity(), false, true);
-        assertEquals(replyDto.getReplyId(), mappedDto.getReplyId());
-        assertEquals(replyDto.getContent(), mappedDto.getContent());
-        assertEquals(replyDto.getAuthor().getMemberId(), mappedDto.getAuthor().getMemberId());
-        assertEquals(replyDto.getQuestion().getQuestionId(), mappedDto.getQuestion().getQuestionId());
-        assertEquals(replyDto.getReplyLikeCount(), mappedDto.getReplyLikeCount());
-        assertEquals(replyDto.getRequestedByAuthor(), mappedDto.getRequestedByAuthor());
-        assertEquals(replyDto.getLikedByRequester(), mappedDto.getLikedByRequester());
-        assertEquals(BadgeAccomplishedServiceImpl.MurengSet.id, mappedDto.getAccomplishedBadge());
     }
 
     @Test

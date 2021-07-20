@@ -32,13 +32,12 @@ public class MemberAchievementMapperTest {
     private static final MemberDto memberDto = DtoCreator.createMemberDto();
 
     @Test
-    public void 엔티티에서_DTO변환_테스트_뱃지획득() {
-        MemberAchievementDto mappedDto = memberAchievementMapper.toDto(member, badges, member, true);
+    public void 엔티티에서_DTO변환_테스트() {
+        MemberAchievementDto mappedDto = memberAchievementMapper.toDto(member, badges, member);
 
         assertEquals(mappedDto.getMember().getEmail(), memberDto.getEmail());
         assertEquals(mappedDto.getBadges().size(), badgeDtos.size());
         assertEquals(mappedDto.getBadges().get(0).getName(), badgeDtos.get(0).getName());
         assertTrue(mappedDto.isRequesterProfile());
-        assertEquals(BadgeAccomplishedServiceImpl.CelebrityMureng.id, mappedDto.getAccomplishedBadge());
     }
 }

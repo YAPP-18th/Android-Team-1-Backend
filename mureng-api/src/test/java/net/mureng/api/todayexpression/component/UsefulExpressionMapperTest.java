@@ -35,15 +35,4 @@ public class UsefulExpressionMapperTest {
         assertTrue(mappedDto.isScrappedByRequester());
     }
 
-    @Test
-    public void 엔티티에서_DTO변환_테스트_뱃지획득() {
-        UsefulExpressionDto mappedDto = todayExpressionMapper.toDtoWithBadge(usefulExpression, member, true);
-        assertEquals(usefulExpressionDto.getExpId(), mappedDto.getExpId());
-        assertEquals(usefulExpressionDto.getExpression(), mappedDto.getExpression());
-        assertEquals(usefulExpressionDto.getMeaning(), mappedDto.getMeaning());
-        assertEquals(usefulExpressionDto.getExpressionExample(), mappedDto.getExpressionExample());
-        assertEquals(usefulExpressionDto.getExpressionExampleMeaning(), mappedDto.getExpressionExampleMeaning());
-        assertTrue(mappedDto.isScrappedByRequester());
-        assertEquals(BadgeAccomplishedServiceImpl.AcademicMureng.id, mappedDto.getAccomplishedBadge());
-    }
 }

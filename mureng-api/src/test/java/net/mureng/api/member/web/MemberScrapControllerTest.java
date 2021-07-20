@@ -43,7 +43,6 @@ public class MemberScrapControllerTest extends AbstractControllerTest {
                 .andExpect(MockMvcResultMatchers.jsonPath("$.data.expressionExample").value("I'm sure that I will achieve my goal."))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.data.expressionExampleMeaning").value("난 내 목표를 달성할 거라고 확신해."))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.data.scrappedByRequester").value(true))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.data.accomplishedBadge").value(BadgeAccomplishedServiceImpl.AcademicMureng.id))
                 .andDo(print());
     }
 

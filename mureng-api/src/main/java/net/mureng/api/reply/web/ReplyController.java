@@ -10,7 +10,6 @@ import net.mureng.api.core.annotation.CurrentUser;
 import net.mureng.api.core.dto.ApiPageRequest;
 import net.mureng.api.core.dto.ApiPageResult;
 import net.mureng.api.core.dto.ApiResult;
-import net.mureng.api.reply.component.ReplyWithBadgeMapper;
 import net.mureng.api.reply.service.ReplyPaginationService;
 import net.mureng.core.badge.service.BadgeAccomplishedService;
 import net.mureng.core.member.entity.Member;
@@ -32,7 +31,6 @@ import javax.validation.constraints.NotNull;
 @RequestMapping("/api/reply")
 public class ReplyController {
     private final ReplyMapper replyMapper;
-    private final ReplyWithBadgeMapper replyWithBadgeMapper;
 
     private final ReplyService replyService;
     private final ReplyPaginationService replyPaginationService;
@@ -64,10 +62,8 @@ public class ReplyController {
                                                                @RequestBody @Valid ReplyDto replyDto){
             Reply newReply = replyMapper.toEntityForPost(replyDto, member, Question.builder().questionId(replyDto.getQuestionId()).build());
 
-            return ResponseEntity.ok(ApiResult.ok(replyWithBadgeMapper.toDto(
-                replyService.create(newReply), member,
-                    badgeAccomplishedService.createMureng3Days(member.getMemberId()),
-                    badgeAccomplishedService.createMurengSet(member.getMemberId())
+            return ResponseEntity.ok(ApiResult.ok(replyMapper.toDto(
+                replyService.create(newReply), member
         )));
     }
 

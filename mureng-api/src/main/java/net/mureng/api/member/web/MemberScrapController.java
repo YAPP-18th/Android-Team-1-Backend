@@ -39,9 +39,8 @@ public class MemberScrapController {
     @PostMapping("/scrap/{expId}")
     public ResponseEntity<ApiResult<UsefulExpressionDto>> scrap(@CurrentUser Member member, @PathVariable Long expId){
         return ResponseEntity.ok(ApiResult.ok(
-                todayExpressionMapper.toDtoWithBadge(
-                    memberExpressionScrapService.scrapTodayExpression(member, expId).getUsefulExpression(), member,
-                        badgeAccomplishedService.createAcademicMureng(member.getMemberId())
+                todayExpressionMapper.toDto(
+                    memberExpressionScrapService.scrapTodayExpression(member, expId).getUsefulExpression(), member
                 )
         ));
     }
