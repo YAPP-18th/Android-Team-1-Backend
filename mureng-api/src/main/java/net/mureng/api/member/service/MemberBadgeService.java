@@ -1,6 +1,7 @@
 package net.mureng.api.member.service;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import net.mureng.core.badge.entity.BadgeAccomplished;
 import net.mureng.core.badge.entity.BadgeAccomplishedPK;
 import net.mureng.core.badge.repository.BadgeAccomplishedRepository;
@@ -12,8 +13,10 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 import java.util.Optional;
 
+import static net.mureng.core.core.message.ErrorMessage.MEMBER_CHECK_BADGE_ACCOMPLISHED;
 import static net.mureng.core.core.message.ErrorMessage.NOT_ACCOMPLISHED_BADGE;
 
+@Slf4j
 @RequiredArgsConstructor
 @Service
 public class MemberBadgeService {
@@ -40,7 +43,10 @@ public class MemberBadgeService {
         BadgeAccomplishedPK pk = BadgeAccomplishedPK.builder().memberId(memberId).badgeId(badgeId).build();
         Optional<BadgeAccomplished> badgeAccomplished = badgeAccomplishedRepository.findById(pk);
 
-        if(badgeAccomplished.isEmpty()) return false;
+        if(badgeAccomplished.isEmpty() || badgeAccomplished.get().getIsChecked()) {
+            log.info(MEMBER_CHECK_BADGE_ACCOMPLISHED);
+            return false;
+        }
 
         return true;
     }

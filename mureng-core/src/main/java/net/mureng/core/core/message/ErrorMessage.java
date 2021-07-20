@@ -18,6 +18,7 @@ public class ErrorMessage {
     // Badge
     public static String NOT_EXIST_BADGE = "존재하지 않는 뱃지입니다.";
     public static String NOT_ACCOMPLISHED_BADGE = "획득하지 않은 뱃지 번호입니다.";
+    public static String MEMBER_CHECK_BADGE_ACCOMPLISHED = "사용자가 뱃지 획득을 확인하였습니다.";
 
     // Reply
     public static String NOT_EXIST_REPLY = "존재하지 않는 답변입니다.";
