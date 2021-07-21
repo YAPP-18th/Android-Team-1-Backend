@@ -41,7 +41,6 @@ public class MemberAchievementControllerTest extends AbstractControllerTest {
                 .andExpect(MockMvcResultMatchers.jsonPath("$.data.member.email").value("test@gmail.com"))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.data.badges", hasSize(2)))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.data.requesterProfile").value("true"))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.data.accomplishedBadge").value(BadgeAccomplishedServiceImpl.CelebrityMureng.id))
                 .andDo(print());
     }
 

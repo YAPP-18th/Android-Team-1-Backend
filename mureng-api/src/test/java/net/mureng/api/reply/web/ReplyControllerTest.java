@@ -108,7 +108,6 @@ public class ReplyControllerTest extends AbstractControllerTest {
                 .andExpect(MockMvcResultMatchers.jsonPath("$.message").value("ok"))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.data.content").value("Test Reply"))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.data.image").value("image-path"))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.data.accomplishedBadge").value(0L))
                 .andDo(print());
     }
 

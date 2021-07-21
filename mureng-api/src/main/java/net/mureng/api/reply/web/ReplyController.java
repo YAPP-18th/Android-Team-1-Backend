@@ -31,6 +31,7 @@ import javax.validation.constraints.NotNull;
 @RequestMapping("/api/reply")
 public class ReplyController {
     private final ReplyMapper replyMapper;
+
     private final ReplyService replyService;
     private final ReplyPaginationService replyPaginationService;
     private final BadgeAccomplishedService badgeAccomplishedService;
@@ -59,12 +60,10 @@ public class ReplyController {
     @PostMapping
     public ResponseEntity<ApiResult<ReplyDto.ReadOnly>> create(@CurrentUser Member member,
                                                                @RequestBody @Valid ReplyDto replyDto){
-            Reply newReply = replyMapper.toEntity(replyDto, member, Question.builder().questionId(replyDto.getQuestionId()).build());
+            Reply newReply = replyMapper.toEntityForPost(replyDto, member, Question.builder().questionId(replyDto.getQuestionId()).build());
 
             return ResponseEntity.ok(ApiResult.ok(replyMapper.toDto(
-                replyService.create(newReply), member,
-                    badgeAccomplishedService.createMureng3Days(member.getMemberId()),
-                    badgeAccomplishedService.createMurengSet(member.getMemberId())
+                replyService.create(newReply), member
         )));
     }
 
@@ -74,7 +73,7 @@ public class ReplyController {
                                                                @RequestBody @Valid ReplyDto replyDto,
                                                                @PathVariable @NotNull Long replyId){
 
-        Reply newReply = replyMapper.toEntity(replyDto, member, replyId);
+        Reply newReply = replyMapper.toEntityForPut(replyDto, member, replyId);
 
         return ResponseEntity.ok(ApiResult.ok(replyMapper.toDto(
                 replyService.update(newReply), member
