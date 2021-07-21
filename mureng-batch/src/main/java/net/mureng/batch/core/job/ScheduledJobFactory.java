@@ -5,6 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import net.mureng.batch.core.job.CronJobRequest;
 import net.mureng.batch.core.job.JobRequest;
 import net.mureng.batch.core.job.ScheduledJob;
+import net.mureng.batch.core.trigger.TriggerProviderFactory;
 import org.quartz.JobDetail;
 import org.quartz.SimpleTrigger;
 import org.quartz.Trigger;
@@ -26,6 +27,7 @@ import static org.quartz.CronExpression.isValidExpression;
 @RequiredArgsConstructor
 public class ScheduledJobFactory {
     private final ApplicationContext context;
+    private final TriggerProviderFactory triggerProviderFactory;
 
     public ScheduledJob buildScheduledJob(JobRequest jobRequest) {
         return ScheduledJob.builder()
@@ -54,43 +56,6 @@ public class ScheduledJobFactory {
     }
 
     private Trigger createTrigger(JobRequest jobRequest) {
-        if (jobRequest instanceof CronJobRequest) {
-            CronJobRequest cronJobRequest = (CronJobRequest)jobRequest;
-            if (! isValidExpression(cronJobRequest.getCronExpression())) {
-                throw new IllegalArgumentException("Provided expression " + cronJobRequest.getCronExpression() +
-                        " is not a valid cron expression");
-            }
-            return createCronTrigger(cronJobRequest);
-        }
-
-        return createSimpleTrigger(jobRequest);
-    }
-
-    private Trigger createCronTrigger(CronJobRequest jobRequest) {
-        CronTriggerFactoryBean factoryBean = new CronTriggerFactoryBean();
-        factoryBean.setName(jobRequest.getJobName());
-        factoryBean.setGroup(jobRequest.getJobGroup());
-        factoryBean.setCronExpression(jobRequest.getCronExpression());
-        factoryBean.setTimeZone(TimeZone.getTimeZone("Asia/Seoul"));
-        factoryBean.setMisfireInstruction(SimpleTrigger.MISFIRE_INSTRUCTION_FIRE_NOW);
-        try {
-            factoryBean.afterPropertiesSet();
-        } catch (ParseException e) {
-            log.warn("ParseException: ", e);
-        }
-        return factoryBean.getObject();
-    }
-
-    private Trigger createSimpleTrigger(JobRequest jobRequest) {
-        SimpleTriggerFactoryBean factoryBean = new SimpleTriggerFactoryBean();
-        factoryBean.setName(jobRequest.getJobName());
-        factoryBean.setGroup(jobRequest.getJobGroup());
-        factoryBean.setStartTime(Date.from(jobRequest.getStartDateAt().atZone(ZoneId.systemDefault()).toInstant()));
-        factoryBean.setMisfireInstruction(SimpleTrigger.MISFIRE_INSTRUCTION_FIRE_NOW);
-        factoryBean.setRepeatInterval(jobRequest.getRepeatIntervalInSeconds() * 1000); //ms 단위임
-        factoryBean.setRepeatCount(jobRequest.getRepeatCount());
-
-        factoryBean.afterPropertiesSet();
-        return factoryBean.getObject();
+        return this.triggerProviderFactory.getInstance(jobRequest).getTrigger(jobRequest);
     }
 }

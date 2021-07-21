@@ -1,5 +1,6 @@
 package net.mureng.batch.core.job;
 
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.batch.core.Job;
@@ -11,6 +12,7 @@ import java.time.LocalDateTime;
 @Slf4j
 @RequiredArgsConstructor
 public class MurengJobLauncher {
+    @Getter
     private final Job job;
     private final JobLauncher jobLauncher;
 
