@@ -36,7 +36,7 @@ jobs:
           restore-keys: |
               ${{ runner.os }}-gradle-
       - name: Gradle 테스트 및 실행파일 생성
-        run: ./gradlew build test bootJar
+        run: ./gradlew build test bootJar -Dfile.encoding=UTF-8 --info
 
       - uses: actions/upload-artifact@v2
         name: 생성한 파일 업로드

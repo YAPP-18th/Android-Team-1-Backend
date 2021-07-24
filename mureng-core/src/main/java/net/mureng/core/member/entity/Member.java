@@ -1,12 +1,16 @@
 package net.mureng.core.member.entity;
 
+import liquibase.pro.packaged.M;
 import lombok.*;
 import net.mureng.core.cookie.entity.CookieAcquirement;
 import org.springframework.util.StringUtils;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import java.time.Instant;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -73,5 +77,12 @@ public class Member {
             this.image = member.getImage();
             this.modDate = LocalDateTime.now();
         }
+    }
+
+    public void increaseAttendanceCount() {
+        this.memberAttendance = MemberAttendance.builder()
+                .attendanceCount(this.memberAttendance.getAttendanceCount() + 1)
+                .lastAttendanceDate(Instant.now().atZone(ZoneId.of("Asia/Seoul")).toLocalDate())
+                .build();
     }
 }

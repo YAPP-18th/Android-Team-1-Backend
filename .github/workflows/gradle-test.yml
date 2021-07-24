@@ -30,4 +30,4 @@ jobs:
         restore-keys: |
           ${{ runner.os }}-gradle-
     - name: Gradle 테스트
-      run: ./gradlew build test
+      run: ./gradlew test -Dfile.encoding=UTF-8 --info

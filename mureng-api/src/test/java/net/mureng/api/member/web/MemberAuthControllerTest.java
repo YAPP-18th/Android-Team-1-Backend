@@ -25,12 +25,9 @@ class MemberAuthControllerTest extends AbstractControllerTest {
     private static final String TEST_PROVIDER_ACCESS_TOKEN = "testProviderToken";
     private static final String TEST_MURENG_ACCESS_TOKEN = "testMurengAccessToken";
     private static final String TEST_MURENG_REFRESH_TOKEN = "testMurengRefreshToken";
-    private static final String TEST_IDENTIFIER = EntityCreator.createMemberEntity().getIdentifier();
+    private static final String TEST_IDENTIFIER = "identity";
     private static final String TEST_PROVIDER_ACCESS_TOKEN_JSON = String.format("{\"providerName\":\"kakao\", " +
             "\"providerAccessToken\":\"%s\"}", TEST_PROVIDER_ACCESS_TOKEN);
-
-    @MockBean
-    private MemberService memberService;
 
     @MockBean
     private OAuth2Service oAuth2Service;
@@ -42,7 +39,6 @@ class MemberAuthControllerTest extends AbstractControllerTest {
     void 사용자_존재체크_테스트() throws Exception {
         TokenDto.Provider provider = new TokenDto.Provider(TokenProvider.KAKAO, TEST_PROVIDER_ACCESS_TOKEN);
         when(oAuth2Service.getProfile(eq(provider))).thenReturn(new OAuth2Profile(TEST_IDENTIFIER));
-        when(memberService.isMemberExist(eq(TEST_IDENTIFIER))).thenReturn(true);
 
         mockMvc.perform(
                 post("/api/member/user-exists")
