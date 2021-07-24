@@ -22,9 +22,6 @@ class HomeControllerTest extends AbstractControllerTest {
     @Autowired
     private JwtCreator jwtCreator;
 
-    @MockBean
-    private UserDetailsService userDetailsService;
-
     @Test
     public void 테스트_GET_비인가사용자() throws Exception {
         mockMvc.perform(
@@ -36,21 +33,19 @@ class HomeControllerTest extends AbstractControllerTest {
 
     @Test
     public void 테스트_GET_인가사용자() throws Exception {
-        String identifier = "test";
+        String identifier = "identity";
 
         Member member = Member.builder()
                             .memberId(1L)
                             .identifier(identifier)
                             .email("test@gmail.com")
                             .isActive(true)
-                            .nickname("Test")
+                            .nickname("테스트유저")
                             .regDate(LocalDateTime.of(2020, 10, 14, 17, 11, 9))
                             .modDate(LocalDateTime.of(2020, 10, 14, 17, 11, 10))
                             .build();
 
         String token = jwtCreator.createAccessToken(member);
-
-        given(userDetailsService.loadUserByUsername(eq(identifier))).willReturn(new UserDetailsImpl(member));
 
         mockMvc.perform(
                     get("/api/authenticated-test")

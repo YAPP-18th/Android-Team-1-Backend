@@ -11,6 +11,7 @@ import net.mureng.api.core.dto.ApiResult;
 import net.mureng.api.core.jwt.dto.TokenDto;
 import net.mureng.api.core.oauth2.dto.OAuth2Profile;
 import net.mureng.api.core.oauth2.service.OAuth2Service;
+import net.mureng.api.core.util.NicknameNormalizer;
 import net.mureng.api.member.component.MemberMapper;
 import net.mureng.api.member.dto.MemberDto;
 import net.mureng.api.member.service.MemberSignupService;
@@ -111,5 +112,9 @@ public class MemberController {
 
         @ApiModelProperty(value = "프로필 이미지 경로")
         private String image;
+
+        public void setNickname(String nickname) {
+            this.nickname = NicknameNormalizer.normalize(nickname);
+        }
     }
 }

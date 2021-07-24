@@ -1,10 +1,9 @@
 package net.mureng.api.core.config;
 
 import lombok.RequiredArgsConstructor;
+import net.mureng.api.core.component.AttendanceCheckInterceptor;
 import net.mureng.api.core.jwt.component.JwtAuthenticationEntryPoint;
 import net.mureng.api.core.jwt.component.JwtAuthenticationFilter;
-import net.mureng.api.core.jwt.component.JwtResolver;
-import net.mureng.api.core.jwt.component.JwtValidator;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -18,10 +17,21 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @EnableWebSecurity
 @RequiredArgsConstructor
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
-    public static final String[] EXCLUDED_URLS = {"", "", };
-    private final JwtResolver jwtResolver;
-    private final JwtValidator jwtValidator;
+    public static final String[] EXCLUDED_URLS = {
+            "/api/member/signup",
+            "/api/member/nickname-exists/**",
+            "/api/member/user-exists/**",
+            "/api/test",
+            "/api/test-failure",
+            "/api/jwt",
+            "/api/member/signin",
+            "/api/member/refresh",
+            "/",
+            "/api/fcm-token"
+    };
+    private final JwtAuthenticationFilter jwtAuthenticationFilter;
     private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
+    private final AttendanceCheckInterceptor attendanceCheckInterceptor;
 
     @Override
     public AuthenticationManager authenticationManagerBean() throws Exception {
@@ -39,16 +49,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
                     .authorizeRequests()
-                        .antMatchers("/api/member/signup",
-                                "/api/member/nickname-exists/**",
-                                "/api/member/user-exists/**").permitAll()
-                        .antMatchers("/api/test", "/api/test-failure").permitAll()
-                        .antMatchers("/api/jwt", "/api/member/signin", "/api/member/refresh").permitAll()
-                        .antMatchers("/").permitAll()
-                        .antMatchers("/api/fcm-token").permitAll()
+                        .antMatchers(EXCLUDED_URLS).permitAll()
                         .anyRequest().authenticated()
                 .and()
-                    .addFilterBefore(new JwtAuthenticationFilter(jwtResolver, jwtValidator), UsernamePasswordAuthenticationFilter.class);
+                    .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
     }
 
     @Override
