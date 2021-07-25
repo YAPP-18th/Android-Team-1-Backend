@@ -1,0 +1,5 @@
+# TODO : local 프로파일과 병합 - liquibase 초기화 이슈 해결 우선
+spring:
+  sql:
+    init:
+      schema-locations: quartz_schema.sql

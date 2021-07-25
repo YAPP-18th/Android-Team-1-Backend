@@ -6,5 +6,4 @@ import org.springframework.batch.core.launch.JobLauncher;
 import org.springframework.scheduling.quartz.QuartzJobBean;
 
 public abstract class MurengQuartzJob extends QuartzJobBean implements InterruptableJob {
-    protected String jobName;
 }

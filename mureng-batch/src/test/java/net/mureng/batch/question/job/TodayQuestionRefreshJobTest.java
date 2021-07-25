@@ -4,6 +4,9 @@ import net.mureng.CoreBasePackage;
 import net.mureng.batch.AbstractJobTest;
 import net.mureng.batch.core.config.TestBatchConfig;
 import net.mureng.batch.push.service.FcmDailyPushService;
+import net.mureng.batch.todayexpression.refresh.job.TodayExpressionRefreshJobConductor;
+import net.mureng.batch.todayexpression.refresh.service.TodayUsefulExpressionRefreshService;
+import net.mureng.batch.todayexpression.refresh.service.TodayUsefulExpressionRefreshServiceImpl;
 import net.mureng.core.question.service.TodayQuestionSelectionService;
 import org.junit.Assert;
 import org.junit.jupiter.api.Assertions;
@@ -30,7 +33,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-@SpringBootTest(classes = {TodayQuestionRefreshJobConfig.class, TestBatchConfig.class})
+@SpringBootTest(classes = {TodayExpressionRefreshJobConductor.class, TestBatchConfig.class,
+        TodayUsefulExpressionRefreshService.class, TodayUsefulExpressionRefreshServiceImpl.class})
 class TodayQuestionRefreshJobTest extends AbstractJobTest {
     @BeforeEach
     public void clearMetadata() {

@@ -1,5 +1,6 @@
 package net.mureng.batch.core.config;
 
+import lombok.NonNull;
 import org.quartz.spi.TriggerFiredBundle;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.config.AutowireCapableBeanFactory;
@@ -16,7 +17,7 @@ public class AutowiringSpringBeanJobFactory extends SpringBeanJobFactory impleme
 	}
 
 	@Override
-	protected Object createJobInstance(TriggerFiredBundle bundle) throws Exception {
+	protected @NonNull Object createJobInstance(@NonNull TriggerFiredBundle bundle) throws Exception {
 		final Object job = super.createJobInstance(bundle);
 		beanFactory.autowireBean(job);
 		return job;

@@ -1,6 +1,7 @@
 package net.mureng.api.core.jwt.component;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import net.mureng.api.core.dto.ApiResult;
 import net.mureng.core.core.exception.ResourceNotFoundException;
@@ -20,14 +21,11 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 @Slf4j
+@RequiredArgsConstructor
+@Component
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
     private final JwtResolver jwtResolver;
     private final JwtValidator jwtValidator;
-
-    public JwtAuthenticationFilter(JwtResolver jwtResolver, JwtValidator jwtValidator) {
-        this.jwtResolver = jwtResolver;
-        this.jwtValidator = jwtValidator;
-    }
 
     @Override
     protected void doFilterInternal(HttpServletRequest servletRequest, HttpServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
