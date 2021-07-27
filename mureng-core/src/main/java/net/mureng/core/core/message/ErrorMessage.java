@@ -24,6 +24,10 @@ public class ErrorMessage {
     public static String NOT_EXIST_REPLY = "존재하지 않는 답변입니다.";
     public static String ALREADY_ANSWERED_REPLY = "이미 답변한 질문입니다.";
 
+    // ReplyLikes
+    public static String ALREADY_PUSHED_REPLY_LIKE = "이미 좋아요를 눌렀습니다.";
+    public static String ALREADY_CANCELED_REPLY_LIKE = "이미 좋아요를 취소했습니다.";
+
     // File Directory
     public static String NOT_DIRECTORY = "Not a directory";
 
@@ -32,9 +36,13 @@ public class ErrorMessage {
 
     // Today Expression
     public static String EXPRESSION_REFRESH_FAIL = "오늘의 표현 새로 고침에 실패하였습니다.";
+    public static String NOT_EXIST_EXPRESSION = "존재하지 않는 오늘의 표현에 대한 요청입니다.";
 
     // Cookie
     public static String ALREADY_COOKIE_ACQUIRED = "이미 오늘 쿠키를 획득하였습니다.";
 
+    // Scrap
+    public static String ALREADY_SCRAPPED_EXPRESSION = "이미 스크랩한 표현입니다.";
+    public static String ALREADY_CANCELED_EXPRESSION = "이미 스크랩을 취소한 표현입니다.";
 
 }

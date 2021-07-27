@@ -7,6 +7,7 @@ import net.mureng.core.badge.entity.BadgeAccomplishedPK;
 import net.mureng.core.badge.repository.BadgeAccomplishedRepository;
 import net.mureng.core.core.exception.BadRequestException;
 import net.mureng.core.core.exception.ResourceNotFoundException;
+import net.mureng.core.core.exception.business.EntityNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -30,7 +31,7 @@ public class MemberBadgeService {
     @Transactional
     public boolean updateBadgeAccomplishedChecked(Long memberId, Long badgeId){
         BadgeAccomplishedPK pk = BadgeAccomplishedPK.builder().memberId(memberId).badgeId(badgeId).build();
-        BadgeAccomplished badgeAccomplished = badgeAccomplishedRepository.findById(pk).orElseThrow(() -> new BadRequestException(NOT_ACCOMPLISHED_BADGE));
+        BadgeAccomplished badgeAccomplished = badgeAccomplishedRepository.findById(pk).orElseThrow(() -> new EntityNotFoundException(NOT_ACCOMPLISHED_BADGE));
         badgeAccomplished.setIsChecked(true);
 
         badgeAccomplishedRepository.saveAndFlush(badgeAccomplished);

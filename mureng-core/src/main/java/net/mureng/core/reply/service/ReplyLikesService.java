@@ -3,6 +3,7 @@ package net.mureng.core.reply.service;
 import lombok.RequiredArgsConstructor;
 import net.mureng.core.badge.service.BadgeAccomplishedService;
 import net.mureng.core.core.exception.BadRequestException;
+import net.mureng.core.core.exception.business.ReplyLikesException;
 import net.mureng.core.member.entity.Member;
 import net.mureng.core.reply.entity.Reply;
 import net.mureng.core.reply.entity.ReplyLikes;
@@ -11,6 +12,9 @@ import net.mureng.core.reply.repository.ReplyLikesRepository;
 import net.mureng.push.service.FcmLikePushService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import static net.mureng.core.core.message.ErrorMessage.ALREADY_CANCELED_REPLY_LIKE;
+import static net.mureng.core.core.message.ErrorMessage.ALREADY_PUSHED_REPLY_LIKE;
 
 @Service
 @RequiredArgsConstructor
@@ -27,7 +31,7 @@ public class ReplyLikesService {
         ReplyLikesPK replyLikesPK = new ReplyLikesPK(member.getMemberId(), reply.getReplyId());
 
         if(replyLikesRepository.existsById(replyLikesPK))
-            throw new BadRequestException("이미 좋아요를 눌렀습니다.");
+            throw new ReplyLikesException(ALREADY_PUSHED_REPLY_LIKE);
 
         ReplyLikes replyLikes = ReplyLikes.builder().id(replyLikesPK).member(member).reply(reply).build();
 
@@ -46,7 +50,7 @@ public class ReplyLikesService {
         ReplyLikesPK replyLikesPK = new ReplyLikesPK(member.getMemberId(), reply.getReplyId());
 
         if(! replyLikesRepository.existsById(replyLikesPK))
-            throw new BadRequestException("이미 좋아요를 취소했습니다.");
+            throw new ReplyLikesException(ALREADY_CANCELED_REPLY_LIKE);
 
         replyLikesRepository.deleteById(replyLikesPK);
     }

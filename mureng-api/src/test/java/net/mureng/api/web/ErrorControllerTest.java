@@ -19,7 +19,7 @@ class ErrorControllerTest extends AbstractControllerTest {
     public void API호출_실패_테스트() throws Exception {
         mockMvc.perform(
                 get("/api/test-failure")
-        ).andExpect(status().isInternalServerError())
+        ).andExpect(status().isBadRequest())
                 .andExpect(MockMvcResultMatchers.jsonPath("$.message").value("net.mureng.mureng failure"));
     }
 }
