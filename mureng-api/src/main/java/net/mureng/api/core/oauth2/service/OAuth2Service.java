@@ -8,7 +8,7 @@ import net.mureng.api.core.jwt.dto.TokenDto;
 import net.mureng.api.core.jwt.dto.TokenProvider;
 import net.mureng.api.core.oauth2.dto.OAuth2Profile;
 import net.mureng.core.core.exception.BadRequestException;
-import net.mureng.core.core.exception.MurengException;
+import net.mureng.core.core.exception.business.MurengException;
 import org.springframework.core.env.Environment;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;

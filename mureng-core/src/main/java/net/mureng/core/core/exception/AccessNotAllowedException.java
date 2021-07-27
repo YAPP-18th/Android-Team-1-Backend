@@ -3,7 +3,7 @@ package net.mureng.core.core.exception;
 /**
  * 리소스 접근 권한 없음 예외 (403 Forbidden)
  */
-public class AccessNotAllowedException extends MurengException {
+public class AccessNotAllowedException extends RuntimeException {
     public AccessNotAllowedException() {
     }
 

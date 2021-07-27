@@ -2,7 +2,7 @@ package net.mureng.core.core.exception;
 /**
  * 인증되지 않은 접근 예외 (401 NotAuthorized)
  */
-public class UnauthorizedException extends MurengException{
+public class UnauthorizedException extends RuntimeException{
     public UnauthorizedException() {
     }
 

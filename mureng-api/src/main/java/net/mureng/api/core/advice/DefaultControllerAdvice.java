@@ -2,6 +2,7 @@ package net.mureng.api.core.advice;
 
 import net.mureng.api.core.dto.ApiResult;
 import net.mureng.core.core.exception.*;
+import net.mureng.core.core.exception.business.MurengException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -36,4 +37,5 @@ public class DefaultControllerAdvice extends AbstractControllerAdvice {
     public ResponseEntity<ApiResult<?>> handleUnauthorizedException(Exception e) {
         return handleException(e, HttpStatus.UNAUTHORIZED);
     }
+
 }

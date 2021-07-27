@@ -2,7 +2,7 @@ package net.mureng.core.question.service;
 
 import lombok.RequiredArgsConstructor;
 import net.mureng.core.core.component.NumberRandomizer;
-import net.mureng.core.core.exception.MurengException;
+import net.mureng.core.core.exception.business.MurengException;
 import net.mureng.core.member.entity.Member;
 import net.mureng.core.question.entity.Question;
 import net.mureng.core.question.repository.QuestionRepository;
