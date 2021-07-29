@@ -3,7 +3,7 @@ package net.mureng.core.badge.service;
 import lombok.RequiredArgsConstructor;
 import net.mureng.core.badge.entity.Badge;
 import net.mureng.core.badge.repository.BadgeRepository;
-import net.mureng.core.core.exception.ResourceNotFoundException;
+import net.mureng.core.core.exception.EntityNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -17,6 +17,6 @@ public class BadgeService {
     @Transactional(readOnly = true)
     public Badge findById(Long badgeId){
         return badgeRepository.findById(badgeId)
-                .orElseThrow(() -> new ResourceNotFoundException(NOT_EXIST_BADGE));
+                .orElseThrow(() -> new EntityNotFoundException(NOT_EXIST_BADGE));
     }
 }

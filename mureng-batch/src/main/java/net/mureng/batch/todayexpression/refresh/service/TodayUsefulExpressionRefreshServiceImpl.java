@@ -1,6 +1,5 @@
 package net.mureng.batch.todayexpression.refresh.service;
 
-import com.mchange.v1.identicator.IdHashSet;
 import lombok.RequiredArgsConstructor;
 import net.mureng.core.core.component.NumberRandomizer;
 import net.mureng.core.core.exception.MurengException;
@@ -18,7 +17,6 @@ import java.util.List;
 import java.util.Set;
 
 import static net.mureng.core.core.message.ErrorMessage.EXPRESSION_REFRESH_FAIL;
-import static net.mureng.core.core.message.ErrorMessage.QUESTION_REFRESH_FAIL;
 
 @Service
 @RequiredArgsConstructor

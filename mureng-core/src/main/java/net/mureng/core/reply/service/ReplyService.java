@@ -3,19 +3,17 @@ package net.mureng.core.reply.service;
 import lombok.RequiredArgsConstructor;
 import net.mureng.core.core.exception.AccessNotAllowedException;
 import net.mureng.core.core.exception.BadRequestException;
-import net.mureng.core.core.exception.ResourceNotFoundException;
+import net.mureng.core.core.exception.EntityNotFoundException;
 import net.mureng.core.member.entity.Member;
 import net.mureng.core.member.repository.MemberRepository;
 import net.mureng.core.question.service.QuestionService;
 import net.mureng.core.reply.entity.Reply;
 import net.mureng.core.reply.repository.ReplyRepository;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.PostConstruct;
-import java.awt.print.Pageable;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -52,7 +50,7 @@ public class ReplyService {
             throw new BadRequestException(ALREADY_ANSWERED_MEMBER);
 
         if (!questionService.existsById(questionId))
-            throw new ResourceNotFoundException(NOT_EXIST_QUESTION);
+            throw new EntityNotFoundException(NOT_EXIST_QUESTION);
 
         if (isQuestionAlreadyReplied(questionId, memberId))
             throw new BadRequestException(ALREADY_ANSWERED_REPLY);
@@ -88,7 +86,7 @@ public class ReplyService {
         Long replyId = newReply.getReplyId();
 
         Reply oldReply = replyRepository.findById(replyId)
-                .orElseThrow(() -> new ResourceNotFoundException(NOT_EXIST_REPLY));
+                .orElseThrow(() -> new EntityNotFoundException(NOT_EXIST_REPLY));
 
         if (!oldReply.isAuthor(newReply.getAuthor()))
             throw new AccessNotAllowedException(UNAUTHORIZED);
@@ -101,7 +99,7 @@ public class ReplyService {
     @Transactional
     public void delete(Member member, Long replyId) {
         Reply reply = replyRepository.findById(replyId)
-                .orElseThrow(() -> new ResourceNotFoundException(NOT_EXIST_REPLY));
+                .orElseThrow(() -> new EntityNotFoundException(NOT_EXIST_REPLY));
 
         if (!reply.isAuthor(member))
             throw new AccessNotAllowedException(UNAUTHORIZED);
@@ -112,7 +110,7 @@ public class ReplyService {
     @Transactional(readOnly = true)
     public Reply findReplyByQuestionIdAndMember(Long memberId, Long questionId) {
         return replyRepository.findByAuthorMemberIdAndQuestionQuestionId(memberId, questionId)
-                .orElseThrow(() -> new ResourceNotFoundException(NOT_EXIST_REPLY));
+                .orElseThrow(() -> new EntityNotFoundException(NOT_EXIST_REPLY));
     }
 
     @Transactional(readOnly = true)
@@ -123,6 +121,6 @@ public class ReplyService {
 
     @Transactional(readOnly = true)
     public Reply findById(Long replyId){
-        return replyRepository.findById(replyId).orElseThrow(() -> new ResourceNotFoundException(NOT_EXIST_REPLY));
+        return replyRepository.findById(replyId).orElseThrow(() -> new EntityNotFoundException(NOT_EXIST_REPLY));
     }
 }
