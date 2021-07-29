@@ -1,7 +1,7 @@
-package net.mureng.core.core.exception.business;
+package net.mureng.core.core.exception;
 
 /**
- * 머렝 도메인 비즈니스 예외
+ * 머렝 도메인 비즈니스 예외 (500 Server Error)
  */
 public class MurengException extends RuntimeException {
 

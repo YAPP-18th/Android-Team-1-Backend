@@ -2,8 +2,7 @@ package net.mureng.core.reply.service;
 
 import lombok.RequiredArgsConstructor;
 import net.mureng.core.badge.service.BadgeAccomplishedService;
-import net.mureng.core.core.exception.BadRequestException;
-import net.mureng.core.core.exception.business.ReplyLikesException;
+import net.mureng.core.core.exception.MurengException;
 import net.mureng.core.member.entity.Member;
 import net.mureng.core.reply.entity.Reply;
 import net.mureng.core.reply.entity.ReplyLikes;
@@ -31,7 +30,7 @@ public class ReplyLikesService {
         ReplyLikesPK replyLikesPK = new ReplyLikesPK(member.getMemberId(), reply.getReplyId());
 
         if(replyLikesRepository.existsById(replyLikesPK))
-            throw new ReplyLikesException(ALREADY_PUSHED_REPLY_LIKE);
+            throw new MurengException(ALREADY_PUSHED_REPLY_LIKE);
 
         ReplyLikes replyLikes = ReplyLikes.builder().id(replyLikesPK).member(member).reply(reply).build();
 
@@ -50,7 +49,7 @@ public class ReplyLikesService {
         ReplyLikesPK replyLikesPK = new ReplyLikesPK(member.getMemberId(), reply.getReplyId());
 
         if(! replyLikesRepository.existsById(replyLikesPK))
-            throw new ReplyLikesException(ALREADY_CANCELED_REPLY_LIKE);
+            throw new MurengException(ALREADY_CANCELED_REPLY_LIKE);
 
         replyLikesRepository.deleteById(replyLikesPK);
     }

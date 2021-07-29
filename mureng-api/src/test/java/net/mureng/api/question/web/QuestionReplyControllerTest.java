@@ -76,10 +76,10 @@ class QuestionReplyControllerTest extends AbstractControllerTest {
 
     @Test
     @WithMockMurengUser
-    public void 질문_내답변_가져오기_400_테스트() throws Exception {
+    public void 질문_내답변_가져오기_404_테스트() throws Exception {
         mockMvc.perform(
                 get("/api/questions/10/replies/me")
-        ).andExpect(status().isBadRequest())
+        ).andExpect(status().isNotFound())
                 .andDo(print());
     }
 }

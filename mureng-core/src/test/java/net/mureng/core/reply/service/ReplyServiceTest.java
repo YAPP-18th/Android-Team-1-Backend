@@ -2,8 +2,7 @@ package net.mureng.core.reply.service;
 
 import net.mureng.core.common.EntityCreator;
 import net.mureng.core.core.exception.BadRequestException;
-import net.mureng.core.core.exception.ResourceNotFoundException;
-import net.mureng.core.core.exception.business.EntityNotFoundException;
+import net.mureng.core.core.exception.EntityNotFoundException;
 import net.mureng.core.member.entity.Member;
 import net.mureng.core.question.service.QuestionService;
 import net.mureng.core.reply.entity.Reply;

@@ -1,8 +1,9 @@
-package net.mureng.core.core.exception.business;
+package net.mureng.core.core.exception;
 
-import net.mureng.core.core.exception.business.MurengException;
+import net.mureng.core.core.exception.MurengException;
+import net.mureng.core.core.exception.ResourceNotFoundException;
 
-public class EntityNotFoundException extends MurengException {
+public class EntityNotFoundException extends ResourceNotFoundException {
     public EntityNotFoundException() {
     }
 

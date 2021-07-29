@@ -3,7 +3,7 @@ package net.mureng.core.core.exception;
 /**
  * 리소스 잘못된 요청 예외 (400 Bad Request)
  */
-public class BadRequestException extends RuntimeException {
+public class BadRequestException extends MurengException {
     public BadRequestException() {
     }
 

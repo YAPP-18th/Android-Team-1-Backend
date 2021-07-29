@@ -2,7 +2,7 @@ package net.mureng.batch.todayexpression.refresh.service;
 
 import lombok.RequiredArgsConstructor;
 import net.mureng.core.core.component.NumberRandomizer;
-import net.mureng.core.core.exception.business.MurengException;
+import net.mureng.core.core.exception.MurengException;
 import net.mureng.core.todayexpression.entity.TodayUsefulExpression;
 import net.mureng.core.todayexpression.entity.UsefulExpression;
 import net.mureng.core.todayexpression.repository.TodayUsefulExpressionRepository;

@@ -3,7 +3,7 @@ package net.mureng.api.member.service;
 import lombok.RequiredArgsConstructor;
 import net.mureng.core.core.exception.BadRequestException;
 import net.mureng.core.badge.service.BadgeAccomplishedService;
-import net.mureng.core.core.exception.business.EntityNotFoundException;
+import net.mureng.core.core.exception.EntityNotFoundException;
 import net.mureng.core.member.entity.Member;
 import net.mureng.core.member.entity.MemberScrap;
 import net.mureng.core.member.entity.MemberScrapPK;
