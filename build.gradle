@@ -25,6 +25,7 @@ subprojects {
 	apply plugin: 'java'
 	apply plugin: 'org.springframework.boot'
 	apply plugin: 'io.spring.dependency-management'
+	apply plugin: 'jacoco'
 
 	sourceCompatibility = '11'
 
@@ -54,6 +55,39 @@ subprojects {
 		annotationProcessor 'org.mapstruct:mapstruct-processor:1.4.2.Final'
 		implementation 'org.liquibase:liquibase-core:4.3.5'
 		implementation 'com.google.firebase:firebase-admin:6.8.1'
+	}
+
+	test {
+		useJUnitPlatform()
+		finalizedBy 'jacocoTestReport'
+	}
+
+	jacocoTestReport {
+		reports {
+			html.destination file("${buildDir}/jacocoHtml")
+			csv.enabled false
+			xml.enabled false
+		}
+
+		finalizedBy 'jacocoTestCoverageVerification'
+	}
+
+	jacocoTestCoverageVerification {
+		violationRules {
+			rule {
+				enabled = true
+				element = 'CLASS'
+
+				limit {
+					counter = 'LINE'
+					value = 'COVEREDRATIO'
+					minimum = 0.00
+				}
+
+				excludes = []
+			}
+
+		}
 	}
 }
 
