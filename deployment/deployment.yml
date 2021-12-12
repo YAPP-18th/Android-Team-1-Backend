@@ -48,6 +48,12 @@ spec:
               value: "$FIREBASE_SERVICE_KEY"
             - name: SPRING_JWT_SECRET
               value: "$SPRING_JWT_SECRET"
+            - name: CLOUD_AWS_CREDENTIALS_ACCESS_KEY
+              value: "$CLOUD_AWS_CREDENTIALS_ACCESS_KEY"
+            - name: CLOUD_AWS_CREDENTIALS_SECRET_KEY
+              value: "$CLOUD_AWS_CREDENTIALS_SECRET_KEY"
+            - name: CLOUD_AWS_S3_BUCKET
+              value: "$CLOUD_AWS_S3_BUCKET"
       volumes:
         - name: content-server-volume
           persistentVolumeClaim:

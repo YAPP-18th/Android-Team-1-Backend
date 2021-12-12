@@ -9,8 +9,8 @@ import java.io.File;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class FileUploaderTest {
-    private final FileUploader fileUploader = new FileUploader();
+class FileSystemFileUploaderTest {
+    private final FileSystemFileUploader fileUploader = new FileSystemFileUploader();
     private String filePath = "";
 
     @Test
@@ -24,7 +24,7 @@ class FileUploaderTest {
         );
 
         // when
-        filePath = fileUploader.saveMultiPartFile(mockMultipartFile, "./");
+        filePath = fileUploader.uploadMultiPartFile(mockMultipartFile, "./");
 
         // then
         File testFile = new File(filePath);

@@ -67,4 +67,14 @@ media:
 # firebase
 firebase:
   service:
-    key: 
+    key:
+
+cloud:
+  aws:
+    credentials:
+      access_key: CLOUD_AWS_CREDENTIALS_ACCESS_KEY
+      secret_key: CLOUD_AWS_CREDENTIALS_SECRET_KEY
+    s3:
+      bucket: CLOUD_AWS_S3_BUCKET
+    region:
+      static: ap-northeast-2
