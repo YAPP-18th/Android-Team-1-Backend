@@ -29,7 +29,7 @@ public class MemberImageService {
      * @return 웹상에서 저장된 경로
      */
     public String uploadMemberImageFile(MultipartFile imageFile) {
-        return fileUploader.saveMultiPartFile(imageFile, memberImageDirName)
+        return fileUploader.uploadMultiPartFile(imageFile, memberImageDirName)
                 .replace(mediaBaseDirName, "");
     }
 }

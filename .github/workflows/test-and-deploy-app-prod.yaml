@@ -42,6 +42,8 @@ jobs:
             ${{ runner.os }}-gradle-
       - name: Gradle 테스트 및 실행파일 생성
         run: ./gradlew :mureng-api:build :mureng-api:test :mureng-api:bootJar -Dfile.encoding=UTF-8 -Duser.timezone=Asia/Seoul --info
+        env:
+          SPRING_PROFILES_ACTIVE: prod
 
       - uses: actions/upload-artifact@v2
         name: 생성한 파일 업로드
@@ -107,6 +109,9 @@ jobs:
           PROD_DB_PASSWORD: ${{ secrets.PROD_DB_PASSWORD }}
           FIREBASE_SERVICE_KEY: ${{ secrets.FIREBASE_SERVICE_KEY }}
           SPRING_JWT_SECRET: ${{ secrets.SPRING_JWT_SECRET }}
+          CLOUD_AWS_CREDENTIALS_ACCESS_KEY: ${{ secrets.CLOUD_AWS_CREDENTIALS_ACCESS_KEY }}
+          CLOUD_AWS_CREDENTIALS_SECRET_KEY: ${{ secrets.CLOUD_AWS_CREDENTIALS_SECRET_KEY }}
+          CLOUD_AWS_S3_BUCKET: ${{ secrets.CLOUD_AWS_S3_BUCKET }}
         with:
           input: deployment/deployment.yml
           output: deploy.yml
