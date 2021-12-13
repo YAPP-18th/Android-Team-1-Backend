@@ -2,25 +2,12 @@ package net.mureng.api.reply.service;
 
 import lombok.RequiredArgsConstructor;
 import net.mureng.api.core.component.FileUploader;
-import net.mureng.api.core.dto.ApiPageRequest;
 import net.mureng.core.core.component.DirectoryScanner;
-import net.mureng.core.core.exception.AccessNotAllowedException;
-import net.mureng.core.core.exception.BadRequestException;
-import net.mureng.core.core.exception.ResourceNotFoundException;
-import net.mureng.core.member.entity.Member;
-import net.mureng.core.question.service.QuestionService;
-import net.mureng.core.reply.entity.Reply;
-import net.mureng.core.reply.repository.ReplyRepository;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.PostConstruct;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.LocalTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -48,7 +35,7 @@ public class ReplyImageService {
      * @return 웹상에서 저장된 경로
      */
     public String uploadReplyImageFile(MultipartFile imageFile) {
-        return fileUploader.saveMultiPartFile(imageFile, replyImageDirName)
+        return fileUploader.uploadMultiPartFile(imageFile, replyImageDirName)
                 .replace(mediaBaseDirName, "");
     }
 

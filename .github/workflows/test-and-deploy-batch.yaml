@@ -1,4 +1,4 @@
-name: Test and Deploy with Noti - prod
+name: Test and Deploy with Noti batch
 
 on:
   workflow_dispatch:
@@ -14,8 +14,8 @@ env:
   PROJECT_ID: ${{ secrets.GKE_PROJECT }}
   GKE_CLUSTER: mureng-cluster-k    # Add your cluster name here.
   GKE_ZONE: asia-northeast3-c   # Add your cluster zone here.
-  DEPLOYMENT_NAME: mureng-app-deployment # Add your deployment name here.
-  IMAGE: mureng
+  DEPLOYMENT_NAME: mureng-batch-deployment # Add your deployment name here.
+  IMAGE: mureng-batch
 
 jobs:
   test:
@@ -41,14 +41,14 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-gradle-
       - name: Gradle 테스트 및 실행파일 생성
-        run: ./gradlew :mureng-api:build :mureng-api:test :mureng-api:bootJar -Dfile.encoding=UTF-8 -Duser.timezone=Asia/Seoul --info
+        run: ./gradlew :mureng-batch:build :mureng-batch:test :mureng-batch:bootJar -Dfile.encoding=UTF-8 -Duser.timezone=Asia/Seoul --info
 
       - uses: actions/upload-artifact@v2
         name: 생성한 파일 업로드
         with:
           name: mureng-app-artifact
-          path: ${{ github.workspace }}/mureng-api/build/libs/mureng-api-0.0.1-SNAPSHOT.jar
-  deployment-api:
+          path: ${{ github.workspace }}/mureng-batch/build/libs/mureng-batch-0.0.1-SNAPSHOT.jar
+  deployment-batch:
     name: Setup, Build, Publish, and Deploy
     needs: test
     runs-on: ubuntu-latest
@@ -63,9 +63,9 @@ jobs:
 
       - name: 업로드한 파일 빌드 경로로 위치
         run: |
-          mkdir mureng-api/build
-          mkdir mureng-api/build/libs
-          mv mureng-api-0.0.1-SNAPSHOT.jar mureng-api/build/libs/
+          mkdir mureng-batch/build
+          mkdir mureng-batch/build/libs
+          mv mureng-batch-0.0.1-SNAPSHOT.jar mureng-batch/build/libs/
 
       # Setup gcloud CLI
       - uses: google-github-actions/setup-gcloud@v0.2.0
@@ -91,7 +91,7 @@ jobs:
             --tag "gcr.io/$PROJECT_ID/$IMAGE:$GITHUB_SHA" \
             --build-arg GITHUB_SHA="$GITHUB_SHA" \
             --build-arg GITHUB_REF="$GITHUB_REF" \
-            ./mureng-api/
+            ./mureng-batch/
 
       # Push the Docker image to Google Container Registry
       - name: Publish
@@ -101,14 +101,14 @@ jobs:
       - name: 환경변수 치환 후 최종 배포 파일 생성
         uses: danielr1996/envsubst-action@1.0.0
         env:
-          PROD_DB_DRIVER: ${{ secrets.PROD_DB_DRIVER }}
-          PROD_DB_URL: ${{ secrets.PROD_DB_URL }}
-          PROD_DB_USERNAME: ${{ secrets.PROD_DB_USERNAME }}
-          PROD_DB_PASSWORD: ${{ secrets.PROD_DB_PASSWORD }}
+          SPRING_DATASOURCE_DRIVER_CLASS_NAME: ${{ secrets.SPRING_DATASOURCE_DRIVER_CLASS_NAME }}
+          SPRING_DATASOURCE_URL: ${{ secrets.SPRING_DATASOURCE_URL }}
+          SPRING_DATASOURCE_USERNAME: ${{ secrets.SPRING_DATASOURCE_USERNAME }}
+          SPRING_DATASOURCE_PASSWORD: ${{ secrets.SPRING_DATASOURCE_PASSWORD }}
           FIREBASE_SERVICE_KEY: ${{ secrets.FIREBASE_SERVICE_KEY }}
           SPRING_JWT_SECRET: ${{ secrets.SPRING_JWT_SECRET }}
         with:
-          input: deployment/deployment.yml
+          input: deployment/deployment-batch.yml
           output: deploy.yml
 
       # Set up kustomize
@@ -127,7 +127,7 @@ jobs:
   notification-success:
     name: 슬랙에 성공 알림
     if: success()
-    needs: [ test, deployment-api ]
+    needs: [ test, deployment-batch ]
     runs-on: ubuntu-latest
     steps:
       - name: 슬랙 성공 알림
@@ -142,7 +142,7 @@ jobs:
   notification-failure:
     name: 슬랙에 실패 알림
     if: failure()
-    needs: [ test, deployment-api ]
+    needs: [ test, deployment-batch ]
     runs-on: ubuntu-latest
     steps:
       - name: 슬랙 실패 알림
