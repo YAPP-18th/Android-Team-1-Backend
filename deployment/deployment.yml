@@ -37,13 +37,13 @@ spec:
             - name: SPRING_PROFILES_ACTIVE
               value: "prod"
             - name: SPRING_DATASOURCE_DRIVER_CLASS_NAME
-              value: "$PROD_DB_DRIVER"
+              value: "$SPRING_DATASOURCE_DRIVER_CLASS_NAME"
             - name: SPRING_DATASOURCE_URL
-              value: "$PROD_DB_URL"
+              value: "$SPRING_DATASOURCE_URL"
             - name: SPRING_DATASOURCE_USERNAME
-              value: "$PROD_DB_USERNAME"
+              value: "$SPRING_DATASOURCE_USERNAME"
             - name: SPRING_DATASOURCE_PASSWORD
-              value: "$PROD_DB_PASSWORD"
+              value: "$SPRING_DATASOURCE_PASSWORD"
             - name: FIREBASE_SERVICE_KEY
               value: "$FIREBASE_SERVICE_KEY"
             - name: SPRING_JWT_SECRET
