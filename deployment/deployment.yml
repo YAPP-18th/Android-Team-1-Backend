@@ -54,6 +54,10 @@ spec:
               value: "$CLOUD_AWS_CREDENTIALS_SECRET_KEY"
             - name: CLOUD_AWS_S3_BUCKET
               value: "$CLOUD_AWS_S3_BUCKET"
+            - name: AWS_ACCESS_KEY
+              value: "$CLOUD_AWS_CREDENTIALS_ACCESS_KEY"
+            - name: AWS_SECRET_KEY
+              value: "$CLOUD_AWS_CREDENTIALS_SECRET_KEY"
       volumes:
         - name: content-server-volume
           persistentVolumeClaim:
