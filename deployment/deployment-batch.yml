@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
         - name: mureng-batch
-          image: gcr.io/PROJECT_ID/IMAGE:TAG
+          image: <IMAGE>
           resources:
             requests:
               memory: "350Mi"
@@ -23,9 +23,6 @@ spec:
             limits:
               memory: "350Mi"
               cpu: "350m"
-          volumeMounts:
-            - name: content-server-volume
-              mountPath: /home/gradle/mount
           ports:
             - containerPort: 8080
           env:
@@ -47,8 +44,4 @@ spec:
               value: "$CLOUD_AWS_CREDENTIALS_ACCESS_KEY"
             - name: AWS_SECRET_KEY
               value: "$CLOUD_AWS_CREDENTIALS_SECRET_KEY"
-      volumes:
-        - name: content-server-volume
-          persistentVolumeClaim:
-            claimName: nfs
 
